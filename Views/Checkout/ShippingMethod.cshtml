@@ -1,0 +1,119 @@
+﻿@model CheckoutShippingMethodModel
+@using Faprika.Web.Factories
+@using Faprika.Services.Catalog
+@inject IWorkContext workcontext
+@inject IShoppingCartModelFactory shoppingCartModelFactory
+@inject IProductService productService
+@{
+    var shoppingCart = workcontext.CurrentCustomer.ShoppingCartItems.OrderBy(o => o.Product.Price).ToList();
+    var shoppingCartModel = new ShoppingCartModel();
+    shoppingCartModel = shoppingCartModelFactory.PrepareShoppingCartModel(shoppingCartModel, shoppingCart);
+
+
+    Layout = "_Root.Blank";
+
+    //title
+    Html.AddTitleParts(T("PageTitle.Checkout").Text);
+
+    //register CSS and JS
+    Html.AddCssFileParts(ResourceLocation.Head, "~/Themes/Sidney/Content/css/pages/checkout.min.css", "~/Themes/Sidney/Content/css/pages/checkout.css");
+}
+<div class="page checkout-page shipping-method-page">
+    @*<div class="progress-container">
+    @await Component.InvokeAsync("CheckoutProgress", new { step = CheckoutProgressStep.Shipping })
+    </div>*@
+    <div class="page-container">
+        <form asp-route="CheckoutShippingMethod" method="post" class="checkout-page-content">
+            <div class="page-body">
+
+                <div class="shipping-method">
+
+                    @if (Model.Warnings.Count == 0)
+                    {
+                        <div class="method-header">
+                            @T("Checkout.Shippingmethod")
+                        </div>
+
+                        @for (var i = 0; i < Model.ShippingMethods.Count; i++)
+                        {
+                            var shippingMethod = Model.ShippingMethods[i];
+                            <div class="method">
+                                <div class="method-info">
+                                    <div class="inputs options">
+                                        <input id="shippingoption_@(i)" type="radio" name="shippingoption" value="@(shippingMethod.Name)___@(shippingMethod.ShippingRateComputationMethodSystemName)" checked="@shippingMethod.Selected" />
+                                        <label for="shippingoption_@(i)">@*@shippingMethod.Name*@</label>
+                                    </div>
+                                    @if (!string.IsNullOrEmpty(shippingMethod.LogoUrl))
+                                    {
+                                        <div class="method-logo">
+                                            <img src="@shippingMethod.LogoUrl" alt="@shippingMethod.Name" class="shipping-method-logo" />
+                                        </div>
+                                    }
+                                </div>
+
+                                @if (shippingMethod.IsFreeShipping)
+                                {
+                                    <div class="method-price">
+                                        <span class="free-shipping">
+                                            @T("Checkout.SelectShippingMethod.FreeShipping")
+                                        </span>
+                                    </div>
+
+                                }
+                                else
+                                {
+                                    <div class="method-price">
+                                        <span>
+                                            @T("Checkout.SelectShippingMethod.Fee", shippingMethod.Fee)
+                                        </span>
+                                    </div>
+                                }
+
+                            </div>
+                        }
+
+                    }
+                    else
+                    {
+                        <div class="message-error">
+                            <ul>
+                                @foreach (var warning in Model.Warnings)
+                                {
+                                    <li>@warning</li>
+                                }
+                            </ul>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="page-right-sidebar">
+                <div class="sidebar-header">
+                    @T("Order.Totals.Title")
+                </div>
+                @*@await Component.InvokeAsync("OrderSummary")*@
+                <div class="order-totals">
+                    @await Component.InvokeAsync("OrderTotals", new { isEditable = false, preparePaymentMethodAdditionalFee = false })
+                </div>
+                <div class="button">
+                    <button type="submit" name="nextstep" class="shipping-method-next-step-button one-submit-button">
+                        <span>@T("Checkout.ShippingMethod.NextButton")</span>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    if (gtag) {
+
+
+        gtag('event', 'add_shipping_info',
+            ecommerce:
+            {
+                'value': { @shoppingCartModel.SubTotalValue},
+                'currency': '@shoppingCartModel.CurrencyCode',
+                'items': itemlist
+            });
+
+
+</script>

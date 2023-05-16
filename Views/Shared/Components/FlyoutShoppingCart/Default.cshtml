@@ -1,0 +1,62 @@
+﻿@model MiniShoppingCartModel
+@inject IEventPublisher eventPublisher
+@{
+ eventPublisher.Publish(new PageRenderingEvent(this.Html, true));
+}
+<div class="flyout-cart @(Model.TotalProducts > 0 ? "" : "empty")">
+    <div class="flyout-cart-header">
+        <div class="cart-title">
+            <span>@string.Format(T("ShoppingCart.Mini.Items").Text, Model.TotalProducts.ToString("N0"))</span>
+            <span class="dropdown-close"></span>
+        </div>
+    </div>
+    @if (Model.TotalProducts > 0)
+    {
+        <div class="flyout-cart-items">
+
+            @for (int i = 0; i < Model.Items.Count; i++)
+            {
+                var item = Model.Items[i];
+                <div class="item">
+                    <div class="picture">
+                        <a class="" href="@Url.RouteUrl("Product", new { SeName = item.ProductSeName })" title="@item.ProductName">
+                            <img class="img-fluid" alt="@item.ProductName" src="@item.Picture.ImageUrl" title="@item.ProductName" />
+                        </a>
+                    </div>
+                    <div class="details">
+                        <div class="product-name">
+                            <a href="@Url.RouteUrl("Product", new { SeName = item.ProductSeName })">@item.ProductName</a>
+                        </div>
+                        <div class="details-bottom">
+                            <div class="product-price"><span class="name">@T("ShoppingCart.UnitPrice")</span><span class="value">@item.UnitPrice</span></div>
+                            <div class="product-quantity"><span class="name">@T("ShoppingCart.Quantity")</span><span class="value">@item.Quantity.ToString("N2")</span></div>
+                            <div class="product-total"><span class="name">@T("ShoppingCart.SubTotal")</span><span class="value">@item.SubTotal</span></div>
+                        </div>
+                    </div>
+                    <span class="remove" onclick="AjaxCart.removeproducttocart('@Url.RouteUrl("RemoveProductToMiniCart", new { shoppingCartItemId = item.Id })', this);return false;"></span>
+                </div>
+            }
+
+        </div>
+        <div class="flyout-cart-bottom">
+            <div class="total">
+                <span>@T("ShoppingCart.Totals.SubTotal"):</span> <strong>@Model.SubTotal</strong>
+            </div>
+            <div class="buttons">
+                <button class="one-click-button" onclick="setLocation('@(Url.RouteUrl("ShoppingCart"))')">
+                    <span>
+                        @T("ShoppingCart.Mini.ViewCart")
+                    </span>
+                </button>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="cart-empty">
+            @T("ShoppingCart.Mini.NoItems")
+        </div>
+    }
+</div>
+
+ 

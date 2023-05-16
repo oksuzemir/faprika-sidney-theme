@@ -1,0 +1,71 @@
+﻿@model ContactVendorModel
+@{
+    Layout = "_Root";
+    //title
+    Html.AddTitleParts($"Tedarikçi İletişim - {Model.VendorName}");
+    Html.AddCssFileParts(ResourceLocation.Head, "~/Themes/Sidney/Content/css/pages/contact.min.css", "~/Themes/Sidney/Content/css/pages/contact.css");
+}
+<div class="page contact-page">
+    <div class="page-container">
+        <div class="page-body">
+            <div class="contact-header">
+                <h1>Tedarikçi İletişim Formu - @Model.VendorName</h1>
+                <div class="breadcrumb">
+                    <ul>
+                        <li>
+                            <a href="@Url.RouteUrl("HomePage")" title="@T("Breadcrumb.Top")">@T("Breadcrumb.Top")</a>
+                            <span class="delimiter"></span>
+                        </li>
+                        <li>
+                            <span class="current-item">Tedarikçi İletişim Formu</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="contact-content">
+                <form asp-route="ContactVendor" method="post">
+                    @if (Model.SuccessfullySent)
+                    {
+                        <div class="result">
+                            @Model.Result
+                        </div>
+                    }
+                    <div class="inputs name">
+                        <div class="input-validate">
+                            <input asp-for="FullName" placeholder="@T("ContactUs.FullName")" class="fullname" />
+                            <span asp-validation-for="FullName"></span>
+                        </div>
+                    </div>
+                    <div class="inputs mail">
+                        <div class="input-validate">
+                            <input asp-for="Email" placeholder="@T("ContactUs.Email")" class="email" />
+                            <span asp-validation-for="Email"></span>
+                        </div>
+                    </div>
+                    <div class="inputs subject">
+                        <div class="input-validate">
+                            <input asp-for="Subject" placeholder="@T("ContactUs.Subject")" class="subject" />
+                            <span asp-validation-for="Subject"></span>
+                        </div>
+                    </div>
+                    <div class="inputs enquiry">
+                        <div class="input-validate">
+                            <textarea asp-for="Enquiry" placeholder="@T("ContactUs.Enquiry")" class="enquiry"></textarea>
+                            <span asp-validation-for="Enquiry"></span>
+                        </div>
+                    </div>
+                    @if (Model.DisplayCaptcha)
+                    {
+                        <div class="captcha-box">
+                            <faprika-captcha />
+                        </div>
+                    }
+                    <div class="buttons">
+                        <button type="submit" name="send-email" value="@T("ContactVendor.Button")">Gönder</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

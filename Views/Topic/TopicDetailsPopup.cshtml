@@ -1,0 +1,9 @@
+﻿@model TopicModel
+@{
+    /*pop-up*/
+    Layout = "_RootPopup";
+
+    Html.AddCssFileParts(ResourceLocation.Head, "~/Themes/Sidney/Content/css/pages/topic.min.css", "~/Themes/Sidney/Content/css/pages/topic.css");
+}
+
+@Html.Raw(Model.Body)

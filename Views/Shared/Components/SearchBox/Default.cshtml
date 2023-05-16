@@ -1,0 +1,68 @@
+﻿@model SearchBoxModel
+@using Faprika
+@{
+    //other variables
+    var random = CommonHelper.GenerateRandomInteger();
+    var clientId = "small-search-box-form-" + random;
+}
+
+<form asp-route="ProductSearch" method="get" class="@clientId">
+    <input class="input"
+           onkeyup="SearchKeyup(this, event)"
+           onkeydown="SearchKeyDown(this, event)"
+           autocomplete="off"
+           name="q"
+           type="text"
+           placeholder="@T("Search.SearchBox.Tooltip")">
+
+    <button class="button-search" type="submit"></button>
+
+    <div class="search-results"></div>
+
+    @if (Model.SearchTermMinimumLength > 0)
+    {
+        <script asp-location="Footer">
+            $(document).ready(function () {
+                $(".@(clientId)").on("submit", function (e) {
+                    var $input = $(this).find(".input");
+                    if ($input.val() == "") {
+                        $input.trigger('focus');
+                        e.preventDefault();
+                    }
+                });
+            });
+
+            var timer;
+            function SearchKeyup(el, e) {
+                //enter keyup
+                if (e.which == 13) {
+                    e.preventDefault();
+                    return false;
+                }
+                timer = setTimeout(function () {
+                    var $input = $(el);
+                    var $button = $input.siblings(".button-search");
+                    var $result = $input.siblings(".search-results");
+                    var term = $input.val();
+
+                    if ($.trim(term).length > @Model.SearchTermMinimumLength) {
+                        $button.addClass('ajax-loading');
+                        $.get('@(Url.RouteUrl("ProductSearchAutoComplete"))', { term: term }, function (data) {
+                            $button.removeClass('ajax-loading');
+                            $result.html(data).show();
+                        });
+                    }
+                    else {
+                        $result.empty().hide();
+                    }
+                }, 500);
+            }
+
+            function SearchKeyDown(el, event) {
+                clearTimeout(timer);
+            }
+        </script>
+    }
+</form>
+
+

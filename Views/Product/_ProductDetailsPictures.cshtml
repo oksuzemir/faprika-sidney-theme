@@ -1,0 +1,104 @@
+﻿@model ProductDetailsModel
+@{
+    //register CSS and JS
+    //swiper
+    Html.AppendScriptParts(ResourceLocation.Footer, "~/lib/swiper/4.4.5/js/swiper.min.js", "~/lib/swiper/4.4.5/js/swiper.js");
+    Html.AddCssFileParts(ResourceLocation.Footer, "~/lib/swiper/4.4.5/css/swiper.min.css", "~/lib/swiper/4.4.5/css/swiper.css");
+
+    //fancybox
+    Html.AppendScriptParts(ResourceLocation.Footer, "~/lib/fancybox/3/jquery.fancybox.min.js", "~/lib/fancybox/3/jquery.fancybox.js");
+    Html.AddCssFileParts(ResourceLocation.Footer, "~/lib/fancybox/3/jquery.fancybox.min.css", "~/lib/fancybox/3/jquery.fancybox.css");
+}
+<div class="gallery gallery-fixed">
+    <div class="product-slider product-slider-inner left">
+        @*left right bottom*@
+        @if (Model.PictureModels.Count > 0)
+        {
+            <div class="swiper-master gallery-thumbs">
+                <div class="swiper-wrapper">
+                    @*Video Thumb*@
+                    @if (Model.VideoUrl.HasValue())
+                    {
+                        <div class="swiper-slide swiper-video"><img itemprop="image" alt="@Model.Name" title="@Model.Name" src="@Model.DefaultPictureModel.FullSizeImageUrl" /></div>
+                    }
+                    @*Image Thumb*@
+                    @foreach (var picture in Model.PictureModels)
+                    {
+                        <div class="swiper-slide"><img itemprop="image" src="@picture.FullSizeImageUrl" alt="@Model.Name" title="@Model.Name" /></div>
+                    }
+                </div>
+                @if (Model.PictureModels.Count > 5 || (Model.VideoUrl.HasValue() && Model.PictureModels.Count > 4))
+                {
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                }
+            </div>
+            <div class="swiper-master gallery-top">
+                @await Html.PartialAsync("_ProductTags", Model)
+                <div class="swiper-wrapper">
+                    @*Video Slide*@
+                    @if (Model.VideoUrl.HasValue())
+                    {
+                        <div class="swiper-slide swiper-video">
+                            <video id="swiper-video" poster="@Model.DefaultPictureModel.FullSizeImageUrl" preload="none" muted loop>
+                                <source src="@Model.VideoUrl" type="video/mp4" width="100%">
+                            </video>
+                        </div>
+                    }
+                    @*Image Slide*@
+                    @foreach (var picture in Model.PictureModels)
+                    {
+                        <div class="swiper-slide">
+                            <a data-fancybox="gallery" href="@picture.FullSizeImageUrl"> <img src="@picture.FullSizeImageUrl" alt="@Model.Name" title="@Model.Name" /></a>
+                        </div>
+                    }
+                </div>
+                @if (Model.PictureModels.Count > 1)
+                {
+                    <div class="swiper-button-next swiper-button-white"></div>
+                    <div class="swiper-button-prev swiper-button-white"></div>
+                }
+            </div>
+        }
+    </div>
+</div>
+<script asp-location="Footer">
+    //Initialize Swiper
+    $(window).on('load', function () {
+        var height = $('.gallery-top').outerHeight();
+        $('.gallery-thumbs').css('height', height);
+        var initialSlide = @(Model.VideoUrl.HasValue() ? 1 : 0);
+        var galleryThumbs = new Swiper('.gallery-thumbs', {
+            direction: 'vertical', // result class "bottom" if "horizontal" do. Height Reset
+            slidesPerView: 5,
+            watchSlidesProgress: true,
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            }
+        });
+        var galleryTop = new Swiper('.gallery-top', {
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            thumbs: {
+                swiper: galleryThumbs
+            },
+            initialSlide: initialSlide
+        });
+        @if (Model.VideoUrl.HasValue())
+        {
+            <text>
+            galleryTop.on('slideChangeTransitionStart', function () {
+                var video = document.getElementById("swiper-video");
+                if ($('.gallery-top .swiper-slide-active').hasClass('swiper-video')) {
+                    video.play();
+                } else {
+                    video.pause();
+                }
+            });
+            </text>
+        }
+    });
+</script>

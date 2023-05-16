@@ -1,0 +1,96 @@
+﻿@model CustomerInfoModel
+@{
+    //title
+    Html.AddTitleParts(T("PageTitle.Account").Text);
+    Html.AddCssFileParts(ResourceLocation.Head, "~/Themes/Sidney/Content/css/pages/account.min.css");
+}
+<section class="page account-page customer-info-page">
+    <div class="page-container">
+        <div class="page-left-sidebar">
+            @await Component.InvokeAsync("CustomerNavigation", new { selectedTabId = CustomerNavigationEnum.Info })
+        </div>
+        <div class="page-body">
+            <form asp-route="CustomerInfo" method="post">
+                <div asp-validation-summary="ModelOnly" class="message-error"></div>
+
+                <div class="page-title">
+                    @T("PageTitle.Account")
+                </div>
+
+                <div class="inputs">
+                    <label asp-for="FirstName"></label>
+                    <div class="input-validate">
+                        <input asp-for="FirstName" />
+                        <span asp-validation-for="FirstName"></span>
+                    </div>
+                </div>
+                <div class="inputs">
+                    <label asp-for="LastName"></label>
+                    <div class="input-validate">
+                        <input asp-for="LastName" />
+                        <span asp-validation-for="LastName"></span>
+                    </div>
+                </div>
+                <div class="inputs">
+                    <label asp-for="Email"></label>
+                    <div class="input-validate">
+                        <input asp-for="Email" />
+                        <span asp-validation-for="Email"></span>
+                    </div>
+                </div>
+                <div class="inputs">
+                    <label asp-for="Phone"></label>
+                    <div class="input-validate">
+                        <faprika-input asp-for="Phone" asp-template="Phone" />
+                        <span asp-validation-for="Phone"></span>
+                    </div>
+                </div>
+                <div class="inputs date-of-birth">
+                    <label>@T("Account.Fields.DateOfBirth")</label>
+                    <faprika-date-picker asp-day-name="@Html.NameFor(x => x.DateOfBirthDay)"
+                                         asp-month-name="@Html.NameFor(x => x.DateOfBirthMonth)"
+                                         asp-year-name="@Html.NameFor(x => x.DateOfBirthYear)"
+                                         asp-selected-day="@Model.DateOfBirthDay"
+                                         asp-selected-month="@Model.DateOfBirthMonth"
+                                         asp-selected-year="@Model.DateOfBirthYear" />
+
+                    <span asp-validation-for="DateOfBirthDay"></span>
+                    <span asp-validation-for="DateOfBirthMonth"></span>
+                    <span asp-validation-for="DateOfBirthYear"></span>
+                </div>
+
+                <div class="inputs options">
+                    <label>@T("Account.Fields.Gender")</label>
+                    <div class="gender">
+                        <span class="male">
+                            <input type="radio" asp-for="Gender" value="M" checked="@(Model.Gender == "M")" id="gender-male" />
+                            <label for="gender-male">@T("Account.Fields.Gender.Male")</label>
+                        </span>
+                        <span class="female">
+                            <input type="radio" asp-for="Gender" value="F" checked="@(Model.Gender == "F")" id="gender-female" />
+                            <label for="gender-female">@T("Account.Fields.Gender.Female")</label>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="inputs options user-marketing">
+                    <input type="checkbox" asp-for="AuthorizeEmailMarketing" id="authorize-email-marketing" />
+                    <label for="authorize-email-marketing">@T("Account.Fields.AuthorizeEmailMarketing")</label>
+                </div>
+
+                <div class="inputs options user-marketing">
+                    <input type="checkbox" asp-for="AuthorizeSmsMarketing" id="authorize-sms-marketing" />
+                    <label for="authorize-sms-marketing">@T("Account.Fields.AuthorizeSmsMarketing")</label>
+                </div>
+
+                <div class="buttons">
+                    <button type="submit" class="button">
+                        @T("Common.Save")
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+@await Component.InvokeAsync("Widget", new { widgetZone = "info_page" })

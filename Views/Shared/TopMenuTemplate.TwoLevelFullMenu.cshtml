@@ -1,0 +1,104 @@
+﻿@model TopMenuModel.TopMenuLineModel
+@using Faprika.Core.Domain.Common
+@{
+    Html.AddCssFileParts(ResourceLocation.Head, "~/Themes/Sidney/Content/css/components/twolevel-menu.min.css", "~/Themes/Sidney/Content/css/components/twolevel-menu.css");
+}
+@{
+    //submenus
+    var subMenus = Model.SubMenus;
+
+    //open in new window
+    string target = "_self";
+    if (Model.OpenNewWindow)
+    {
+        target = "_blank";
+    }
+
+    //font weight
+    string fontWeight = "normal";
+    if (Model.FontWeightBold)
+    {
+        fontWeight = "bold";
+    }
+
+    //font style
+    string fontStyle = "normal";
+    if (Model.FontStyleItalic)
+    {
+        fontStyle = "italic";
+    }
+
+    //menu level class
+    string levelClass = "";
+    //only root level
+    if (Model.Level == 1)
+    {
+        levelClass = "two-level full";
+    }
+
+    //column count
+    string columnCount = "";
+    if (Model.ColumnCount > 0)
+    {
+        columnCount = string.Format("-moz-column-count: {0}; -webkit-column-count: {0}; column-count: {0};", Model.ColumnCount);
+    }
+}
+
+<li class="@levelClass">
+    <a href="@Model.Url" target="@target" style="font-weight: @(fontWeight); font-style: @(fontStyle);">
+        @Model.Name
+    </a>
+
+    @* Is First Level *@
+    @if (Model.Level == 1)
+    {
+        //top menu pictures
+        var topMenuPictures = Model.AvailableTopMenuPictures;
+
+        @if (subMenus.Any() || topMenuPictures.Any())
+        {
+            <div class="sub">
+
+                @if (subMenus.Count > 0)
+                {
+                    <ul style="@columnCount">
+                        @foreach (var subMenu in subMenus)
+                        {
+                            @await Html.PartialAsync("TopMenuTemplate.TwoLevelFullMenu", subMenu)
+                        }
+                    </ul>
+                }
+
+                @if (topMenuPictures.Count > 0)
+                {
+                    <div class="topmenu-pictures">
+
+                        @foreach (var picture in topMenuPictures)
+                        {
+                            <div class="topmenu-pictures-picture">
+                                <a @(!String.IsNullOrWhiteSpace(picture.Url) ? $"href={picture.Url}" : "")>
+                                    <img src="@picture.PictureUrl" alt="@Model.Name" />
+                                </a>
+                            </div>
+                        }
+
+                    </div>
+                }
+
+            </div>
+        }
+    }
+    else
+    {
+        if (subMenus.Count > 0)
+        {
+            <ul style="@columnCount">
+                @foreach (var subMenu in subMenus)
+                {
+                    @await Html.PartialAsync("TopMenuTemplate.TwoLevelFullMenu", subMenu)
+                }
+            </ul>
+        }
+    }
+</li>
+

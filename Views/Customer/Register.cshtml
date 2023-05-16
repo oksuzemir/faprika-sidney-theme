@@ -1,0 +1,81 @@
+﻿@model RegisterModel
+@inject IEventPublisher eventPublisher
+@{
+    Layout = "_Root.Head";
+    //title
+    Html.AddTitleParts(T("PageTitle.Register").Text);
+
+    Html.AddCssFileParts(ResourceLocation.Head, "~/Themes/Sidney/Content/css/pages/auth.min.css", "~/Themes/Sidney/Content/css/pages/auth.css");
+
+    //event
+    eventPublisher.Publish(new PageRenderingEvent(this.Html, false));
+}
+
+<main class="page auth-page">
+    <div class="page-container">
+        <div class="auth-form">
+            @await Component.InvokeAsync("Logo")
+            <form asp-route="Register" asp-route-returnurl="@Context.Request.Query["ReturnUrl"]" method="post">
+                <div class="form-group">
+                    <div asp-validation-summary="ModelOnly" class="message-error"></div>
+                </div>
+                <div class="inputs register-name">
+                    <div class="input-validate">
+                        <input asp-for="FirstName" class="input" type="text" autofocus="autofocus" placeholder="@T("Account.Fields.FirstName")" />
+                        <span asp-validation-for="LastName"></span>
+                    </div>
+                </div>
+                <div class="inputs register-lastname">
+                    <div class="input-validate">
+                        <input asp-for="LastName" class="input" type="text" placeholder="@T("Account.Fields.LastName")" />
+                        <span asp-validation-for="LastName"></span>
+                    </div>
+                </div>
+                <div class="inputs register-email">
+                    <div class="input-validate">
+                        <input asp-for="EmailOrPhone" class="input" placeholder="@T("Account.Fields.EmailOrPhone")" />
+                        <span asp-validation-for="EmailOrPhone"></span>
+                    </div>
+                </div>
+                <div class="inputs register-password">
+                    <div class="input-validate">
+                        <input asp-for="Password" class="input" placeholder="@T("Account.Fields.Password")" />
+                        <span asp-validation-for="Password"></span>
+                    </div>
+                </div>
+                <div class="inputs options register-marketing">
+                    <input type="checkbox" asp-for="AuthorizeMarketing" />
+                    <label for="AuthorizeMarketing">@T("Account.Fields.AuthorizeMarketing")</label>
+                </div>
+                @if (Model.DisplayCaptcha)
+                {
+                    <div class="captcha-wrapper">
+                        <faprika-captcha />
+                    </div>
+                }
+                <div class="buttons">
+                    <button type="submit" id="register-button" class="register-button one-submit-button">
+                        <span>@T("Account.Register.Button")</span>
+                    </button>
+                </div>
+                <div class="message">
+                    @T("Account.Fields.AcceptPrivacyPolicy1")
+                    <span onclick="javascript:OpenWindow('@(Url.RouteUrl("TopicPopup", new {SystemName = "termsofuse" }))', '@T("Account.Fields.AcceptTermsofUse")'); return false;">@T("Account.Fields.AcceptTermsofUse")</span> @T("Account.Fields.AcceptPrivacyPolicy2")
+                    <span onclick="javascript:OpenWindow('@(Url.RouteUrl("TopicPopup", new {SystemName = "privacyinfo" }))', '@T("Account.Fields.AcceptPrivacyPolicy")'); return false;">@T("Account.Fields.AcceptPrivacyPolicy")</span> @T("Account.Fields.AcceptPrivacyPolicy3")
+                </div>
+            </form>
+            <div class="external-authentication">
+                @await Component.InvokeAsync("ExternalMethods")
+            </div>
+        </div>
+        <div class="bottom-wrap">
+            <span>
+                @T("Account.Login.Text")  <a href="@Url.RouteUrl("Login")">
+                    <span>@T("Account.Login")</span>
+                </a>
+            </span>
+        </div>
+    </div>
+</main>
+
+@await Component.InvokeAsync("Widget", new { widgetZone = "register_page" })

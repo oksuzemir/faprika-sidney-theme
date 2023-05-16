@@ -1,0 +1,98 @@
+﻿@model ShoppingCartModel.OrderReviewDataModel
+@if (Model.Display)
+{
+    <div class="order-review-data">
+        <div class="billing-info-wrap">
+            <div class="billing-info">
+                <div class="title">
+                    <strong>@T("Order.BillingAddress")</strong>
+                </div>
+                <ul class="info-list">
+                    <li class="name">
+                        @Model.BillingAddress.FirstName @Model.BillingAddress.LastName
+                    </li>
+                    <li class="email">
+                        @T("Order.Email"): @Model.BillingAddress.Email
+                    </li>
+                    <li class="phone">
+                        @T("Order.Phone"): @Model.BillingAddress.Phone
+                    </li>
+                    <li class="address1">
+                        @Model.BillingAddress.AddressDetail
+                    </li>
+                    <li class="city-state-zip">
+                        @Model.BillingAddress.DistrictName
+                        ,
+                        @Model.BillingAddress.StateProvinceName
+                    </li>
+                    <li class="country">
+                        @Model.BillingAddress.CountryName
+                    </li>
+                </ul>
+            </div>
+            @if (!string.IsNullOrEmpty(Model.PaymentMethod))
+            {
+                <div class="payment-method-info">
+                    <div class="title">
+                        <strong>@T("Order.Payment")</strong>
+                    </div>
+                    <ul class="info-list">
+                        <li class="payment-method">
+                            <span class="label">
+                                @T("Order.Payment.Method"):
+                            </span>
+                            <span class="value">
+                                @Model.PaymentMethod
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+            }
+        </div>
+
+        <div class="shipping-info-wrap">
+            <div class="shipping-info">
+                <div class="title">
+                    <strong>@T("Order.ShippingAddress")</strong>
+                </div>
+                <ul class="info-list">
+                    <li class="name">
+                        @Model.ShippingAddress.FirstName @Model.ShippingAddress.LastName
+                    </li>
+                    <li class="email">
+                        @T("Order.Email"): @Model.ShippingAddress.Email
+                    </li>
+                    <li class="phone">
+                        @T("Order.Phone"): @Model.ShippingAddress.Phone
+                    </li>
+                    <li class="address1">
+                        @Model.ShippingAddress.AddressDetail
+                    </li>
+                    <li class="city-state-zip">
+                        @Model.ShippingAddress.DistrictName
+                        ,
+                        @Model.ShippingAddress.StateProvinceName
+                    </li>
+                    <li class="country">
+                        @Model.ShippingAddress.CountryName
+                    </li>
+                </ul>
+            </div>
+            <div class="shipping-method-info">
+                <div class="title">
+                    <strong>@T("Order.Shipping")</strong>
+                </div>
+                <ul class="info-list">
+                    <li class="shipping-method">
+                        <span class="label">
+                            @T("Order.Shipping.Name"):
+                        </span>
+                        <span class="value">
+                            @Model.ShippingMethod
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+}

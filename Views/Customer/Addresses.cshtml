@@ -1,0 +1,108 @@
+﻿@model CustomerAddressListModel
+@{
+    //title
+    Html.AddTitleParts(T("Account.CustomerAddresses").Text);
+    Html.AddCssFileParts(ResourceLocation.Head, "~/Themes/Sidney/Content/css/pages/account.min.css");
+}
+
+<section class="page account-page address-list-page">
+    <div class="page-container">
+        <div class="page-left-sidebar">
+            @await Component.InvokeAsync("CustomerNavigation", new { selectedTabId = CustomerNavigationEnum.Addresses })
+        </div>
+        <div class="page-body">
+            <div class="address-top">
+                <div class="buttons">
+                    <button class="button add-address-button" type="button" onclick="location.href='@Url.RouteUrl("CustomerAddressAdd")'">
+                        @T("Common.AddNew")
+                    </button>
+                </div>
+                <div class="address-search">
+                    <form asp-route="CustomerAddresses" method="get">
+                        <input asp-for="SearchTerm" placeholder="@T("Common.Search")" />
+                        <button type="submit" name="search" class="button-search"></button>
+                    </form>
+                </div>
+            </div>
+            @if (Model.Addresses.Count > 0)
+            {
+                <div class="address-list">
+
+                    @for (var i = 0; i < Model.Addresses.Count; i++)
+                    {
+                        var address = Model.Addresses[i];
+
+                        <div class="panel-item">
+                            <div class="panel-title">
+                                @address.Name
+                                <div class="panel-buttons">
+                                    <button class="button button-edit" type="button" onclick="location.href = '@(Url.RouteUrl("CustomerAddressEdit", new {addressId = address.Id}))'"></button>
+                                    <button class="button button-delete" type="button" onclick="deletecustomeraddress(@(address.Id))"></button>
+                                </div>
+                            </div>
+                            <ul class="info">
+                                <li class="name">
+                                    @address.FirstName @address.LastName
+                                </li>
+                                <li class="email">
+                                    @address.Email
+                                </li>
+                                <li class="phone">
+                                    @address.Phone
+                                </li>
+                                <li class="address">
+                                    @address.AddressDetail
+                                </li>
+                                <li class="city-state-country">
+                                    @address.DistrictName, @address.StateProvinceName - @address.CountryName
+                                </li>
+                            </ul>
+
+                        </div>
+
+                    }
+                    <script asp-location="Footer">
+                    function deletecustomeraddress(addressId) {
+                        if (confirm('@T("Admin.Common.AreYouSure")')) {
+                            var postData = {
+                                addressId: addressId
+                            };
+                            addAntiForgeryToken(postData);
+
+                            $.ajax({
+                                cache: false,
+                                type: 'POST',
+                                url: '@Url.Action("AddressDelete", "Customer")',
+                                data: postData,
+                                dataType: 'json',
+                                success: function(data) {
+                                    location.href = data.redirect;
+                                },
+                                error: function(xhr, ajaxOptions, thrownError) {
+                                    alert('Failed to delete');
+                                }
+                            });
+                        }
+                    }
+                    </script>
+
+                </div>
+
+                var pager = Html.Pager(Model.PagerModel);
+                if (!string.IsNullOrEmpty(pager.ToHtmlString()))
+                {
+                    <div class="pager">
+                        @pager
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="no-data">
+                    <span class="no-address">@T("Account.CustomerAddresses.NoAddresses")</span>
+                </div>
+            }
+
+        </div>
+    </div>
+</section>

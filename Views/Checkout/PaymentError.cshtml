@@ -1,0 +1,29 @@
+﻿@model CheckoutPaymentErrorModel
+@{
+    Layout = "_Root.Blank";
+
+    //title
+    Html.AddTitleParts(T("PageTitle.Checkout").Text);
+
+    //register CSS and JS
+    Html.AddCssFileParts(ResourceLocation.Head, "~/Themes/Sidney/Content/css/pages/checkout.min.css", "~/Themes/Sidney/Content/css/pages/checkout.css");
+}
+<div class="page checkout-page payment-error-page">
+    <div class="page-container">
+        <div class="payment-error">
+            <h1>@T("Checkout.YourOrderHasBeenError")</h1>
+            @if (Model != null)
+            {
+                <strong>@T("Checkout.YourOrderHasBeenError.Description")</strong>
+                <span>@ViewBag.Message</span>
+                <div class="buttons">
+                    <button type="button" class="payment-error-reorder" onclick="setLocation('@Url.RouteUrl("CheckoutRetry", new { orderGuid = Model.OrderGuid })')">@T("Checkout.PaymentError.Retry")</button>
+                </div>
+            }
+            else
+            {
+                <span>@ViewBag.Message</span>
+            }
+        </div>
+    </div>
+</div>

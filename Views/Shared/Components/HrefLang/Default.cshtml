@@ -1,0 +1,21 @@
+﻿@model LanguageSelectorModel
+@inject IStoreContext storeContext
+@using Faprika.Core.Domain.Stores
+
+@if (Model.AvailableLanguages.Count > 1)
+{
+    foreach (var lang in Model.AvailableLanguages)
+    {
+        string url = $"{storeContext.CurrentStore.GetStoreUrl().TrimEnd('/')}{lang.Url}";
+
+        if (lang.UniqueSeoCode.HasValue())
+        {
+            <link rel="alternate" hreflang="@lang.UniqueSeoCode" href="@url" />
+        }
+        else
+        {
+            <link rel="alternate" hreflang="x-default" href="@url" />
+            <link rel="alternate" hreflang="tr" href="@url" />
+        }
+    }
+}

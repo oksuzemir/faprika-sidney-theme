@@ -1,0 +1,34 @@
+﻿@model TopMenuModel.TopMenuLineModel
+
+@{ 
+    //submenus
+    var subMenus = Model.SubMenus;
+}
+
+<li data-menu="@Model.Id">
+
+    @if (subMenus.Count > 0)
+    {
+        <span>
+            @Model.Name
+        </span>
+        <ul>
+            @foreach (var subMenu in subMenus)
+            {
+                @await Html.PartialAsync("MobileMenuTemplate.Default", subMenu)
+            }
+            <li>
+                <a href="@Model.Url" title="@Model.Name">
+                    @T("Common.ViewAll")
+                </a>
+            </li>
+        </ul>
+    }
+    else
+    {
+        <a href="@Model.Url" title="@Model.Name">
+            @Model.Name
+        </a>
+    }
+</li>
+

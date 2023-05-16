@@ -1,0 +1,163 @@
+﻿@model CustomerProductReviewsModel
+@{
+    //title
+    Html.AddTitleParts(T("PageTitle.CustomerProductReviews").Text);
+    Html.AddCssFileParts(ResourceLocation.Head, "~/Themes/Default/Content/css/pages/account.min.css");
+}
+
+<section class="page account-page reviews-list-page">
+    <div class="page-container">
+        <div class="page-left-sidebar">
+            @await Component.InvokeAsync("CustomerNavigation", new { selectedTabId = CustomerNavigationEnum.ProductReviews })
+        </div>
+        <div class="page-body">
+            @if (Model.ProductReviews.Count > 0)
+            {
+                var pager = Html.Pager(Model.PagerModel);
+
+            <div class="product-reviews">
+                <div class="product-reviews-header">
+                    <h1>@T("PageTitle.CustomerProductReviews")</h1>
+                    <div class="breadcrumb">
+                        <ul>
+                            <li>
+                                <a href="@Url.RouteUrl("HomePage")" title="@T("Breadcrumb.Top")">@T("Breadcrumb.Top")</a>
+                                <span class="delimiter"></span>
+                            </li>
+                            <li>
+                                <span class="current-item">@T("PageTitle.CustomerProductReviews")</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                @foreach (var review in Model.ProductReviews)
+                {
+                    var ratingPercent = review.Rating * 20;
+                    <div class="product-review-item">
+                        <div class="review-item-head">
+                            <div class="review-title">
+                                <span>@review.Title</span>@(!string.IsNullOrEmpty(review.ApprovalStatus) ? $" - {review.ApprovalStatus}" : null)
+                            </div>
+                            <div class="rating-box">
+                                <div class="rating-outer">
+                                    <div class="rating-inner" style="width: @(ratingPercent)%">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="review-content">
+                            <div class="review-text">
+                                @Html.Raw(Faprika.Core.Html.HtmlHelper.FormatText(review.ReviewText, false, true, false, false, false, false))
+                            </div>
+                            <div class="review-info">
+                                <span class="user">
+                                    <label>@T("Account.CustomerProductReviews.ProductReviewFor"):</label>
+                                    <a href="@Url.RouteUrl("Product", new {SeName = review.ProductSeName})">@review.ProductName</a>
+
+                                </span>
+                                <span class="separator">|</span>
+                                <span class="date">
+                                    <label>@T("Reviews.Date"):</label>
+                                    <span>@review.WrittenOnStr</span>
+                                </span>
+                            </div>
+                            @if (!string.IsNullOrEmpty(review.ReplyText))
+                            {
+                                <div class="reply">
+                                    <div class="reply-header">
+                                        <strong>@T("Reviews.Reply")</strong>
+                                    </div>
+                                    <div class="reply-text">
+                                        @Html.Raw(Faprika.Core.Html.HtmlHelper.FormatText(review.ReplyText, false, true, false, false, false, false))
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+                @if (!string.IsNullOrEmpty(pager.ToHtmlString()))
+                {
+                    <div class="pager">
+                        @pager
+                    </div>
+                }
+            </div>
+
+            }
+            else
+            {
+                <div class="no-data">
+                    <span class="no-comment">@T("Account.CustomerProductReviews.NoRecords")</span>
+                </div>
+            }
+
+
+
+            @*@if (Model.ProductReviews.Count > 0)
+                {
+                    var pager = Html.Pager(Model.PagerModel);
+
+                    <div class="columns is-mobile is-multiline">
+                        @foreach (var review in Model.ProductReviews)
+                        {
+                            var ratingPercent = review.Rating * 20;
+                            <div class="product-review-item">
+                                <div class="review-item-head">
+                                    <div class="review-title">
+                                        <strong>@review.Title</strong>@(!string.IsNullOrEmpty(review.ApprovalStatus) ? $" - {review.ApprovalStatus}" : null)
+                                    </div>
+                                    <div class="product-review-box">
+                                        <div class="rating">
+                                            <div style="width: @(ratingPercent)%">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="review-content">
+                                    <div class="review-text">
+                                        @Html.Raw(Faprika.Core.Html.HtmlHelper.FormatText(review.ReviewText, false, true, false, false, false, false))
+                                    </div>
+                                    <div class="review-info">
+                                        <span class="user">
+                                            <label>@T("Account.CustomerProductReviews.ProductReviewFor"):</label>
+                                            <a href="@Url.RouteUrl("Product", new {SeName = review.ProductSeName})">@review.ProductName</a>
+
+                                        </span>
+                                        <span class="separator">|</span>
+                                        <span class="date">
+                                            <label>@T("Reviews.Date"):</label>
+                                            <span>@review.WrittenOnStr</span>
+                                        </span>
+                                    </div>
+                                    @if (!string.IsNullOrEmpty(review.ReplyText))
+                                    {
+                                        <div class="reply">
+                                            <div class="reply-header">
+                                                @T("Reviews.Reply")
+                                            </div>
+                                            <div class="reply-text">
+                                                @Html.Raw(Faprika.Core.Html.HtmlHelper.FormatText(review.ReplyText, false, true, false, false, false, false))
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        }
+
+                        @if (!string.IsNullOrEmpty(pager.ToHtmlString()))
+                        {
+                            <div class="pager">
+                                @pager
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="no-data">
+                        @T("Account.CustomerProductReviews.NoRecords")
+                    </div>
+                }*@
+        </div>
+    </div>
+</section>

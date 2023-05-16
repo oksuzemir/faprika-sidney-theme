@@ -1,0 +1,199 @@
+﻿@model FooterModel
+@{
+    Html.AddCssFileParts(ResourceLocation.Footer, "~/Themes/Sidney/Content/css/components/footer.min.css", "~/Themes/Sidney/Content/css/components/footer.css");
+
+    //register JS
+    Html.AppendScriptParts(ResourceLocation.Footer, "~/lib/jquery-scrolltop/jquery.scrolltop.min.js", "~/lib/jquery-scrolltop/jquery.scrolltop.js");
+}
+
+<div class="footer">
+    <div class="footer-container">
+        <div class="footer-top">
+            <div class="footer-block">
+                <h5>@T("Footer.Quicklink.One")</h5>
+                <ul>
+                    @foreach (var topic in Model.Topics.Where(x => x.IncludeInFooterColumn1).ToList())
+                    {
+                        <li>
+                            <a href="@Url.RouteUrl("Topic", new { SeName=topic.SeName })">@topic.Title</a>
+                        </li>
+                    }
+                    @foreach (var help in Model.Helps.Where(x => x.IncludeInFooterColumn1).ToList())
+                    {
+                        <li>
+                            <a href="@Url.RouteUrl("Help", new { SeName=help.SeName })">@help.Title</a>
+                        </li>
+                    }
+                    @foreach (var category in Model.Categories.Where(x => x.IncludeInFooterColumn1).ToList())
+                    {
+                        <li>
+                            <a href="@Url.RouteUrl("Category", new { SeName=category.SeName })">@category.Name</a>
+                        </li>
+                    }
+                    @foreach (var manufacturer in Model.Manufacturers.Where(x => x.IncludeInFooterColumn1).ToList())
+                    {
+                        <li>
+                            <a href="@Url.RouteUrl("Manufacturer", new { SeName=manufacturer.SeName })">@manufacturer.Name</a>
+                        </li>
+                    }
+                    @if (Model.AllowCustomersToApplyForVendorAccount)
+                    {
+                        <li>
+                            <a href="@Url.RouteUrl("ApplyVendorAccount")">@T("VendorLink")</a>
+                        </li>
+                    }
+                    <li>
+                        <a href="@Url.RouteUrl("ContactUs")">@T("ContactUs")</a>
+                    </li>
+                </ul>
+                @await Component.InvokeAsync("SocialButtons")
+            </div>
+            <div class="footer-block">
+                <h5>@T("Footer.Quicklink.Two")</h5>
+                <ul>
+                    <li>
+                        <a href="@Url.RouteUrl("CustomerInfo")">@T("Account.MyAccount")</a>
+                    </li>
+                    <li>
+                        <a href="@Url.RouteUrl("CustomerOrders")">@T("Account.CustomerOrders")</a>
+                    </li>
+                    <li>
+                        <a href="@Url.RouteUrl("CustomerAddresses")">@T("Account.CustomerAddresses")</a>
+                    </li>
+                    <li>
+                        <a href="@Url.RouteUrl("ShoppingCart")">@T("ShoppingCart")</a>
+                    </li>
+                    <li>
+                        <a href="@Url.RouteUrl("Wishlist")">@T("Wishlist")</a>
+                    </li>
+                    @if (Model.BlogEnabled)
+                    {
+                        <li><a href="@Url.RouteUrl("Blog")">@T("Blog")</a></li>
+                    }
+                    @foreach (var topic in Model.Topics.Where(x => x.IncludeInFooterColumn2).ToList())
+                    {
+                        <li>
+                            <a href="@Url.RouteUrl("Topic", new { SeName=topic.SeName })">@topic.Title</a>
+                        </li>
+                    }
+                    @foreach (var help in Model.Helps.Where(x => x.IncludeInFooterColumn2).ToList())
+                    {
+                        <li>
+                            <a href="@Url.RouteUrl("Help", new { SeName=help.SeName })">@help.Title</a>
+                        </li>
+                    }
+                    @foreach (var category in Model.Categories.Where(x => x.IncludeInFooterColumn2).ToList())
+                    {
+                        <li>
+                            <a href="@Url.RouteUrl("Category", new { SeName=category.SeName })">@category.Name</a>
+                        </li>
+                    }
+                    @foreach (var manufacturer in Model.Manufacturers.Where(x => x.IncludeInFooterColumn2).ToList())
+                    {
+                        <li>
+                            <a href="@Url.RouteUrl("Manufacturer", new { SeName=manufacturer.SeName })">@manufacturer.Name</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+            <div class="footer-block">
+                <h5>@T("Footer.Quicklink.Three")</h5>
+                <ul>
+                    @foreach (var topic in Model.Topics.Where(x => x.IncludeInFooterColumn3).ToList())
+                    {
+                        <li>
+                            <a href="@Url.RouteUrl("Topic", new { SeName=topic.SeName })">@topic.Title</a>
+                        </li>
+                    }
+                    @foreach (var help in Model.Helps.Where(x => x.IncludeInFooterColumn3).ToList())
+                    {
+                        <li>
+                            <a href="@Url.RouteUrl("Help", new { SeName=help.SeName })">@help.Title</a>
+                        </li>
+                    }
+                    @foreach (var category in Model.Categories.Where(x => x.IncludeInFooterColumn3).ToList())
+                    {
+                        <li>
+                            <a href="@Url.RouteUrl("Category", new { SeName=category.SeName })">@category.Name</a>
+                        </li>
+                    }
+                    @foreach (var manufacturer in Model.Manufacturers.Where(x => x.IncludeInFooterColumn3).ToList())
+                    {
+                        <li>
+                            <a href="@Url.RouteUrl("Manufacturer", new { SeName=manufacturer.SeName })">@manufacturer.Name</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+            <div class="footer-block">
+                <h5>@T("Footer.Quicklink.Four")</h5>
+                <ul>
+                    @foreach (var topic in Model.Topics.Where(x => x.IncludeInFooterColumn4).ToList())
+                    {
+                        <li>
+                            <a href="@Url.RouteUrl("Topic", new { SeName=topic.SeName })">@topic.Title</a>
+                        </li>
+                    }
+                    @foreach (var help in Model.Helps.Where(x => x.IncludeInFooterColumn4).ToList())
+                    {
+                        <li>
+                            <a href="@Url.RouteUrl("Help", new { SeName=help.SeName })">@help.Title</a>
+                        </li>
+                    }
+                    @foreach (var category in Model.Categories.Where(x => x.IncludeInFooterColumn4).ToList())
+                    {
+                        <li>
+                            <a href="@Url.RouteUrl("Category", new { SeName=category.SeName })">@category.Name</a>
+                        </li>
+                    }
+                    @foreach (var manufacturer in Model.Manufacturers.Where(x => x.IncludeInFooterColumn4).ToList())
+                    {
+                        <li>
+                            <a href="@Url.RouteUrl("Manufacturer", new { SeName=manufacturer.SeName })">@manufacturer.Name</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+            <div class="footer-block wide">
+                @await Component.InvokeAsync("NewsletterBox")
+
+                <div class="contact">
+                    @if (!string.IsNullOrWhiteSpace(Model.StorePhone))
+                    {
+                        <div class="contact-block">
+                            <div>
+                                <h4 class="title icon-headset">@T("Footer.StorePhone")</h4>
+                                <a href="tel:@Model.StorePhone" title="@Model.StorePhone">@Model.StorePhone</a>
+                            </div>
+                        </div>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.StoreEmail))
+                    {
+                        <div class="contact-block">
+                            <div>
+                                <h4 class="title icon-mail">@T("Footer.StoreEmail")</h4>
+                                <a href="mailto:@Model.StoreEmail" title="@Model.StoreEmail">@Model.StoreEmail</a>
+                            </div>
+                        </div>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.StoreAddress))
+                    {
+                        <div class="contact-block wide">
+                            <div>
+                                <h4 class="title icon-map">@T("Footer.StoreAddress")</h4>
+                                <span>@Model.StoreAddress</span>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <img src="~/Themes/Sidney/Content/img/footer-payment.png" alt="@Model.StoreName" />
+            <span>&copy @T("Content.CopyrightNotice", DateTime.Now.Year, Model.StoreName)</span>
+        </div>
+        <iframe width="1" scrolling="no" height="1" frameborder="0" src="https://analytics.faprika.net/?q=@Model.StoreName" seamless="seamless"></iframe>
+    </div>
+
+    <span class="go-to-top"></span>
+</div>

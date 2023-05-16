@@ -1,0 +1,52 @@
+﻿@model OrderTrackingModel
+@{
+    //title
+    Html.AddTitleParts(T("PageTitle.OrderTracking").Text);
+    Html.AddCssFileParts(ResourceLocation.Head, "~/Themes/Sidney/Content/css/pages/account.min.css", "~/Themes/Sidney/Content/css/pages/account.css");
+}
+
+<section class="page account-page order-tracking-page">
+    <div class="page-container">
+        <form asp-route="OrderTracking" method="post">
+            <div class="order-tracking-header">
+                <h1>@T("PageTitle.OrderTracking")</h1>
+                <div class="breadcrumb">
+                    <ul>
+                        <li>
+                            <a href="@Url.RouteUrl("HomePage")" title="@T("Breadcrumb.Top")">@T("Breadcrumb.Top")</a>
+                            <span class="delimiter"></span>
+                        </li>
+                        <li>
+                            <span class="current-item">@T("PageTitle.OrderTracking")</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            @if (Model.Result.HasValue())
+            {
+                <div class="message-error">@Model.Result</div>
+            }
+            <div class="input-wrap">
+                <div class="inputs">
+                    <div class="input-validate">
+                        <input asp-for="OrderNumber" class="input" autofocus="autofocus" placeholder="@T("OrderTracking.Fields.OrderNumber")" />
+                        <span asp-validation-for="OrderNumber"></span>
+                    </div>
+                </div>
+
+                <div class="inputs">
+                    <div class="input-validate">
+                        <input asp-for="EmailOrPhone" class="input" placeholder="@T("OrderTracking.Fields.EmailOrPhone")" />
+                        <span asp-validation-for="EmailOrPhone"></span>
+                    </div>
+                </div>
+
+                <div class="buttons">
+                    <button class="button order-tracking-button" type="submit">
+                        @T("OrderTracking.Button")
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>

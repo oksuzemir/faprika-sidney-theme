@@ -1,0 +1,25 @@
+﻿@inject IEventPublisher eventPublisher
+@{
+    Layout = "_Root.Head";
+
+    //register CSS and JS
+    Html.AddCssFileParts(ResourceLocation.Head, "~/Themes/Sidney/Content/css/components/header-blank.min.css", "~/Themes/Sidney/Content/css/components/header-blank.css");
+
+    //event
+    eventPublisher.Publish(new PageRenderingEvent(this.Html, false));
+}
+
+<header class="header-blank">
+    <div class="header-container">
+        <div class="header-logo">
+            @await Component.InvokeAsync("Logo")
+        </div>
+    </div>
+</header>
+
+@if (IsSectionDefined("Breadcrumb"))
+{
+    @RenderSection("Breadcrumb")
+}
+
+@RenderBody()

@@ -1,0 +1,52 @@
+﻿@inject IWorkContext workContext
+@inject ILanguageService languageService
+@{
+    //Js in footer
+    Html.AppendScriptParts(ResourceLocation.Footer, "~/lib/toastr/2.1.4/toastr.min.js", "~/lib/toastr/2.1.4/toastr.js");
+    Html.AppendScriptParts(ResourceLocation.Footer, "~/lib/jquery-modal/jquery-modal.min.js", "~/lib/jquery-modal/jquery-modal.js");
+    Html.AppendScriptParts(ResourceLocation.Footer, "~/js/public.dropdownmenu.min.js", "~/js/public.dropdownmenu.js");
+    Html.AppendScriptParts(ResourceLocation.Footer, "~/js/public.ajaxcart.min.js", "~/js/public.ajaxcart.js");
+    Html.AppendScriptParts(ResourceLocation.Footer, "~/js/public.common.min.js", "~/js/public.common.js");
+    Html.AppendScriptParts(ResourceLocation.Footer, "~/lib/responsive-toolkit/responsive-toolkit.min.js", "~/lib/responsive-toolkit/responsive-toolkit.js");
+    Html.AppendScriptParts(ResourceLocation.Footer, "~/Themes/Sidney/Content/js/main.min.js", "~/Themes/Sidney/Content/js/main.js");
+    Html.AppendScriptParts(ResourceLocation.Footer, "~/lib/js.cookie/js.cookie.min.js", "~/lib/js.cookie/js.cookie.js");
+    Html.AppendScriptParts(ResourceLocation.Footer, "~/lib/css-browser-selector-master/css_browser_selector.min.js", "~/lib/css-browser-selector-master/css_browser_selector.min.js");
+    Html.AppendScriptParts(ResourceLocation.Footer, "~/lib/jquery-migrate/jquery-migrate-3.0.1.min.js", "~/lib/jquery-migrate/jquery-migrate-3.0.1.js");
+    Html.AppendScriptParts(ResourceLocation.Footer, "~/lib/jquery-validate/jquery.validate.unobtrusive-v3.2.10/jquery.validate.unobtrusive.min.js", "~/lib/jquery-validate/jquery.validate.unobtrusive-v3.2.10/jquery.validate.unobtrusive.js");
+
+    Html.AppendScriptParts(ResourceLocation.Footer, "~/lib/jquery-validate/jquery.validate-v1.17.0/jquery.validate.min.js", "~/lib/jquery-validate/jquery.validate-v1.17.0/jquery.validate.js");
+    //js in header
+    Html.AppendScriptParts(ResourceLocation.Head, "~/lib/jquery/jquery-3.6.0.min.js", "~/lib/jquery/jquery-3.6.0.js");
+    //add main CSS file
+    Html.AppendCssFileParts(ResourceLocation.Footer, "~/Themes/Sidney/Content/css/plugins/toastr.min.css", "~/Themes/Sidney/Content/css/plugins/toastr.css");
+    Html.AppendCssFileParts(ResourceLocation.Head, "https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&display=swap", excludeFromBundle: true);
+    Html.AppendCssFileParts(ResourceLocation.Head, "~/Themes/Sidney/Content/css/global.min.css", "~/Themes/Sidney/Content/css/global.css");
+}
+<!DOCTYPE html>
+<html lang="@languageService.GetTwoLetterIsoLanguageName(workContext.WorkingLanguage)">
+<head>
+    <title>@Html.FaprikaTitle(true)</title>
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+    <meta name="description" content="@(Html.FaprikaMetaDescription())" />
+    <meta name="keywords" content="@(Html.FaprikaMetaKeywords())" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no">
+    <link rel="shortcut icon" href="~/favicon.ico">
+
+    @Html.FaprikaRobots()
+    @Html.FaprikaHeadCustom()
+    @await Component.InvokeAsync("Widget", new { widgetZone = "head_html_tag" })
+    @Html.FaprikaCssFiles(this.Url, ResourceLocation.Head)
+    @Html.FaprikaInlineCss()
+    @Html.FaprikaScripts(this.Url, ResourceLocation.Head)
+    @Html.FaprikaInlineScripts(this.Url, ResourceLocation.Head)
+    @Html.FaprikaCanonicalUrls()
+    @await Component.InvokeAsync("HrefLang")
+</head>
+<body class="@Html.FaprikaPageCssClasses(includeClassElement: false)">
+    <faprika-antiforgery-token />
+    @RenderBody()
+    @Html.FaprikaCssFiles(this.Url, ResourceLocation.Footer)
+    @Html.FaprikaScripts(this.Url, ResourceLocation.Footer)
+    @Html.FaprikaInlineScripts(this.Url, ResourceLocation.Footer)
+</body>
+</html>

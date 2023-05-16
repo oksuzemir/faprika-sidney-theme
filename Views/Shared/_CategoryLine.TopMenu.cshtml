@@ -1,0 +1,46 @@
+﻿@model TopMenuModel.CategoryLineModel
+@{
+    //subcategories
+    var subCategories = Model.Category.SubCategories.Where(x => x.IncludeInTopMenu).ToList();
+}
+<li class="@(subCategories.Any() ? "has-sublist" : "")">
+    <a href="@Url.RouteUrl("Category", new { SeName = Model.Category.SeName })">
+        @Model.Category.Name
+    </a>
+    @{
+        if (subCategories.Any())
+        {
+            // is first level
+            if (Model.Category.Level == 1)
+            {
+                <div class="sublist">
+                    <div class="inner">
+                        <ul>
+                            @foreach (var subCategory in subCategories)
+                            {
+                                var categoryLineModel = new TopMenuModel.CategoryLineModel
+                                {
+                                    Category = subCategory
+                                };
+                                @await Html.PartialAsync("_CategoryLine.TopMenu", categoryLineModel)
+                            }
+                        </ul>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <ul>
+                    @foreach (var subCategory in subCategories)
+                    {
+                        var categoryLineModel = new TopMenuModel.CategoryLineModel
+                        {
+                            Category = subCategory
+                        };
+                        @await Html.PartialAsync("_CategoryLine.TopMenu", categoryLineModel)
+                    }
+                </ul>
+            }
+        }
+    }
+</li>

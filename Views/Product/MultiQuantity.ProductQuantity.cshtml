@@ -1,0 +1,75 @@
+﻿@model ProductDetailsModel.AddToCartModel
+@{
+    //reset value
+    Model.EnteredQuantity = 0;
+
+    //other variables
+    var random = CommonHelper.GenerateRandomInteger();
+}
+
+@if (Model.AllowCustomerSelectQuantity)
+{
+    <div class="quantity-box">
+        <div class="select">
+            <select asp-for="EnteredQuantity">
+                @for (int i = 0; i < 11; i++)
+                {
+                    <option value="@i">@i</option>
+                }
+            </select>
+        </div>
+    </div>
+}
+else
+{
+    if (Model.AllowCustomerWriteQuantity)
+    {
+    <div class="inputs">
+        <span id="minus-button-@(random)" class="minus">-</span>
+        @if (Model.AllowDecimalStockQuantity)
+        {
+            <input asp-for="EnteredQuantity" value="@Model.EnteredQuantity.FormatInvariant()" type="number" min="0)" step="@(Model.StockQuantityStep.FormatInvariant())" class="qty-input" />
+        }
+        else
+        {
+            <input asp-for="EnteredQuantity" value="@Model.EnteredQuantity.ToInt()" type="number" min="0" step="1" class="qty-input" />
+        }
+        <span id="plus-button-@(random)" class="plus">+</span>
+    </div>
+        <script asp-location="Footer">
+            $(document).ready(function () {
+                // This button will decrement the value till 1
+                $("#minus-button-@(random)").on('click', function (e) {
+                    // Stop acting like a button
+                    e.preventDefault();
+                    //get wrapper input
+                    var $wrapper = $(this).closest('.inputs');
+                    // Get current element
+                    var el = $wrapper.find('.qty-input')[0];
+                    //step down
+                    el.stepDown();
+                    //trigger change
+                    $('#@Html.IdFor(model => model.EnteredQuantity)').trigger('change');
+                });
+
+                // This button will increment the value
+                $('#plus-button-@(random)').on('click', function (e) {
+                    // Stop acting like a button
+                    e.preventDefault();
+                    //get wrapper input
+                    var $wrapper = $(this).closest('.inputs');
+                    // Get current element
+                    var el = $wrapper.find('.qty-input')[0];
+                    //step up
+                    el.stepUp();
+                    //trigger change
+                    $('#@Html.IdFor(model => model.EnteredQuantity)').trigger('change');
+                });
+            });
+        </script>
+    }
+    else
+    {
+        <input asp-for="EnteredQuantity" value="@Model.EnteredQuantity" type="hidden" />
+    }
+}

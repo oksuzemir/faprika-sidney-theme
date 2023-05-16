@@ -1,0 +1,55 @@
+﻿@model ProductOverviewModel
+@{
+    //register CSS and JS
+    //product-box
+    Html.AppendScriptParts(ResourceLocation.Footer, "~/Themes/Sidney/Content/js/product-box.min.js", "~/Themes/Sidney/Content/js/product-box.js");
+
+    //swiper
+    Html.AppendScriptParts(ResourceLocation.Footer, "~/lib/swiper/4.4.5/js/swiper.min.js", "~/lib/swiper/4.4.5/js/swiper.js");
+    Html.AddCssFileParts(ResourceLocation.Footer, "~/lib/swiper/4.4.5/css/swiper.min.css", "~/lib/swiper/4.4.5/css/swiper.css");
+
+    //lazy
+    Html.AppendScriptParts(ResourceLocation.Footer, "~/lib/jquery-lazy/jquery.lazy.min.js", "~/lib/jquery-lazy/jquery.lazy.js");
+
+    //prepare AJAX link
+    //int quantity = 1;
+    //var addtocartlink = Url.RouteUrl("AddProductToCart-Catalog", new { productId = Model.Id, quantity = quantity });
+}
+<div class="campaign-product">
+    <div class="product@(Model.IsOutOfStock ? " out-of-stock" : "")" data-productid="@Model.Id">
+        <i class="fa fa-check"></i>   
+        <div class="image">
+            <a href="@Url.RouteUrl("Product", new { SeName = Model.SeName })" title="@Model.Name">
+                <figure class="product-image-wrapper">
+                    <img class="product-image" alt="@Model.Name" src="@Url.Content("~/" + Model.LazyLogoName)" data-src="@Model.DefaultPictureModel.ImageUrl" title="@Model.Name" />
+                    @await Html.PartialAsync("_ProductSliderBox", Model)
+                </figure>
+                @await Html.PartialAsync("_ProductTagBox", Model)
+            </a>
+        </div>
+
+        <div class="product-info">
+            <h2 class="name">
+                <a href="@Url.RouteUrl("Product", new {SeName = Model.SeName})">@Model.Name</a>
+            </h2>
+            @if (Model.IsOutOfStock == false)
+            {
+                <div class="quantity">
+                    <div class="quantity-panel-small">
+                        <div class="quantity-panel-button">
+                            <div class="btn-minus">
+                                <span></span>
+                            </div>
+                        </div>
+                        <div class="quantity-panel-button">
+                            <div class="btn-plus">
+                                <span></span>
+                            </div>
+                        </div>
+                        <input class="qty-input" type="text" value="1">
+                    </div>
+                </div>
+            }            
+        </div>     
+    </div>
+</div>

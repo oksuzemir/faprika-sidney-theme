@@ -1,0 +1,18 @@
+﻿@import "../helpers/all";
+@import "../variables/variables-dev";
+
+.header-blank {
+    background: #fff;
+    border-bottom: 1px solid $color-border;
+
+    .header-logo {
+        padding: 7px 0;
+        @include centered;
+
+        img {
+            &[src*=svg] {
+                height: 100%;
+            }
+        }
+    }
+}

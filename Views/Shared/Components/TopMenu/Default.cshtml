@@ -1,0 +1,13 @@
+﻿@model TopMenuModel
+
+<ul>
+    @{
+        var rootTopMenus = Model.TopMenus.ToList();
+    }
+    @foreach (var topMenu in rootTopMenus)
+    {
+        @await Html.PartialAsync(topMenu.TemplateViewPath, topMenu)
+    }
+</ul>
+
+

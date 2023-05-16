@@ -1,0 +1,286 @@
+﻿@import "../helpers/all";
+@import "../variables/variables-dev";
+
+.contact-page {
+    margin: 60px 0 10px 0;
+
+    .page-body {
+        @include border($color-border, $border-base);
+        background: #fff;
+        padding: 0 15px 15px;
+
+        .contact-header {
+            @include flexbox;
+            @include flex-direction(column);
+            border-bottom: 1px solid $color-border;
+            margin-bottom: 20px;
+            padding: 15px 0;
+
+            h1 {
+                font-size: 14px;
+                font-weight: 700;
+                color: $gray-darker;
+                margin-bottom: 15px;
+            }
+
+            .breadcrumb {
+                @include breadcrumb;
+            }
+        }
+
+        .contact-blocks {
+            @include flexbox;
+            @include flex-direction(column);
+            padding-bottom: 20px;
+
+            h3 {
+                @include flexbox;
+                @include justify-content(center);
+                @include flex-direction(column);
+                font-size: 15px;
+                color: $gray-darker;
+                font-weight: 600;
+                margin-bottom: 15px;
+
+                &:before {
+                    font-family: "Faprika";
+                    font-weight: 300;
+                    color: $gray-dark;
+                    font-size: 40px;
+                    margin-bottom: 15px;
+                }
+
+                &.icon {
+                    &-headset {
+                        &:before {
+                            content: "\f590";
+                        }
+                    }
+
+                    &-mail {
+                        &:before {
+                            content: "\f0e0";
+                        }
+                    }
+
+                    &-address {
+                        &:before {
+                            content: "\f5a0";
+                        }
+                    }
+                }
+            }
+
+            span {
+                font-size: 13px;
+                color: $gray-dark;
+            }
+
+            > div {
+                @include flex(1);
+                @include border($color-border, $border-base);
+                padding: 20px;
+                text-align: center;
+                margin-bottom: 10px;
+
+                @at-root .ie & {
+                    flex: 1 1 1;
+                }
+            }
+        }
+
+        .contact-content {
+            > div {
+                font-size: 13px;
+                line-height: 26px;
+
+                strong, a {
+                    color: $gray-darker;
+                }
+
+                h2 {
+                    font-size: 14px;
+                    line-height: 26px;
+                }
+
+                margin-bottom: 15px;
+
+                .social {
+
+                    a {
+                        color: $gray-dark;
+
+                        &.facebook {
+                            &:before {
+                                content: "\f39e";
+                            }
+                        }
+
+                        &.instagram {
+                            &:before {
+                                content: "\f16d";
+                            }
+                        }
+
+                        &.twitter {
+                            &:before {
+                                content: "\f099";
+                            }
+                        }
+
+                        &.youtube {
+                            &:before {
+                                content: "\f167";
+                            }
+                        }
+
+                        &.pinterest {
+                            &:before {
+                                content: "\f231";
+                            }
+                        }
+
+                        &:before {
+                            font-family: "FaprikaBrand";
+                            font-size: 15px;
+                            margin-right: 10px;
+                        }
+
+                        &:hover {
+                            &:before {
+                                color: $color-primary;
+                            }
+                        }
+                    }
+                }
+            }
+
+            form {
+                width: 100%;
+
+                .result {
+                    padding: 15px;
+                    position: relative;
+                    margin: 0 0 10px 0;
+                    background-color: lighten($color-success, 32%);
+                    border-left: 3px solid $color-success;
+                    color: darken($color-success, 20%);
+                }
+
+                textarea {
+                    min-height: 150px;
+                }
+
+                button {
+                    @include button($color-primary, $btn-height-md);
+                    width: 100%;
+                    margin-top: 10px;
+                }
+
+                .inputs {
+                    position: relative;
+
+                    .input-validate {
+                        max-width: 100%;
+                    }
+
+                    input, textarea {
+                        padding-left: 30px;
+
+                        @at-root .ie & {
+                            width: 100%;
+                        }
+                    }
+
+                    textarea {
+                        padding-left: 15px;
+                    }
+
+                    &:before {
+                        position: absolute;
+                        font-family: "Faprika";
+                        left: 10px;
+
+                        @at-root .ie & {
+                            top:17px;
+                        }
+                    }
+
+                    &.name {
+                        &:before {
+                            content: "\f007";
+                        }
+                    }
+
+                    &.mail {
+                        &:before {
+                            content: "\f0e0";
+                        }
+                    }
+
+                    &.subject {
+                        &:before {
+                            content: "\f059";
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @include mq(sm) {
+        .page-body {
+            .contact-header {
+                @include flex-direction(row);
+                @include justify-content(space-between);
+                line-height: 48px;
+                padding: 0;
+
+                h1 {
+                    margin: 0;
+                }
+            }
+
+            .contact-blocks {
+                @include flex-direction(row);
+                margin: 0 -15px;
+
+                > div {
+                    margin: 0 15px;
+                }
+            }
+
+            .contact-content {
+                @include flexbox;
+
+                > div {
+                    @include flex(0 276px);
+                    margin-right: 30px;
+                }
+
+                form {
+                    @include flex(1);
+                }
+            }
+        }
+    }
+
+    @include mq(md) {
+        margin: 20px 0;
+
+        .page-body {
+            padding: 0 20px 20px;
+        }
+    }
+
+    @include mq(lg) {
+
+        .page-body {
+            .contact-content {
+                > div {
+                    @include flex(0 356px);
+                }
+            }
+        }
+    }
+}

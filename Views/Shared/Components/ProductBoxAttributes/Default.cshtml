@@ -1,0 +1,90 @@
+﻿@model IList<ProductDetailsModel.ProductAttributeModel>
+@using Faprika.Core.Domain.Catalog
+@if (Model.Count > 0)
+{
+    var productId = ViewBag.Id;
+
+    //prepare AJAX link
+    var addtocartlink = Url.RouteUrl("AddProductToCart-Catalog", new { productId = productId, quantity = 1, loadAttribute = false });
+
+    <div class="product-box-attributes" id="product-box-attribute-@productId">
+
+        @foreach (var attribute in Model)
+        {
+            var controlId = $"product_attribute_{attribute.Id}";
+            var textPrompt = !string.IsNullOrEmpty(attribute.TextPrompt) ? attribute.TextPrompt : attribute.Name;
+            <div class="attribute-item">
+
+                <div class="attribute-label" id="@($"product_attribute_label_{attribute.Id}")">
+                    <label class="text-prompt">
+                        @textPrompt
+                    </label>
+                </div>
+                <div class="attribute-input" id="@($"product_attribute_input_{attribute.Id}")">
+                    @switch (attribute.AttributeControlType)
+                    {
+                        case AttributeControlType.DropdownList:
+                        case AttributeControlType.RadioList:
+                            {
+                                <ul class="radio-list">
+                                    @foreach (var attributeValue in attribute.Values)
+                                    {
+                                        var attributeName = string.IsNullOrEmpty(attributeValue.PriceAdjustment) ?
+                                            attributeValue.Name :
+                                            T("Products.ProductAttributes.PriceAdjustment", attributeValue.Name, attributeValue.PriceAdjustment).Text;
+                                        <li>
+                                            <input id="@(controlId)_@(attributeValue.Id)" type="radio" name="@(controlId)" data-qty="@attributeValue.StockQuantity" data-prc="@attributeValue.OverriddenPrice" disabled="@attributeValue.IsDisabled" value="@attributeValue.Id" checked="@attributeValue.IsPreSelected" />
+                                            <label for="@(controlId)_@(attributeValue.Id)">@attributeName</label>
+                                        </li>
+                                    }
+                                </ul>
+                            }
+                            break;
+                        case AttributeControlType.ColorSquares:
+                            {
+                                <ul class="color-squares" id="color-squares-@(attribute.Id)">
+                                    @foreach (var attributeValue in attribute.Values)
+                                    {
+                                        var attributeName = string.IsNullOrEmpty(attributeValue.PriceAdjustment) ?
+                                            attributeValue.Name :
+                                            T("Products.ProductAttributes.PriceAdjustment", attributeValue.Name, attributeValue.PriceAdjustment).Text;
+                                        <li @(attributeValue.IsPreSelected ? @Html.Raw(" class=\"selected-value\"") : null)>
+                                            <label for="@(controlId)_@(attributeValue.Id)" style="background-color:@(attributeValue.ColorSquaresRgb);" title="@attributeName">
+                                                <input id="@(controlId)_@(attributeValue.Id)" type="radio" name="@(controlId)" data-qty="@attributeValue.StockQuantity" disabled="@attributeValue.IsDisabled" value="@attributeValue.Id" checked="@attributeValue.IsPreSelected" />
+                                            </label>
+                                        </li>
+                                    }
+                                </ul>
+                                <script>
+                                $(document).ready(function() {
+                                    $('#product-box-attribute-@productId #color-squares-@(attribute.Id)').delegate('input', 'click', function(event) {
+                                        $('#product-box-attribute-@productId #color-squares-@(attribute.Id)').find('li').removeClass('selected-value');
+                                        $(this).closest('li').addClass('selected-value');
+                                    });
+                                });
+                                </script>
+                            }
+                            break;
+                    }
+                </div>
+            </div>
+        }
+        <button type="button" class="close-to-attributes" id="close-to-attribute-@productId"></button>
+        <button type="button" class="add-to-cart" onclick="AjaxCart.addproducttocart_catalog('@addtocartlink', '#product-catalog-form-@productId', this);return false;"><span>@T("ShoppingCart.AddToCart")</span></button>
+        <script>
+            $(document).ready(function () {
+                $("#close-to-attribute-@productId").on("click", function () {
+                    $('#product-box-attribute-@productId').fadeOut("fast", function () {
+                        $(this).remove();
+                    });
+                });
+
+                $(document).on("addproducttocart", function () {
+                    $('#product-box-attribute-@productId').fadeOut("fast", function () {
+                        $(this).remove();
+                    });
+                });
+            });
+        </script>
+    </div>
+}

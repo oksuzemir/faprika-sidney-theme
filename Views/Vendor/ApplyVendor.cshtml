@@ -1,0 +1,67 @@
+﻿@using System.Text.Encodings.Web
+@model ApplyVendorModel
+@{ //title
+    Html.AddTitleParts("Tedarikçi Başvuru Formu");
+    //page class
+    Html.AddCssFileParts(ResourceLocation.Head, "~/Themes/Sidney/Content/css/pages/contact.min.css", "~/Themes/Sidney/Content/css/pages/contact.css"); }
+
+<div class="page contact-page">
+    <div class="page-container">
+        <div class="page-body">
+            <div class="contact-header">
+                <h1>Tedarikçi Başvuru Formu</h1>
+                <div class="breadcrumb">
+                    <ul>
+                        <li>
+                            <a href="@Url.RouteUrl("HomePage")" title="@T("Breadcrumb.Top")">@T("Breadcrumb.Top")</a>
+                            <span class="delimiter"></span>
+                        </li>
+                        <li>
+                            <span class="current-item">Başvuru Formu</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="contact-content">
+                @if (Model.DisableFormInput)
+                {
+    <div class="result">
+        @Model.Result
+    </div>
+}
+else
+{
+<form asp-route="ApplyVendorAccount" method="post" enctype="multipart/form-data">
+    <div asp-validation-summary="ModelOnly" class="message-error"></div>
+    <div class="inputs name">
+        <div class="input-validate">
+            <input asp-for="Name" placeholder="@T("ContactUs.FullName")" class="fullname" />
+            <span asp-validation-for="Name"></span>
+        </div>
+    </div>
+    <div class="inputs mail">
+        <div class="input-validate">
+            <input asp-for="Email" placeholder="@T("ContactUs.Email")" class="email" />
+            <span asp-validation-for="Email"></span>
+        </div>
+    </div>
+    <div class="inputs enquiry">
+        <div class="input-validate">
+            <textarea asp-for="Description" placeholder="Açıklama" class="enquiry"></textarea>
+            <span asp-validation-for="Description"></span>
+        </div>
+    </div>
+    @if (Model.DisplayCaptcha)
+    {
+<div class="captcha-box">
+    <faprika-captcha />
+</div>}
+
+    <div class="buttons">
+        <button type="submit" id="apply-vendor" name="apply-vendor" value="@T("ContactVendor.Button")">Başvuruyu Gönder</button>
+    </div>
+</form>}
+            </div>
+        </div>
+    </div>
+</div>

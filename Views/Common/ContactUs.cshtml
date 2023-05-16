@@ -1,0 +1,108 @@
+﻿@model ContactUsModel
+@{
+    Layout = "_Root";
+
+    //title
+    Html.AddTitleParts(T("PageTitle.ContactUs").Text);
+    Html.AddCssFileParts(ResourceLocation.Head, "~/Themes/Sidney/Content/css/pages/contact.min.css", "~/Themes/Sidney/Content/css/pages/contact.css");
+}
+<div class="page contact-page">
+    <div class="page-container">
+        <div class="page-body">
+
+            <div class="contact-header">
+                <h1>@T("PageTitle.ContactUs")</h1>
+                <div class="breadcrumb">
+                    <ul>
+                        <li>
+                            <a href="@Url.RouteUrl("HomePage")" title="@T("Breadcrumb.Top")">@T("Breadcrumb.Top")</a>
+                            <span class="delimiter"></span>
+                        </li>
+                        <li>
+                            <span class="current-item">@T("PageTitle.ContactUs")</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="contact-blocks">
+                <div>
+                    <h3 class="icon-headset">@T("Footer.StorePhone")</h3>
+                    <a href="tel:@Model.StorePhone" title="@Model.StorePhone">@Model.StorePhone</a>
+                </div>
+                <div>
+                    <h3 class="icon-mail">@T("Footer.StoreEmail")</h3>
+                    <a href="mailto:@Model.StoreEmail" title="@Model.StoreEmail">@Model.StoreEmail</a>
+                </div>
+                <div>
+                    <h3 class="icon-address">@T("Footer.StoreAddress")</h3>
+                    <span>@Model.StoreAddress</span>
+                </div>
+            </div>
+            <div class="contact-content">
+                <div>
+                    @await Component.InvokeAsync("TopicBlock", new { systemName = "ContactUs" })
+                    @await Component.InvokeAsync("SocialButtons")
+                </div>
+                <form asp-route="ContactUs" method="post">
+                    @if (Model.SuccessfullySent)
+                    {
+                        <div class="result">
+                            @Model.Result
+                        </div>
+                    }
+                    <div class="inputs name">
+                        <div class="input-validate">
+                            <input asp-for="FullName" placeholder="@T("ContactUs.FullName")" class="fullname" />
+                            <span asp-validation-for="FullName"></span>
+                        </div>
+                    </div>
+                    <div class="inputs mail">
+                        <div class="input-validate">
+                            <input asp-for="Email" placeholder="@T("ContactUs.Email")" class="email" />
+                            <span asp-validation-for="Email"></span>
+                        </div>
+                    </div>
+                    <div class="inputs subject">
+                        <div class="input-validate">
+                            <input asp-for="Subject" placeholder="@T("ContactUs.Subject")" class="subject" />
+                            <span asp-validation-for="Subject"></span>
+                        </div>
+                    </div>
+                    <div class="inputs enquiry">
+                        <div class="input-validate">
+                            <textarea asp-for="Enquiry" placeholder="@T("ContactUs.Enquiry")" class="enquiry"></textarea>
+                            <span asp-validation-for="Enquiry"></span>
+                        </div>
+                    </div>
+                    @if (Model.DisplayCaptcha)
+                    {
+                        <div class="captcha-box">
+                            <faprika-captcha />
+                        </div>
+                    }
+                    <div class="buttons">
+                        <button type="submit" name="send-email" value="@T("ContactUs.Button")">@T("ContactUs.Button")</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+        if ($('.result').text() != '') 
+        {
+            dataLayer.push({
+                'event': 'Briefing',
+                'Category': 'Information',
+                'Action': 'Information form send',
+                'Label': '@Model.FormId',
+                'noninteraction': true
+            });
+        };
+    });
+
+</script>

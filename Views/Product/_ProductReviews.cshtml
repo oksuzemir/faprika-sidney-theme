@@ -1,0 +1,133 @@
+﻿@model ProductReviewsModel
+@{
+    Html.AppendScriptParts(ResourceLocation.Footer, "~/js/public.productreview.min.js", "~/js/public.productreview.js");
+
+    var ratingPercent = 0;
+    decimal ratingValue = 0;
+    if (Model.TotalReviews != 0)
+    {
+        ratingPercent = ((Model.RatingSum * 100) / Model.TotalReviews) / 5;
+        ratingValue = ratingPercent / (decimal)20;
+    }
+}
+
+@*@if (Model.TotalReviews > 0)
+    {
+        var ratingValue = ratingPercent / (decimal)20;
+
+        <div class="ratings-info">
+            <div class="rating-box">
+                <div class="rating-outer">
+                    <div class="rating-inner" style="width: @(ratingPercent)%">
+                    </div>
+                </div>
+            </div>
+
+            <span itemprop="ratingValue">@ratingValue.ToString("0.00")</span>
+            <span itemprop="reviewCount">@Model.TotalReviews</span>
+        </div>
+    }*@
+
+<div class="product-reviews" @if (Model.TotalReviews > 0) { <text> itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating" </text> }>
+    @if (Model.Items.Count > 0)
+    {
+        <div class="review-list">
+            <div class="review-header">
+                <span>@string.Format(T("Reviews.Title").Text, Model.TotalReviews)</span>
+                <span itemprop="reviewCount" style="display:none">@Model.TotalReviews</span>
+                <span itemprop="ratingValue" style="display:none">@ratingValue.ToString("0.00")</span>
+            </div>
+            @foreach (var review in Model.Items.OrderByDescending(x => x.Id))
+            {
+                <div class="review-item">
+                    <div class="review-item-head">
+                        <div class="review-title">
+                            <span>@review.Title</span>
+                        </div>
+                        <div class="rating-box">
+                            <div class="rating-outer">
+                                <div class="rating-inner" style="width: @(review.Rating * 20)%">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="review-content">
+                        <div class="review-text">
+                            @Html.Raw(Faprika.Core.Html.HtmlHelper.FormatText(review.ReviewText, false, true, false, false, false, false))
+                        </div>
+                        <div class="review-content-bottom">
+                            <div class="review-info">
+                                <span class="user">
+                                    @review.CustomerName
+                                </span>
+                                <span class="separator">|</span>
+                                <span class="date">
+                                    @review.WrittenOnStr
+                                </span>
+                            </div>
+                            @await Html.PartialAsync("_ProductReviewHelpfulness", review.Helpfulness)
+
+                        </div>
+
+                        @if (!string.IsNullOrEmpty(review.ReplyText))
+                        {
+                            <div class="reply">
+                                <div class="reply-text">
+                                    @Html.Raw(Faprika.Core.Html.HtmlHelper.FormatText(review.ReplyText, false, true, false, false, false, false))
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    }
+
+    <div class="review-add">
+        <div class="review-header">
+            <span>@T("Reviews.AddNew").Text</span>
+        </div>
+        <div class="review-rating">
+            <label asp-for="AddProductReview.Rating"></label>
+            <div class="star-rating">
+                <fieldset class="rating">
+                    <input asp-for="AddProductReview.Rating" value="5" type="radio" id="addproductrating_5" /><label class="full" for="addproductrating_5" data-label="@T("Reviews.Fields.Rating.5")"></label>
+                    <input asp-for="AddProductReview.Rating" value="4" type="radio" id="addproductrating_4" /><label class="full" for="addproductrating_4" data-label="@T("Reviews.Fields.Rating.4")"></label>
+                    <input asp-for="AddProductReview.Rating" value="3" type="radio" id="addproductrating_3" /><label class="full" for="addproductrating_3" data-label="@T("Reviews.Fields.Rating.3")"></label>
+                    <input asp-for="AddProductReview.Rating" value="2" type="radio" id="addproductrating_2" /><label class="full" for="addproductrating_2" data-label="@T("Reviews.Fields.Rating.2")"></label>
+                    <input asp-for="AddProductReview.Rating" value="1" type="radio" id="addproductrating_1" /><label class="full" for="addproductrating_1" data-label="@T("Reviews.Fields.Rating.1")"></label>
+                </fieldset>
+            </div>
+            <span class="rating-value"></span>
+        </div>
+        <div class="review-form">
+            <div class="inputs">
+                @*<label asp-for="AddProductReview.Title"></label>*@
+                <input asp-for="AddProductReview.Title" class="review-title" asp-disabled="@(!Model.AddProductReview.CanCurrentCustomerLeaveReview)" placeholder="@T("AddProductReview.Title")" />
+                <span asp-validation-for="AddProductReview.Title"></span>
+            </div>
+            <div class="inputs">
+                @*<label asp-for="AddProductReview.ReviewText"></label>*@
+                <textarea asp-for="AddProductReview.ReviewText" class="review-text" asp-disabled="@(!Model.AddProductReview.CanCurrentCustomerLeaveReview)" placeholder="@T("AddProductReview.ReviewText")"></textarea>
+                <span asp-validation-for="AddProductReview.ReviewText"></span>
+            </div>
+
+            <div class="buttons">
+                <button type="button" class="write-product-review-button" onclick="ProductReview.addproductreview();return false;">
+                    @T("Reviews.SubmitButton")
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script asp-location="Footer">
+        ProductReview.init('@Url.Action("ProductReviewsAdd", "Product", new { productId = Model.ProductId })', '#product-details-form', '#product-review-box');
+        $(function () {
+            $(".rating label").on('mouseenter', function () {
+                $(".rating-value").text($(this).data('label'));
+            }).on('mouseleave', function () {
+                $(".rating-value").empty();
+            });
+        });
+</script>

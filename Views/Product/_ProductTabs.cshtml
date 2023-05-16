@@ -1,0 +1,48 @@
+﻿@model ProductDetailsModel
+@{
+    Html.AppendScriptParts(ResourceLocation.Footer, "~/lib/jquery-simpletabs/jquery-simpletabs.min.js", "~/lib/jquery-simpletabs/jquery-simpletabs.js");
+}
+
+<div class="tab-container">
+    <div class="tabs">
+        <ul class="tab-menu">
+            <li><span data-target="tab-fulldescription" class="active">@T("Products.FullDescription")</span></li>
+            @if (Model.ProductReviews.AllowCustomerReviews)
+            {
+                <li><span data-target="tab-reviews">@T("Products.Reviews")</span></li>
+            }
+            @foreach (var topic in Model.Topics)
+            {
+                <li><span data-target="tab-topic-@topic.Id">@topic.Title</span></li>
+            }
+        </ul>
+        <section class="tab-content">
+            <div class="tab-item tab-fulldescription active">
+                @if (!string.IsNullOrEmpty(Model.FullDescription))
+                {
+                    <div class="full-description" itemprop="description">
+                        @Html.Raw(Model.FullDescription)
+                    </div>
+                }
+            </div>
+            @if (Model.ProductReviews.AllowCustomerReviews)
+            {
+                <div class="tab-item tab-reviews">
+                    @await Html.PartialAsync("_ProductReviews", Model.ProductReviews)
+                </div>
+            }
+            @foreach (var topic in Model.Topics)
+            {
+                <div class="tab-item tab-topic-@topic.Id">
+                    @Html.Raw(topic.Body)
+                </div>
+            }
+        </section>
+    </div>
+</div>
+
+<script asp-location="Footer">
+    $(document).ready(function () {
+        $('.tab-container').simpleTabs();
+    });
+</script>

@@ -1,0 +1,18 @@
+﻿@{
+    Layout = "_Root";
+
+    //title
+    Html.AddTitleParts(T("PageTitle.PageNotFound").Text);
+    Html.AddCssFileParts(ResourceLocation.Head, "~/Themes/Sidney/Content/css/pages/error-page.min.css", "~/Themes/Sidney/Content/css/pages/error-page.css");
+}
+<div class="page error-page">
+    <div class="page-container">
+        <div class="error-content">
+            <h1 class="not-found">@T("PageNotFound.Title")</h1>
+            <span>@T("PageNotFound.Text")</span>
+            <a href="@Url.RouteUrl("HomePage")">
+                @T("Common.StartShopping")
+            </a>
+        </div>
+    </div>
+</div>

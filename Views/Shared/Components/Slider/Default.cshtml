@@ -1,0 +1,93 @@
+﻿@model IList<SliderModel>
+@inject SliderSettings settings
+@using Faprika.Core.Domain.Banners
+@using Newtonsoft.Json
+@{
+    //register CSS and JS
+    //swiper
+    Html.AppendScriptParts(ResourceLocation.Footer, "~/lib/swiper/4.4.5/js/swiper.min.js", "~/lib/swiper/4.4.5/js/swiper.js");
+    Html.AddCssFileParts(ResourceLocation.Footer, "~/lib/swiper/4.4.5/css/swiper.min.css", "~/lib/swiper/4.4.5/css/swiper.css");
+
+    Html.AddCssFileParts(ResourceLocation.Head, "~/Themes/Sidney/Content/css/components/slider.min.css", "~/Themes/Sidney/Content/css/components/slider.css");
+}
+
+@if (Model.Count > 0)
+{
+    string mobileJson = JsonConvert.SerializeObject(Model.Where(x => x.Mobile));
+    string tabletJson = JsonConvert.SerializeObject(Model.Where(x => x.Tablet));
+    string desktopJson = JsonConvert.SerializeObject(Model.Where(x => x.Desktop));
+
+    <script asp-location="Footer">
+        // Initialize Slide Items
+        function initSlides() {
+
+            // Variables
+            var mobileJson = @Html.Raw(mobileJson);
+            var tabletJson = @Html.Raw(tabletJson);
+            var desktopJson = @Html.Raw(desktopJson);
+
+            // Slide Array
+            var slides = new Array();
+
+            // Viewport Detect
+            if (ResponsiveToolkit.is('<=sm')) {slides = mobileJson}
+            else if (ResponsiveToolkit.is('md')) {slides = tabletJson}
+            else {slides = desktopJson}
+
+            // Slide Content Wrapper
+            var slideWrap = $('.main-slider .swiper-wrapper').empty();
+
+            // Each slide items in slides
+            $.each(slides, function (index, slide) {
+                var slideItem = $('<div class="swiper-slide"><a href="' + slide.Url + '"><img data-src="' + slide.PictureUrl + '" alt="' + slide.Name + '" class="swiper-lazy" /></a></div>');
+                slideWrap.append(slideItem);
+            });
+            //Swiper-Slider
+            var swiper = new Swiper('.main-slider .swiper-container', {
+                // Enable lazy loading
+                lazy: {
+                    loadPrevNext: true,
+                },
+                slidesPerView: 1,
+                loop: true,
+                centeredSlides: true,
+                speed: @settings.Speed,
+                effect: '@settings.Effect',
+                @if (settings.AutoPlay)
+                {
+                    <text>
+                    autoplay: {
+                        delay: @settings.Delay,
+                    },
+                    </text>
+                }
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                    dynamicBullets: true,
+                },
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                }
+            });
+        }
+
+        // DOM on Ready
+        $(document).ready(function () {
+            initSlides();
+        });
+    </script>
+
+    <div class="main-slider" style="width:@(settings.Width)px; height:@(settings.Height)px;">
+        <div class="swiper-container">
+            <div class="swiper-wrapper"></div>
+            <!-- Add Pagination -->
+            @*<div class="swiper-pagination"></div>*@
+            <!-- Add Arrows -->
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+        </div>
+    </div>
+}
+

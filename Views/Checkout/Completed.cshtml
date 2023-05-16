@@ -1,0 +1,23 @@
+﻿@model CheckoutCompletedModel
+@{
+    Layout = "_Root.Blank";
+
+    //title
+    Html.AddTitleParts(T("PageTitle.Checkout").Text);
+
+    //register CSS and JS
+    Html.AddCssFileParts(ResourceLocation.Head, "~/Themes/Sidney/Content/css/pages/checkout.min.css", "~/Themes/Sidney/Content/css/pages/checkout.css");
+}
+<div class="page checkout-page order-completed-page">
+    <div class="page-container">
+        <div class="order-completed">
+            <h1>@T("Checkout.YourOrderHasBeenSuccessfullyProcessed")</h1>
+            <strong>@T("Checkout.OrderNumber"): @Model.Order.CustomOrderNumber</strong>
+            <span>@T("Checkout.YourOrderHasBeenSuccessfullyProcessed.Description")</span>
+            <div class="buttons">
+                <button type="button" class="order-completed-continue" onclick="setLocation('@Url.RouteUrl("HomePage")')">@T("Checkout.ThankYou.Continue")</button>
+                <button type="button" class="order-completed-details" onclick="setLocation('@Url.RouteUrl("OrderDetails", new { orderID = Model.Order.Id })')">@T("Checkout.PlacedOrderDetails")</button>
+            </div>
+        </div>
+    </div>
+</div>

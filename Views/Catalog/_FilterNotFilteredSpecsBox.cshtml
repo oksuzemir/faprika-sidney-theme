@@ -1,0 +1,48 @@
+﻿@model CatalogPagingFilteringModel.SpecificationFilterModel
+@{
+    var notFilteredItemsGroups = Model.NotFilteredItems.GroupBy(x => x.SpecificationAttributeName);
+    var selectedItems = string.Join(",", Model.AlreadyFilteredItems.Select(x => x.Id));
+}
+@if (Model.Enabled)
+{
+    //register JS
+    Html.AppendScriptParts(ResourceLocation.Footer, "~/js/public.catalogfilter.min.js", "~/js/public.catalogfilter.js");
+
+    <script asp-location="Footer">
+        $(document).ready(function () {
+            var autoRedirect = ResponsiveToolkit.is('>md');
+            CatalogFilter.init("@Html.Raw(Model.FilterUrl)", "@selectedItems", autoRedirect);
+        });
+    </script>
+
+    if (Model.NotFilteredItems.Count > 0)
+    {
+        foreach (var group in notFilteredItemsGroups)
+        {
+            var groupList = group.ToList();
+            var activeList = groupList.Where(x => x.Active).ToList();
+
+            <div class="filter-box notfiltered-items @(groupList.Any(x => !string.IsNullOrEmpty(x.SpecificationAttributeOptionColorRgb)) ? "filter-box-color" : null )">
+                <div class="title">
+                    <span>@groupList[0].SpecificationAttributeName</span>
+                    @if (activeList.Count > 0)
+                    {
+                        <span class="count">@(string.Format(T("Filtering.SpecificationFilter.Count").Text, activeList.Count))</span>
+                    }
+                </div>
+                <ul>
+                    @foreach (var spec in groupList)
+                    {
+                    <li class="filter-item @(spec.Active ? "filter-active" : null) @(!string.IsNullOrEmpty(spec.SpecificationAttributeOptionColorRgb) ? "filter-item-color" : null)" data-filter-id="@spec.Id" onclick="CatalogFilter.setFilter(this);return false;">
+                        <label style="background-color: @(spec.SpecificationAttributeOptionColorRgb);"></label>
+                        <span>@spec.SpecificationAttributeOptionName</span>
+                    </li>
+                    }
+                </ul>
+            </div>
+        }
+    }
+
+
+
+}

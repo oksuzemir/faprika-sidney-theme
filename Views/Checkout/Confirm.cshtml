@@ -1,0 +1,22 @@
+﻿@model CheckoutConfirmModel
+@{
+    Layout = "_Root.Blank";
+
+    //title
+    Html.AddTitleParts(T("PageTitle.Checkout").Text);
+
+    //register CSS and JS
+    Html.AddCssFileParts(ResourceLocation.Head, "~/Themes/Sidney/Content/css/pages/checkout.min.css", "~/Themes/Sidney/Content/css/pages/checkout.css");
+}
+
+<div class="page checkout-page payment-error-page">
+    <div class="page-container">
+        <div class="payment-error">
+            <h1>@T("Checkout.ConfirmYourOrder")</h1>
+            @foreach (var warning in Model.Warnings)
+            {
+                <span>@warning</span>
+            }
+        </div>
+    </div>
+</div>

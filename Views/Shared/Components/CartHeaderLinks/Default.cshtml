@@ -1,0 +1,36 @@
+﻿@model CartHeaderLinksModel
+
+<div class="button-wishlist">
+    <a href="@Url.RouteUrl("Wishlist")">
+        @T("Wishlist")
+        <span class="qty-bubble qty-wishlist">@T("Wishlist.HeaderQuantity", Model.WishlistItems)</span>
+    </a>
+</div>
+
+<div class="button-cart dropdown-wrapper">
+    <span class="dropdown-toggle">
+        @T("ShoppingCart")
+        <span class="qty-bubble qty-cart">@T("ShoppingCart.HeaderQuantity", Model.ShoppingCartItems.ToString("N0"))</span>
+    </span>
+    <div class="flyout-cart-wrapper dropdown-menu">
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('.button-cart.dropdown-wrapper').click(function () {
+            if ($('.flyout-cart-wrapper.dropdown-menu').html().trim().length == 0) {
+                $(".flyout-cart-wrapper").html('@T("Admin.Common.Wait")');
+                var postData = {};
+                addAntiForgeryToken(postData);
+                $.ajax({
+                      cache: false,
+                      type: "POST",
+                      data: postData,
+                      url: '@Url.RouteUrl("FlyoutShoppingCartAjax")',
+                      success: function (result) { $(".flyout-cart-wrapper").html(result); }
+                });
+            }
+        });
+    });
+</script>

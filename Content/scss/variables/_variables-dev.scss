@@ -1,0 +1,112 @@
+﻿@import "_variables.scss";
+
+// --------------------------------------------------
+// Development Variables
+// --------------------------------------------------
+
+// Body
+//
+// Settings for the `<body>` element.
+
+$body-bg: #f3f6f9 !default;
+$body-color: #666666 !default;
+
+
+$color-border: #e2e6eb;
+
+$gray-darker: #212121;
+$gray-dark: #666666;
+$gray-light: #9a9a9a;
+
+$border-base: 3px;
+
+// Links
+//
+// Style anchor elements.
+$link-color: #666666 !default;
+$link-decoration: none !default;
+$link-hover-color: darken($link-color, 15%) !default;
+$link-hover-decoration: none !default;
+
+// Wrapper breakpoints
+//
+// Define the minimum dimensions at which your layout will change,
+// adapting to different screen sizes, for use in media queries.
+
+$wrapper-breakpoints: (xs:480px ,sm: 768px, md: 992px, lg: 1201px ) !default;
+
+
+// Wrapper widths
+//
+// Define the maximum width of `.wrapper` for different screen sizes.
+
+$wrapper-width-sm: 720px !default;
+$wrapper-width-md: 960px !default;
+$wrapper-width-lg: 1200px !default;
+
+// Modals
+$modal-lg: 800px !default;
+$modal-md: 600px !default;
+$modal-sm: 400px !default;
+
+
+// Layers z-index
+$z-index-low: 1000 !default;
+$z-index-medium: 1050 !default;
+$z-index-hard: 1100 !default;
+
+// Fonts
+//
+// Font, line-height, and color for body text, headings, and more.
+
+// stylelint-disable value-keyword-case
+$font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Open Sans", "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !default;
+
+$font-size-base: 13px !default; // Assumes the browser default, typically `16px`
+$font-size-lg: ($font-size-base * 1.25) !default;
+$font-size-sm: ($font-size-base * .875) !default;
+
+$font-weight-light: 300 !default;
+$font-weight-normal: 400 !default;
+$font-weight-bold: 700 !default;
+
+$font-weight-base: $font-weight-normal !default;
+$line-height-base: 1 !default;
+
+$h1-font-size: $font-size-base * 2.5 !default;
+$h2-font-size: $font-size-base * 2 !default;
+$h3-font-size: $font-size-base * 1.75 !default;
+$h4-font-size: $font-size-base * 1.5 !default;
+$h5-font-size: $font-size-base * 1.25 !default;
+$h6-font-size: $font-size-base !default;
+
+
+// Buttons
+//
+// For each of Bootstrap's buttons, define text, background, and border color.
+
+$btn-height-sm: 30px !default;
+$btn-height-md: 40px !default;
+$btn-height-lg: 50px !default;
+
+
+
+// Forms
+
+$label-margin-bottom: .5rem !default;
+
+$input-padding-y: .375rem !default;
+$input-padding-x: .75rem !default;
+$input-line-height: $line-height-base !default;
+
+$input-bg: #FFFFFF !default;
+
+$input-color: #333333 !default;
+$input-border-color: #EEEEEE !default;
+$input-border-width: 1px !default;
+
+$input-border-radius: .25rem !default;
+
+$input-focus-bg: $input-bg !default;
+$input-focus-border-color: darken($input-color, 25%) !default;
+$input-focus-color: $input-color !default;

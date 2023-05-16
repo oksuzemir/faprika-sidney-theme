@@ -1,0 +1,33 @@
+﻿@model CatalogPagingFilteringModel.SpecificationFilterModel
+@{
+    var alreadyFilteredItemsGroups = Model.AlreadyFilteredItems.GroupBy(x => x.SpecificationAttributeName);
+}
+@if (Model.Enabled)
+{
+    if (Model.AlreadyFilteredItems.Count > 0)
+    {
+        <div class="filter-box filtered-items">
+            <div class="title">
+                @T("Filtering.SpecificationFilter.CurrentlyFilteredBy")
+                <a href="@Model.RemoveFilterUrl" class="remove-filter">@T("Filtering.SpecificationFilter.RemoveAll")</a>
+            </div>
+            <div class="filtered-items-wrap">
+                @foreach (var group in alreadyFilteredItemsGroups)
+                {
+                    var groupList = group.ToList();
+
+                    @foreach (var spec in groupList)
+                    {
+                        <div class="item">
+                            <span>@spec.SpecificationAttributeOptionName</span>
+                            <a class="remove" href="@spec.FilterUrl">
+                                @*@T("Filtering.SpecificationFilter.Remove")*@
+                            </a>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    }
+
+}

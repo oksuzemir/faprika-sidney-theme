@@ -1,0 +1,87 @@
+﻿@inject IWorkContext workContext
+@inject ILanguageService languageService
+@inject CatalogSettings catalogSettings
+@using Faprika.Core.Domain.Catalog
+@{
+    Html.AddCssFileParts(ResourceLocation.Head, "~/Themes/Sidney/Content/css/components/header.min.css", "~/Themes/Sidney/Content/css/components/header.css");
+}
+
+<div class="header deneme-oldu ">
+    <div class="header-top">
+        <div class="header-top-container">
+            <span class="info">@T("Header.InfoText")</span>
+            <div class="header-top-links">
+                <a href="@Url.RouteUrl("OrderTracking")">@T("Account.OrderTracking")</a>
+                <a href="@Url.RouteUrl("HelpIndex")">@T("Help")</a>
+                <a href="@Url.RouteUrl("ContactUs")">@T("ContactUs")</a>
+                <div class="languageSelector dropdown-wrapper">
+                    <span class="dropdown-toggle">
+                        <img alt="@workContext.WorkingLanguage.Name" src="@Url.Content("~/i/f/" + workContext.WorkingLanguage.FlagImageFileName)">
+                        @workContext.WorkingLanguage.Name
+                    </span>
+                    <ul class="dropdown-menu">
+                        @await Component.InvokeAsync("LanguageSelector")
+                        @if (catalogSettings.ShowCurrencySelector)
+                        {
+                            @await Component.InvokeAsync("CurrencySelector")
+                        }
+                        @await Component.InvokeAsync("CountrySelector")
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="header-main">
+        <div class="header-main-container">
+            <div class="header-mobile-menu dropdown-wrapper">
+                <span class="mobile-menu-open dropdown-toggle"></span>
+                @await Component.InvokeAsync("MobileMenu")
+            </div>
+            <div class="header-logo">
+                @await Component.InvokeAsync("Logo")
+            </div>
+            <div class="header-search">
+                @await Component.InvokeAsync("SearchBox")
+            </div>
+            <div class="header-links">
+                <div class="button-search dropdown-wrapper">
+                    <span class="dropdown-toggle">
+                    </span>
+                    <div class="dropdown-menu">
+                        <div class="dropdown-header">
+                            <span class="title">@T("Search.Mobile.Title")</span>
+                            <span class="dropdown-close"></span>
+                        </div>
+                        @await Component.InvokeAsync("SearchBox")
+                    </div>
+                </div>
+                @await Component.InvokeAsync("HeaderNews")
+                <div class="button-user dropdown-wrapper">
+                    <span class="dropdown-toggle">
+                        @T("Account.MyAccount")
+                        <span class="qty-bubble selected-lang">@languageService.GetTwoLetterIsoLanguageName(workContext.WorkingLanguage)</span>
+                    </span>
+                    <div class="user-nav dropdown-menu">
+                        @await Component.InvokeAsync("HeaderLinks")
+                        <div class="nav-bottom">
+                            @await Component.InvokeAsync("LanguageSelector")
+                            @if (catalogSettings.ShowCurrencySelector)
+                            {
+                                @await Component.InvokeAsync("CurrencySelector")
+                            }
+                            @await Component.InvokeAsync("CountrySelector")
+                        </div>
+                    </div>
+                </div>
+                @await Component.InvokeAsync("CartHeaderLinks")
+            </div>
+
+        </div>
+    </div>
+    <div class="header-menu">
+        <div class="header-menu-container">
+            @await Component.InvokeAsync("TopMenu")
+        </div>
+    </div>
+</div>
+

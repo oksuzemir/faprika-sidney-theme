@@ -1,0 +1,84 @@
+﻿@model ShoppingCartModel
+@{
+    Layout = "_Root.Blank";
+
+    //title
+    Html.AddTitleParts(T("PageTitle.ShoppingCart").Text);
+
+    //register CSS and JS
+    Html.AddCssFileParts(ResourceLocation.Head, "~/Themes/Sidney/Content/css/components/header-blank.min.css", "~/Themes/Sidney/Content/css/components/header-blank.css");
+    Html.AddCssFileParts(ResourceLocation.Head, "~/Themes/Sidney/Content/css/pages/cart.min.css", "~/Themes/Sidney/Content/css/pages/cart.css");
+}
+<section class="page shopping-cart-page">
+    @*<div class="progress-container">
+            @await Component.InvokeAsync("CheckoutProgress", new { step = CheckoutProgressStep.Cart })
+        </div>*@
+    <div class="page-container">
+        @if (Model.Items.Any())
+        {
+            <div class="cart-area">
+                <div class="page-body">
+                    @await Component.InvokeAsync("OrderSummary", new { overriddenModel = Model })
+                    @await Component.InvokeAsync("CrossSellProducts")
+                </div>
+                <div class="page-right-sidebar">
+                    <form asp-route="ShoppingCart" method="post" id="shopping-cart-form">
+                        <div class="order-totals">
+                            <div class="order-totals-header">
+                                @T("Order.Totals.Title")
+                            </div>
+                            <div class="order-totals-content">
+                                @await Component.InvokeAsync("OrderTotals", new { isEditable = Model.IsEditable, preparePaymentMethodAdditionalFee = false })
+                                @if (!string.IsNullOrEmpty(Model.MinOrderSubtotalWarning))
+                                {
+                                    <div class="min-amount-warning">
+                                        @Model.MinOrderSubtotalWarning
+                                    </div>
+                                }
+                                <div class="checkout-buttons">
+                                    @if (string.IsNullOrEmpty(Model.MinOrderSubtotalWarning) && !Model.HideCheckoutButton)
+                                    {
+                                        <button type="submit" id="checkout" name="checkout" value="checkout" class="checkout-button one-submit-button">
+                                            <span>@T("Checkout.Button")</span>
+                                        </button>
+                                    }
+                                </div>
+                                <div class="terms-of-service">
+                                    <p>
+                                        @T("Checkout.TermsOfService.Accept1") <span onclick="javascript:OpenWindow('@(Url.RouteUrl("TopicPopup", new {SystemName = "conditionsofuse" }))', '@T("Checkout.TermsOfService.ConditionsOfUse")'); return false;">@T("Checkout.TermsOfService.ConditionsOfUse")</span>@T("Checkout.TermsOfService.Accept2")
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        @if (Model.IsEditable)
+                        {
+                            @await Html.PartialAsync("_DiscountBox", Model.DiscountBox)
+
+                            <div class="attributes">
+                                @await Html.PartialAsync("_CheckoutAttributes", Model)
+                            </div>
+                        }
+                    </form>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="shopping-cart-empty">
+                <strong>@T("ShoppingCart.CartIsEmpty.Desc1")</strong>
+                <span>@T("ShoppingCart.CartIsEmpty.Desc2")</span>
+                <a href="@Url.RouteUrl("HomePage")">
+                    @T("Common.StartShopping")
+                </a>
+            </div>
+        }
+    </div>
+</section>
+
+<script asp-location="Footer">
+    $(document).ready(function () {
+        $(document).on("addproducttocart", function () {
+            setLocation('@Url.RouteUrl("ShoppingCart")');
+        });
+    });
+</script>

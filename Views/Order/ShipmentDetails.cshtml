@@ -1,0 +1,88 @@
+﻿@model ShipmentDetailsModel
+@{
+    //title
+    Html.AddTitleParts("Gönderi Detay");
+    //page class
+    Html.AddCssFileParts(ResourceLocation.Head, "~/Themes/Sidney/Content/css/pages/account.min.css");
+}
+
+<section class="page account-page order-details-page">
+    <div class="page-container">
+        <div class="page-body">
+            <div class="order-details">
+                <div class="billing-info-content">                  
+                    <div class="billing-info">
+                        <div class="order-details-title">Gonderi Detay</div>
+                        <ul class="info-list">
+                            <li class="name">
+                               Gonderi: @Model.Id
+                            </li>
+                            <li class="email">
+                                Kargo: @Model.ShippedDate
+                            </li>
+                            <li class="phone">
+                                Teslim: @Model.DeliveryDate
+                            </li>
+                            <li class="phone">
+                                Takip No: @Model.TrackingNumber
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="cart-wrap">
+                <div class="cart-title">
+                    <span>@T("Order.Product(s)")</span>
+                </div>
+                <div class="cart-item-header">                
+                    <div class="product-details">
+                        <div class="product-info">
+                            <span>@T("CartHeader.Product.Name")</span>
+                        </div>                       
+                        <div class="variant-box">
+                            <div class="product-quantity">
+                                <span>Toplam</span>
+                            </div>
+                            <div class="product-total-price">
+                                <span>Sevk</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @if (Model.Items.Count > 0)
+                {
+                    @foreach (var item in Model.Items)
+                    {
+                        <div class="cart-item">                         
+                            <div class="product-details">
+                                <div class="product-info">
+                                    <a href="@Url.RouteUrl("Product", new {SeName = item.ProductSeName})" class="product-name">
+                                        @item.ProductName
+                                    </a>
+                                    <div class="attributes">
+                                        @T("ShoppingCart.SKU"): @item.Sku
+                                    </div>
+                                    @if (!string.IsNullOrEmpty(item.AttributeInfo))
+                                    {
+                                        <div class="attributes">
+                                            @Html.Raw(item.AttributeInfo)
+                                        </div>
+                                    }
+                                </div>
+                                <div class="variant-box">
+                                    <div class="product-quantity">
+                                        <span class="product-quantity">@item.QuantityOrdered.ToString("N2")</span>
+                                    </div>
+                                    <div class="product-total-price">
+                                        <span class="product-subtotal">@item.QuantityShipped.ToString("N2")</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>          
+        </div>
+    </div>
+</section>

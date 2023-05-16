@@ -1,0 +1,107 @@
+﻿@model CustomerOrderListModel
+@{
+    //title
+    Html.AddTitleParts(T("Account.CustomerOrders").Text);
+    Html.AddCssFileParts(ResourceLocation.Head, "~/Themes/Sidney/Content/css/pages/account.min.css");
+}
+<section class="page account-page order-list-page">
+    <div class="page-container">
+        <div class="page-left-sidebar">
+            @await Component.InvokeAsync("CustomerNavigation", new { selectedTabId = CustomerNavigationEnum.Orders })
+        </div>
+        <div class="page-body">
+            <div class="order-search">
+                <form asp-route="CustomerOrders" method="post">
+                    <div class="page-title">
+                        @T("Account.CustomerOrders")
+                    </div>
+                    <div class="order-search-box">
+                        <div class="input-group">
+                            <div class="inputs">
+                                <label asp-for="FirstName"></label>
+                                <input asp-for="FirstName" />
+                            </div>
+                            <div class="inputs">
+                                <label asp-for="LastName"></label>
+                                <input asp-for="LastName" />
+                            </div>
+                            <div class="inputs">
+                                <label asp-for="Email"></label>
+                                <input asp-for="Email" />
+                            </div>
+                            <div class="inputs">
+                                <label asp-for="Phone"></label>
+                                <input asp-for="Phone" />
+                            </div>
+                            <div class="inputs inputs-date">
+                                <label asp-for="StartDate"></label>
+                                <div class="inputs input-group">
+                                    <faprika-editor asp-for="StartDate" />
+                                    <faprika-editor asp-for="EndDate" />
+                                </div>
+                            </div>
+                            <div class="inputs">
+                                <label asp-for="InOrderStatusIds"></label>
+                                <faprika-select asp-for="InOrderStatusIds" asp-items="Model.AvailableOrderStatuses" asp-multiple="true" />
+                            </div>
+                            <div class="inputs">
+                                <label asp-for="InPaymentStatusIds"></label>
+                                <faprika-select asp-for="InPaymentStatusIds" asp-items="Model.AvailablePaymentStatuses" asp-multiple="true" />
+                            </div>
+                            <div class="inputs">
+                                <label asp-for="InShippingStatusIds"></label>
+                                <faprika-select asp-for="InShippingStatusIds" asp-items="Model.AvailableShippingStatuses" asp-multiple="true" />
+                            </div>
+                        </div>
+                        <div class="button-group">
+                            <button type="submit" name="search" class="button-search">@T("Common.Search")</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            @if (Model.Orders.Count > 0)
+            {
+                <div class="order-list">
+
+                    @foreach (var order in Model.Orders)
+                    {
+                        <div class="panel-item">
+                            <div class="panel-title">
+                                #@order.CustomOrderNumber
+                                <div class="panel-buttons">
+                                    <a href="@Url.RouteUrl("OrderDetails", new { orderId = order.Id })" class="button button-details"></a>
+                                    @if (order.IsReturnRequestAllowed)
+                                        {
+                                            <button onclick="location.href = '@Url.RouteUrl("ReturnRequest", new { orderId = order.Id })'" class="button button-return"></button>
+                                        }
+                                </div>
+                            </div>
+                            <ul class="info">
+                                <li><span>@T("Account.CustomerOrders.FullName")</span> <span class="order-date">: @order.FullName</span></li>
+                                <li><span>@T("Account.CustomerOrders.OrderStatus")</span> <span class="order-status" style="color: @order.OrderStatusEnum.Color">: @order.OrderStatus</span></li>
+                                <li><span>@T("Account.CustomerOrders.ShippingStatus")</span> <span class="shipping-status">: @order.ShippingStatus</span></li>
+                                <li><span>@T("Account.CustomerOrders.OrderDate")</span> <span class="order-date">: @order.CreatedOn.ToString()</span></li>
+                                <li><span>@T("Account.CustomerOrders.OrderTotal")</span> <span class="order-total">: <strong>@order.OrderTotal</strong></span></li>
+                            </ul>
+                        </div>
+                    }
+
+                </div>
+
+                var pager = Html.Pager(Model.PagerModel);
+                if (!string.IsNullOrEmpty(pager.ToHtmlString()))
+                {
+                    <div class="pager">
+                        @pager
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="no-data">
+                    <span class="no-orders">@T("Account.CustomerOrders.NoOrders")</span>
+                </div>
+            }
+        </div>
+    </div>
+</section>

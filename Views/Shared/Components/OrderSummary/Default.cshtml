@@ -1,0 +1,217 @@
+@model ShoppingCartModel
+@inject IWebHelper webHelper
+
+@await Html.PartialAsync("_OrderReviewData", Model.OrderReviewData)
+
+@if (Model.Warnings.Count > 0)
+{
+    <div class="message-error">
+        <ul>
+            @foreach (var warning in Model.Warnings)
+            {
+                <li>@warning</li>
+            }
+        </ul>
+    </div>
+}
+
+<div class="cart-wrap">
+    <div class="cart-item-header">
+        <div class="product-image">
+        </div>
+        <div class="product-details">
+            <div class="product-info">
+                <span>@T("CartHeader.Product.Name")</span>
+            </div>
+            <div class="product-unit-price">
+                <span>@T("CartHeader.Product.UnitPrice")</span>
+            </div>
+            <div class="variant-box">
+                <div class="product-quantity">
+                    <span>@T("CartHeader.Product.Quantity")</span>
+                </div>
+                <div class="product-total-price">
+                    <span>@T("CartHeader.Product.TotalPrice")</span>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+    @foreach (var item in Model.Items)
+    {
+        <div class="cart-item">
+            <div class="product-image">
+                <a href="@Url.RouteUrl("Product", new {SeName = item.ProductSeName})">
+                    <img alt="@item.ProductName" src="@item.Picture.ImageUrl" title="@item.ProductName" />
+                </a>
+            </div>
+            <div class="product-details">
+                <div class="product-info">
+                    <a href="@Url.RouteUrl("Product", new {SeName = item.ProductSeName})" class="product-name">
+                        @item.ProductName
+                    </a>
+                    <div class="attributes">
+                        @T("ShoppingCart.SKU"): @item.Sku
+                    </div>
+                    @if (!string.IsNullOrEmpty(item.AttributeInfo))
+                    {
+                        <div class="attributes">
+                            @Html.Raw(item.AttributeInfo)
+                        </div>
+                    }
+                    @if (item.Warnings.Count > 0)
+                    {
+                        <div class="message-error">
+                            <ul>
+                                @foreach (var warning in item.Warnings)
+                                {
+                                    <li>@Html.Raw(warning)</li>
+                                }
+                            </ul>
+                        </div>
+                    }
+                </div>
+                <div class="product-unit-price">
+                    <span>@item.UnitPrice</span>
+                </div>
+                <div class="variant-box">
+                    <div class="product-quantity inputs">
+                        @if (Model.IsEditable)
+                        {
+                            if (item.AllowItemEditing)
+                            {
+                                if (!item.AllowCustomerSelectQuantity && item.AllowCustomerWriteQuantity)
+                                {
+                                    <span id="minus-button-@item.Id" class="minus">-</span>
+                                    @if (item.AllowDecimalStockQuantity)
+                                    {
+                                        <input name="itemquantity@(item.Id)" id="itemquantity@(item.Id)" type="number" value="@(item.Quantity.FormatInvariant())" min="@(item.MinimumQty.FormatInvariant())" max="@(item.MaximumQty.FormatInvariant())" step="@(item.StockQuantityStep.FormatInvariant())" class="qty-input" />
+                                    }
+                                    else
+                                    {
+                                        <input name="itemquantity@(item.Id)" id="itemquantity@(item.Id)" type="number" value="@(item.Quantity.ToInt())" min="@(item.MinimumQty.ToInt())" max="@(item.MaximumQty.ToInt())" step="@(item.StockQuantityStep.FormatInvariant())" class="qty-input" />
+                                    }
+                                    <span id="plus-button-@item.Id" class="plus">+</span>
+
+                                    <script asp-location="Footer">
+                                        $(document).ready(function () {
+
+                                            var timer;
+
+                                            $('#itemquantity@(item.Id)').on("change", function () {
+
+                                                var $input = $(this);
+
+                                                if (timer) {
+                                                    clearTimeout(timer);
+                                                }
+                                                timer = setTimeout(function () {
+
+                                                    //get url
+                                                    var url = "@(Url.RouteUrl("UpdateProductToCart", new { shoppingCartItemId = item.Id, quantity = "-qty-" }, webHelper.CurrentRequestProtocol))";
+                                                    if ($input.val() > 0) {
+                                                        //replace value
+                                                        url = url.replace("-qty-", $input.val());
+                                                        //set location
+                                                        setLocation(url);
+                                                    }
+
+                                                }, 2000);
+                                            });
+
+                                            // This button will decrement the value till 1
+                                            $("#minus-button-@item.Id").on('click', function (e) {
+                                                // Stop acting like a button
+                                                e.preventDefault();
+                                                // Get current element
+                                                var el = document.getElementById('itemquantity@(item.Id)');
+                                                //step down
+                                                el.stepDown();
+                                                //trigger change
+                                                $('#itemquantity@(item.Id)').trigger('change');
+                                            });
+
+                                            // This button will increment the value
+                                            $('#plus-button-@item.Id').on('click', function (e) {
+                                                // Stop acting like a button
+                                                e.preventDefault();
+                                                // Get current element
+                                                var el = document.getElementById('itemquantity@(item.Id)');
+                                                //step up
+                                                el.stepUp();
+                                                //trigger change
+                                                $('#itemquantity@(item.Id)').trigger('change');
+                                            });
+                                        });
+                                    </script>
+                                }
+                                else
+                                {
+                                    <select name="itemquantity@(item.Id)" class="qty-dropdown" onchange="setLocation(this.value);">
+                                        @{decimal stepQuantity = item.MinimumQty;}
+                                        @while (stepQuantity <= item.MaximumQty)
+                                        {
+                                            var url = Url.RouteUrl("UpdateProductToCart", new { shoppingCartItemId = item.Id, quantity = stepQuantity.ToString("N0") }, webHelper.CurrentRequestProtocol);
+
+                                            if (item.Quantity == stepQuantity)
+                                            {
+                                                <option selected="selected" value="@url">@stepQuantity.ToString("N0")</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@url">@stepQuantity.ToString("N0")</option>
+                                            }
+                                            stepQuantity += item.StockQuantityStep == decimal.Zero ? decimal.One : item.StockQuantityStep;
+                                        }
+                                    </select>
+                                }
+                            }
+                            else
+                            {
+                                if (item.AllowDecimalStockQuantity)
+                                {
+                                    <input name="itemquantity@(item.Id)" id="itemquantity@(item.Id)" type="number" value="@(item.Quantity.FormatInvariant())" readonly="readonly" class="qty-input" />
+                                }
+                                else
+                                {
+                                    <input name="itemquantity@(item.Id)" id="itemquantity@(item.Id)" type="number" value="@(item.Quantity.ToInt())" readonly="readonly" class="qty-input" />
+                                }
+                            }
+                        }
+                        else
+                        {
+                            <span class="product-quantity">@T("CartHeader.Product.Quantity"): @item.Quantity.ToString("N2")</span>
+                        }
+                    </div>
+                    <div class="product-total-price">
+                        <span class="product-subtotal">@item.SubTotal</span>
+                        @if (!string.IsNullOrEmpty(item.Discount))
+                        {
+                            <div class="discount">
+                                @item.Discount
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="product-remove">
+                <a class="product-remove-icon one-click-button" href="@Url.RouteUrl("RemoveProductToCart", new { shoppingCartItemId = item.Id })" rel="nofollow"></a>
+            </div>
+        </div>
+    }
+</div>
+
+@if (Model.IsEditable)
+{
+    <div class="cart-options">
+
+        <button type="button" class="continue-shopping" onclick="setLocation('@Url.RouteUrl("HomePage")')">
+            @T("ShoppingCart.ContinueShopping")
+        </button>
+        <button type="button" class="remove-all" onclick="setLocation('@Url.RouteUrl("RemoveAllProductToCart")')">
+            @T("ShoppingCart.RemoveAllItems")
+        </button>
+    </div>
+}
+

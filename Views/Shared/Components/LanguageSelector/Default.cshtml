@@ -1,0 +1,19 @@
+﻿@model LanguageSelectorModel
+
+<div class="language-list">
+    <ul>
+        @foreach (var lang in Model.AvailableLanguages)
+        {
+            @if (lang.Id != Model.CurrentLanguageId)
+            {
+                <li>
+                    <a href="@lang.Url" title="@lang.Name">
+                        <img title='@lang.Name' alt='@lang.Name' @(lang.Id == Model.CurrentLanguageId ? " class=selected" : null)
+                     src="@Url.Content("~/i/f/" + @lang.FlagImageFileName)" />
+                        @lang.Name
+                    </a>
+                </li>
+            }
+        }
+    </ul>
+</div>

@@ -1,0 +1,94 @@
+﻿@import "../helpers/all";
+@import "../variables/variables-dev";
+
+.error-page {
+    .page-container {
+        margin-top: 60px;
+
+        .error-content {
+            @include centered;
+            @include flex-direction(column);
+            @include border($color-border, $border-base);
+            background: #fff;
+            margin: 10px 0;
+            padding: 8vh 0;
+
+            h1 {
+                font-size: 22px;
+                font-weight: 700;
+                color: $gray-darker;
+                position: relative;
+                line-height: 42px;
+                @include flexbox;
+                @include flex-direction(column);
+                @include align-items(center);
+
+                &:before {
+                    font-family: "Faprika";
+                    color: $color-danger;
+                    font-size: 70px;
+                    line-height: 70px;
+                    font-weight: 700;
+                    margin-bottom: 15px;
+                    left: 0;
+                }
+
+                &.not-found {
+                    &:before {
+                        content: "\f071";
+                    }
+                }
+            }
+
+            span {
+                font-size: 13px;
+                line-height: 24px;
+                margin: 15px 0;
+                padding: 0 10px;
+                text-align: center;
+            }
+
+            a {
+                @include button($color-primary, $btn-height-md);
+            }
+        }
+    }
+
+    @include mq(xs) {
+        .page-container {
+
+            .error-content {
+                h1 {
+                    font-size: 35px;
+                }
+
+                span {
+                    font-size: 14px;
+                }
+            }
+        }
+    }
+
+    @include mq(sm) {
+        .page-container {
+            .error-content {
+
+                span {
+                    font-size: 14px;
+                    width: 60%;
+                    margin: 30px 0;
+                }
+            }
+        }
+    }
+
+    @include mq(md) {
+        .page-container {
+            margin-top: 0;
+
+            .error-content {
+                margin: 20px 0;
+            }
+        }
+    }
+}

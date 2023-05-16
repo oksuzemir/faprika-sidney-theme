@@ -1,0 +1,17 @@
+﻿@model BlogPostCategoryListModel
+@if (Model.Categories.Count > 0)
+{
+    <div class="block block-popular-blogcategories">
+        <div class="title">
+            <strong>@T("Blog.Categories")</strong>
+        </div>
+        <div class="listbox">
+            <ul class="categories">
+                @foreach (var item in Model.Categories)
+                {
+                    <li><a href="@Url.RouteUrl("BlogByCategory", new { category = item.Name })">@item.Name</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}

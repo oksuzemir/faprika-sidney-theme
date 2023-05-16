@@ -1,0 +1,56 @@
+﻿@model CustomerReturnRequestsModel
+@{
+    //title
+    Html.AddTitleParts(T("account.customerreturnrequests").Text);
+    Html.AddCssFileParts(ResourceLocation.Head, "~/Themes/Sidney/Content/css/pages/account.min.css");
+}
+<section class="page account-page order-returns-list-page">
+    <div class="page-container">
+        <div class="page-left-sidebar">
+            @await Component.InvokeAsync("CustomerNavigation", new { selectedTabId = CustomerNavigationEnum.ReturnRequests })
+        </div>
+        <div class="page-body">
+            @if (Model.Items.Count > 0)
+            {
+                <div class="order-search">
+                    <form method="post">
+                        <div class="page-title">İade Taleplerim</div>
+                    </form>
+                </div>
+                <div class="order-list">
+                    @foreach (var returnRequest in Model.Items)
+                    {
+                        <div class="panel-item">
+                            <div class="panel-title">
+                                @T("Account.CustomerReturnRequests.Title") #@returnRequest.CustomNumber
+                                <div class="panel-buttons">
+                                    <span title="@returnRequest.Comments" class="@(returnRequest.Comments.HasValue() ? "button button-details" : "")"></span>
+                                </div>
+                            </div>
+                            <ul class="info">
+                                <li class="product">
+                                    <span>@T("Account.CustomerReturnRequests.Item")</span>
+                                    <a href="@Url.RouteUrl("Product", new { SeName = returnRequest.ProductSeName })"><span class="order-product">: @returnRequest.ProductName</span></a>
+                                </li>
+                                <li class="product">
+                                    <span>@T("Account.CustomerReturnRequests.Quantity")</span>
+                                    <span>: @returnRequest.Quantity @T("Account.CustomerReturnRequests.Total")</span>
+                                </li>
+                                <li><span>@T("Account.CustomerReturnRequests.Date")</span> <span class="order-date">: @returnRequest.CreatedOn.ToString()</span></li>
+                                <li><span>@T("Admin.Orders.Returns.Fields.ReturnReason")</span> <span class="shipping-status">: @returnRequest.ReturnReason</span></li>
+                                <li><span>@T("Admin.Orders.Returns.Fields.ReturnAction")</span> <span class="shipping-status">: @returnRequest.ReturnAction</span></li>
+                                <li><span>@T("Account.CustomerReturnRequests.Action")</span> <span class="shipping-status">: @returnRequest.ReturnRequestStatus</span></li>
+                            </ul>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="no-data">
+                    <span class="no-orders">@T("account.customerreturn.noreturnrequests")</span>
+                </div>
+            }
+        </div>
+    </div>
+</section>

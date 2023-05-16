@@ -1,0 +1,17 @@
+﻿@model CustomerNavigationModel
+<div class="side-navigation">
+    <div class="nav-title">
+        <strong>@T("Account.Navigation")</strong>
+    </div>
+    <div class="nav-wrap">
+        <ul class="nav-list">
+            @foreach (var item in Model.CustomerNavigationItems)
+            {
+                <li class="@(Model.SelectedTab == item.Tab ? "active" : "inactive") @item.ItemClass">
+                    <a href="@Url.RouteUrl(item.RouteName)">@(item.Title)</a>
+                </li>
+            }
+        </ul>
+    </div>
+</div>
+

@@ -1,0 +1,73 @@
+﻿@model HeaderLinksModel
+<div class="dropdown-header">
+    <span class="title">@T("Account.MyAccount")</span>
+    <span class="dropdown-close"></span>
+</div>
+<div class="dropdown-menu-contents">
+
+    @if (Model.IsAuthenticated)
+    {
+        <a class="userlink-info" href="@Url.RouteUrl("CustomerInfo")">
+            @T("Account.Info")
+        </a>
+        <a class="userlink-address" href="@Url.RouteUrl("CustomerAddresses")">
+            @T("Account.CustomerAddresses")
+        </a>
+        <a class="userlink-orders" href="@Url.RouteUrl("CustomerOrders")">
+            @T("Account.CustomerOrders")
+        </a>
+        <a class="userlink-return" href="@Url.RouteUrl("CustomerReturnRequests")">
+            @T("Account.Customerreturnrequests")
+        </a>
+        <a class="userlink-wishlist" href="@Url.RouteUrl("Wishlist")">
+            @T("Wishlist")
+        </a>
+        @if (Model.AllowCustomersToApplyForVendorAccount)
+        {
+            <a class="userlink-vendor" href="@Url.RouteUrl("ApplyVendorAccount")">@T("VendorLink")</a>
+        }
+        <a class="userlink-password" href="@Url.RouteUrl("CustomerChangePassword")">
+            @T("Account.ChangePassword")
+        </a>
+        <a class="userlink-logout" href="@Url.RouteUrl("Logout")">
+            @T("Account.Logout")
+        </a>
+
+    }
+    else
+    {
+        <a class="userlink-login" href="@Url.RouteUrl("Login")">
+            @T("Account.Login")
+        </a>
+        <a class="userlink-register" href="@Url.RouteUrl("Register")">
+            @T("Account.Register")
+        </a>
+        @if (Model.AllowCustomersToApplyForVendorAccount)
+        {
+            <a class="userlink-vendor" href="@Url.RouteUrl("ApplyVendorAccount")">
+                @T("VendorLink")
+            </a>
+        }
+        <a class="userlink-wishlist" href="@Url.RouteUrl("Wishlist")">
+            @T("Wishlist")
+        </a>
+        <a class="userlink-ordertracking" href="@Url.RouteUrl("OrderTracking")">
+            @T("Account.OrderTracking")
+        </a>
+    }
+    @if (Model.IsCustomerImpersonated || Model.DisplayAdminLink)
+    {
+        if (Model.IsCustomerImpersonated)
+        {
+            <a class="userlink-logout" href="@Url.RouteUrl("Logout")">
+                @T("Account.ImpersonatedAs.Finish")
+            </a>
+        }
+        if (Model.DisplayAdminLink)
+        {
+            <a class="userlink-admin" href="@Url.Content("~/admin/")">
+                @T("Account.Admin")
+            </a>
+        }
+    }
+</div>

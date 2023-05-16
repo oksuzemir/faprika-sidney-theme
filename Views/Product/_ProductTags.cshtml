@@ -1,0 +1,44 @@
+﻿@model ProductDetailsModel
+@*left-top*@
+@if (Model.ProductTagModels.Where(x => x.IncludeInBoxLeftTop).Any())
+{
+    <div class="product-tag left-top">
+        @foreach (var tag in Model.ProductTagModels.Where(x => x.IncludeInBoxLeftTop).ToList())
+        {
+            <img src="@tag.PictureUrl" alt="@tag.Name" title="@tag.Name" />
+        }
+    </div>
+}
+
+@*left-bottom*@
+@if (Model.ProductTagModels.Where(x => x.IncludeInBoxLeftBottom).Any())
+{
+    <div class="product-tag left-bottom">
+        @foreach (var tag in Model.ProductTagModels.Where(x => x.IncludeInBoxLeftBottom).ToList())
+        {
+            <img src="@tag.PictureUrl" alt="@tag.Name" title="@tag.Name" />
+        }
+    </div>
+}
+
+@*right-top*@
+@if (Model.ProductTagModels.Where(x => x.IncludeInBoxRightTop).Any())
+{
+    <div class="product-tag right-top">
+        @foreach (var tag in Model.ProductTagModels.Where(x => x.IncludeInBoxRightTop).ToList())
+        {
+            <img src="@tag.PictureUrl" alt="@tag.Name" title="@tag.Name" />
+        }
+    </div>
+}
+
+@*right-bottom*@
+@if (Model.ProductTagModels.Where(x => x.IncludeInBoxRightBottom).Any())
+{
+    <div class="product-tag right-bottom">
+        @foreach (var tag in Model.ProductTagModels.Where(x => x.IncludeInBoxRightBottom).ToList())
+        {
+            <img src="@tag.PictureUrl" alt="@tag.Name" title="@tag.Name" />
+        }
+    </div>
+}

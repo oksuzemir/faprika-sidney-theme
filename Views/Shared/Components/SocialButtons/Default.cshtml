@@ -1,0 +1,29 @@
+﻿@model SocialModel
+<div class="social">
+    @if (!string.IsNullOrEmpty(Model.FacebookLink))
+    {
+        <a href="@Model.FacebookLink" rel="nofollow" target="_blank" class="facebook">
+        </a>
+
+    }
+    @if (!string.IsNullOrEmpty(Model.InstagramLink))
+    {
+        <a href="@Model.InstagramLink" rel="nofollow" target="_blank" class="instagram">
+        </a>
+    }
+    @if (!string.IsNullOrEmpty(Model.TwitterLink))
+    {
+        <a href="@Model.TwitterLink" rel="nofollow" target="_blank" class="twitter">
+        </a>
+    }
+    @if (!string.IsNullOrEmpty(Model.YoutubeLink))
+    {
+        <a href="@Model.YoutubeLink" rel="nofollow" target="_blank" class="youtube">
+        </a>
+    }
+    @if (!string.IsNullOrEmpty(Model.PinterestLink))
+    {
+        <a href="@Model.PinterestLink" rel="nofollow" target="_blank" class="pinterest">
+        </a>
+    }
+</div>

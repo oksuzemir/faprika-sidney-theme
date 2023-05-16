@@ -1,0 +1,1133 @@
+﻿@import "../helpers/all";
+@import "../variables/variables-dev";
+
+.campaign-page {
+    .page-container {
+        margin-top: 30px;
+        margin-bottom: 15px;
+
+        .page-body {
+
+            .campaign-content {
+                border-bottom: 1px solid $color-border;
+                border-radius: 3px;
+                padding-bottom: 5px;
+                background: #fff;
+                padding: 15px;
+
+                .page-title {
+                    padding: 0 0 15px 0;
+                    border-bottom: 1px solid $color-border;
+                    @include flexbox();
+                    @include justify-content(space-between);
+                    @include align-items(center);
+
+                    h1 {
+                        font-size: 20px;
+                        font-weight: 600;
+                        line-height: 18px;
+                        color: $gray-darker;
+                    }
+                }
+
+                .campaigns {
+                    .campaign {
+                        padding: 15px 0;
+
+                        .campaign-header {
+                            font-size: 20px;
+                            font-weight: 700;
+                            line-height: 18px;
+                            color: $gray-darker;
+                            padding: 15px 0 15px;
+                            @include flexbox();
+                            @include justify-content(space-between);
+
+                            a {
+                                color: $gray-darker;
+                            }
+
+                            span {
+                                font-size: 11px;
+                                font-weight: 400;
+                                color: $gray-light;
+                                text-align: right;
+                                padding-left: 10px;
+                            }
+                        }
+
+                        .campaign-content {
+                            display: block;
+
+                            &.detail {
+                                border: none;
+                            }
+
+                            .campaign-picture {
+                                @include flex(1);
+                                @include flex-basis(0);
+                            }
+
+                            .campaign-timebox {
+                                background-color: #000000;
+                                padding: 8px;
+                                width: 100%;
+                                text-align: center;
+                                font-size: 16px;
+                                font-weight: 500;
+                                color: #ffffff;
+                                border: 1px dashed #ffffff;
+
+                                .box {
+                                    font-size: 12px;
+                                    padding: 5px;
+                                }
+                            }
+
+                            .campaign-inner {
+                                @include flex(3);
+                                @include flex-basis(0);
+                                padding-top: 10px;
+
+                                .campaign-body {
+                                    line-height: 25px;
+                                    font-size: 14px;
+
+                                    .expiration-date {
+                                        padding-top: 10px;
+                                    }
+                                }
+
+                                .campaign-detail-button {
+                                    padding-top: 5px;
+                                    display: flex;
+                                    justify-content: end;
+                                    width: 100%;
+
+
+                                    .morelink {
+                                        color: #4b71fc;
+                                        font-weight: 600;
+                                        border: 1px solid #4b71fc;
+                                        padding: 10px;
+                                        border-radius: 3px;
+                                        text-align: center;
+                                        width: 200px;
+                                        height: 35px;
+                                        font-weight: bold;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                .campaign-container {
+                    border: 1px solid #e2e6eb;
+                    border-radius: 3px;
+                    background: #fff;
+                    padding: 20px;
+
+                    div {
+                        font-size: 13px;
+                        line-height: 26px;
+                        margin-bottom: 15px;
+
+                        strong, a {
+                            color: #212121;
+                        }
+
+                        h2 {
+                            font-size: 14px;
+                            line-height: 26px;
+                        }
+
+                        h4 {
+                            color: #212121;
+                            font-size: 20px;
+                            line-height: 40px;
+                            padding-top: 20px;
+                        }
+
+                        h5 {
+                            font-size: 14px;
+                            line-height: 0px;
+                            padding: 20px 0px;
+                        }
+                    }
+
+                    .campaign {
+
+                        .campaign-title {
+                            position: relative;
+                            margin-top: 30px;
+                            padding-left: 20px;
+                            padding-right: 20px;
+                            padding: 0 20px 15px 20px;
+                            border-bottom: 1px dashed #a1a1a1;
+
+                            h1 {
+                                font-size: 27px;
+                                font-weight: 700;
+                                color: #7c65e7;
+                                text-transform: capitalize;
+                                margin: 0;
+                            }
+
+                            h4 {
+                                font-size: 20px;
+                                color: $gray-darker;
+                                font-weight: 600;
+                                line-height: 28px;
+                                background: $body-bg;
+                                padding: 0 20px;
+                                z-index: 1;
+                            }
+
+                            h6 {
+                                font-size: 14px;
+                                color: $gray-dark;
+                                font-weight: 400;
+                                line-height: 20px;
+                                background: $body-bg;
+                                padding: 0 20px;
+                                z-index: 1;
+                            }
+
+
+                            &:before {
+                                content: "";
+                                border-bottom: 1px solid $color-border;
+                                width: 100%;
+                                position: absolute;
+                                left: 0;
+
+                                @at-root .ie & {
+                                    top: 50%;
+                                }
+                            }
+                        }
+
+                        .campaign-products {
+                            margin: 0 -5px;
+
+                            .campaign-group-title {
+                                margin-bottom: 20px;
+                                margin-top: 20px;
+                                text-align: center;
+                                font-size: 16px;
+                                font-weight: 600;
+                                color: #212121;
+                                margin-top: 20px;
+                                background: #f3f6f9;
+                                z-index: 1;
+                                line-height: 0px;
+
+                                span {
+                                    background: #f3f6f9;
+                                    padding: 0 10px;
+                                    z-index: 1;
+                                }
+                            }
+
+                            .campaign-group-item {
+                                padding-top: 20px;
+                                padding-bottom: 20px;
+                                border-top: solid 1px #f1f2f2;
+                                background: #fff;
+                                border: 1px solid #e2e6eb;
+                            }
+
+                            .product {
+
+                                .image {
+                                    padding: 25px 25px 0px 25px;
+                                }
+                            }
+                            /*   .quantity {
+                                border-radius: 12px;
+
+                                @include flexbox;
+                                @include justify-content(center);
+
+
+                                .quantity-panel-small {
+                                    @include flexbox;
+                                    @include justify-content(center);
+                                    background: white;
+                                    border-radius: 10px;
+                                    padding-right: 1px;
+                                    border: 1px solid #e8e8e8;
+                                    width: 98px;
+
+                                    .quantity-panel-button {
+
+                                        .btn-minus, .btn-plus {
+                                            height: 40px !important;
+                                            width: 30px !important;
+                                            background: #e6e7e8;
+                                            color: #58595b;
+                                            font-size: 12px;
+                                            cursor: pointer;
+                                            transition: all ease 0.2s;
+                                            -webkit-transition: all ease 0.2s;
+                                            -moz-transition: all ease 0.2s;
+                                            -ms-transition: all ease 0.2s;
+                                            -o-transition: all ease 0.2s;
+                                            padding: 7px;
+                                        }
+
+                                        .btn-minus {
+                                            border-top-left-radius: 12px;
+                                            border-bottom-left-radius: 12px;
+                                            background: #cecece;
+
+                                            > span {
+                                                &:before {
+                                                    content: "\2d";
+                                                    font-style: initial;
+                                                    font-family: "Faprika";
+                                                    font-size: 20px;
+                                                }
+                                            }
+
+                                            &:hover {
+                                                span {
+                                                    color: white;
+                                                }
+                                            }
+                                        }
+
+                                        .btn-plus {
+                                            border-top-right-radius: 12px;
+                                            border-bottom-right-radius: 12px;
+                                            background: #d8d8d8;
+                                            padding: 7px;
+
+                                            > span {
+                                                &:before {
+                                                    content: "\2b";
+                                                    font-style: initial;
+                                                    font-family: "Faprika";
+                                                    font-size: 20px;
+                                                }
+                                            }
+
+                                            &:hover {
+                                                span {
+                                                    color: white;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
+                                .qty-input {
+                                    border: 0;
+                                    color: #646464;
+                                    width: 15px;
+                                    font-size: 14px;
+                                    margin: 0 10px;
+                                }
+
+                                .qty-input {
+                                    &:focus {
+                                        outline: none;
+                                    }
+                                }
+                            }*/
+                            @include productBox;
+
+
+                            .campaign-product-wrap {
+                                width: 100%;
+                                @include flexbox;
+                                @include flex-wrap(wrap);
+
+                                .campaign-product-item {
+                                    @include flex(0 50%);
+                                    max-width: 50%;
+                                    padding: 5px;
+                                }
+
+                                .campaign-product {
+                                    @include flexbox;
+                                    @include align-items(center);
+                                    transition: all ease 0.2s;
+                                    -webkit-transition: all ease 0.2s;
+                                    -moz-transition: all ease 0.2s;
+                                    -ms-transition: all ease 0.2s;
+                                    -o-transition: all ease 0.2s;
+                                    cursor: pointer;
+                                    padding: 10px;
+                                    border: solid 2px #eee;
+
+                                    i {
+                                        &.fa-check {
+                                            visibility: hidden;
+                                            transition: all ease 0.2s;
+                                            position: absolute;
+                                            left: 8px;
+                                            top: 6px;
+                                            z-index: 1;
+                                            color: #fff;
+                                            background: #646464;
+                                            border-radius: 100%;
+                                            width: 25px;
+                                            height: 25px;
+                                            display: -webkit-flex;
+                                            display: -moz-flex;
+                                            display: -ms-flexbox;
+                                            display: -ms-flex;
+                                            display: flex;
+                                            -webkit-align-items: center;
+                                            -moz-align-items: center;
+                                            -ms-align-items: center;
+                                            align-items: center;
+                                            -webkit-justify-content: center;
+                                            -moz-justify-content: center;
+                                            -ms-justify-content: center;
+                                            justify-content: center;
+                                        }
+                                    }
+
+                                    .selected {
+                                        border-color: #000000;
+
+                                        i {
+                                            &.fa-check {
+                                                visibility: visible;
+
+                                                &:before {
+                                                    content: "\f00c";
+                                                    font-family: "Faprika";
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    .image {
+                                        padding: 25px 25px 0px 25px;
+                                    }
+                                }
+
+                                .swiper-container {
+                                    max-width: 100%;
+                                    overflow: hidden;
+                                    padding: 10px 0;
+                                    margin: 0 5px;
+                                    position: relative;
+
+                                    .swiper-slide {
+                                        width: 50%;
+                                        height: auto;
+                                        margin-right: 10px;
+
+                                        &:nth-child(-n+1) {
+                                            width: calc(100% - 10px);
+                                        }
+                                    }
+
+                                    .swiper-button-next, .swiper-button-prev {
+                                        background: #fff;
+                                        width: 30px;
+                                        height: 30px;
+                                        @include border($color-border, $border-base);
+
+                                        @include mq(xs,max) {
+                                            display: none;
+                                        }
+
+                                        &:before {
+                                            font-family: Faprika;
+                                            font-size: 30px;
+                                            color: $color-primary;
+                                            font-weight: 300;
+                                            display: block;
+                                            text-align: center;
+                                        }
+
+                                        &.swiper-button-disabled {
+                                            pointer-events: initial;
+                                        }
+                                    }
+
+                                    .swiper-button-next {
+                                        right: -1px;
+
+                                        &:before {
+                                            content: "\f105";
+                                        }
+                                    }
+
+                                    .swiper-button-prev {
+                                        left: -1px;
+
+                                        &:before {
+                                            content: "\f104";
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        &:first-child {
+                            margin-top: 20px;
+                        }
+                    }
+
+                    @include mq(sm) {
+                        .campaign {
+                            .campaign-pictures {
+                                margin: 0 -10px;
+
+                                &-picture {
+                                    padding: 10px;
+
+                                    &.tablet-1 {
+                                        @include flex(0 8.333333%);
+                                        max-width: 8.333333%;
+                                    }
+
+                                    &.tablet-2 {
+                                        @include flex(0 16.666667%);
+                                        max-width: 16.666667%;
+                                    }
+
+                                    &.tablet-3 {
+                                        @include flex(0 25%);
+                                        max-width: 25%;
+                                    }
+
+                                    &.tablet-4 {
+                                        @include flex(0 33.333333%);
+                                        max-width: 33.333333%;
+                                    }
+
+                                    &.tablet-5 {
+                                        @include flex(0 41.666667%);
+                                        max-width: 41.666667%;
+                                    }
+
+                                    &.tablet-6 {
+                                        @include flex(0 50%);
+                                        max-width: 50%;
+                                    }
+
+                                    &.tablet-7 {
+                                        @include flex(0 58.333333%);
+                                        max-width: 58.333333%;
+                                    }
+
+                                    &.tablet-8 {
+                                        @include flex(0 66.666667%);
+                                        max-width: 66.666667%;
+                                    }
+
+                                    &.tablet-9 {
+                                        @include flex(0 75%);
+                                        max-width: 75%;
+                                    }
+
+                                    &.tablet-10 {
+                                        @include flex(0 83.333333%);
+                                        max-width: 83.333333%;
+                                    }
+
+                                    &.tablet-11 {
+                                        @include flex(0 91.666667%);
+                                        max-width: 91.666667%;
+                                    }
+
+                                    &.tablet-12 {
+                                        @include flex(0 100%);
+                                        max-width: 100%;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                .campaign-pictures-picture {
+
+                    * {
+                        -webkit-box-sizing: border-box;
+                        box-sizing: border-box;
+                    }
+
+                    img {
+                        vertical-align: top;
+                        max-width: 100%;
+                        backface-visibility: hidden;
+                        min-height: 200px;
+                    }
+
+                    figcaption {
+                        opacity: 0;
+                        width: 100%;
+                        height: 100%;
+                        position: absolute;
+                        top: 0;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+
+                        &:after {
+                            background-color: white;
+                            opacity: 0.6;
+                            top: 0;
+                            bottom: 0;
+                            content: '';
+                            left: -100%;
+                            position: absolute;
+                            width: 200px;
+                            box-shadow: 0 0 100px white;
+                            -webkit-transform: skew(-20deg);
+                            transform: skew(-20deg);
+                        }
+
+                        h3 {
+                            left: 20px;
+                            bottom: 20px;
+                            font-size: 26px;
+                            font-weight: 600;
+                            line-height: 26px;
+                            color: #fff;
+                            margin: 0;
+                            text-transform: uppercase;
+                        }
+                    }
+
+                    &:hover {
+                        figcaption {
+                            opacity: 1;
+                            background: rgba( $color-primary, .8);
+
+                            &:after {
+                                left: 200%;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        .campaign {
+            .campaign-title {
+                @include centered;
+                @include flex-direction(column);
+                position: relative;
+                margin: 10px 0;
+
+                h4 {
+                    font-size: 20px;
+                    color: $gray-darker;
+                    font-weight: 600;
+                    line-height: 28px;
+                    background: $body-bg;
+                    padding: 0 20px;
+                    z-index: 1;
+                }
+
+                h6 {
+                    font-size: 14px;
+                    color: $gray-dark;
+                    font-weight: 400;
+                    line-height: 20px;
+                    background: $body-bg;
+                    padding: 0 20px;
+                    z-index: 1;
+                }
+
+                &:before {
+                    content: "";
+                    border-bottom: 1px solid $color-border;
+                    width: 100%;
+                    position: absolute;
+                    left: 0;
+
+                    @at-root .ie & {
+                        top: 50%;
+                    }
+                }
+            }
+
+            .campaign-products {
+                margin: 0 -5px;
+
+                @include productBox;
+
+                .campaign-group-title {
+                    margin-bottom: 20px;
+                    margin-top: 20px;
+                    text-align: center;
+                    font-size: 16px;
+                    font-weight: 600;
+                    color: #212121;
+                    margin-top: 20px;
+                    background: #f3f6f9;
+                    z-index: 1;
+                    line-height: 0px;
+
+                    span {
+                        background: #f3f6f9;
+                        padding: 0 10px;
+                        z-index: 1;
+                    }
+                }
+
+                .campaign-group-item {
+                    padding-top: 20px;
+                    padding-bottom: 20px;
+                    border-top: solid 1px #f1f2f2;
+                    background: #fff;
+                    border: 1px solid #e2e6eb;
+                }
+
+                .product {
+
+                    .image {
+                        padding: 25px 25px 0px 25px;
+                    }
+
+                    .product-info {
+                        height: 85px;
+                    }
+                }
+
+                .campaign-product-wrap {
+                    width: 100%;
+                    @include flexbox;
+                    @include flex-wrap(wrap);
+
+                    .campaign-product-item {
+                        @include flex(0 50%);
+                        max-width: 50%;
+                        padding: 5px;
+                    }
+
+                    .campaign-product {
+                        @include flexbox;
+                        @include align-items(center);
+                        transition: all ease 0.2s;
+                        -webkit-transition: all ease 0.2s;
+                        -moz-transition: all ease 0.2s;
+                        -ms-transition: all ease 0.2s;
+                        -o-transition: all ease 0.2s;
+                        cursor: pointer;
+                        padding: 10px;
+                        border: solid 2px #eee;
+
+                        i {
+                            &.fa-check {
+                                visibility: hidden;
+                                transition: all ease 0.2s;
+                                position: absolute;
+                                left: 8px;
+                                top: 6px;
+                                z-index: 1;
+                                color: #fff;
+                                background: #646464;
+                                border-radius: 100%;
+                                width: 25px;
+                                height: 25px;
+                                display: -webkit-flex;
+                                display: -moz-flex;
+                                display: -ms-flexbox;
+                                display: -ms-flex;
+                                display: flex;
+                                -webkit-align-items: center;
+                                -moz-align-items: center;
+                                -ms-align-items: center;
+                                align-items: center;
+                                -webkit-justify-content: center;
+                                -moz-justify-content: center;
+                                -ms-justify-content: center;
+                                justify-content: center;
+                            }
+                        }
+
+                        .selected {
+                            border-color: #000000;
+
+                            i {
+                                &.fa-check {
+                                    visibility: visible;
+
+                                    &:before {
+                                        content: "\f00c";
+                                        font-family: "Faprika";
+                                    }
+                                }
+                            }
+                        }
+
+                        .image {
+                            padding: 25px 25px 0px 25px;
+                        }
+                    }
+
+                    .product {
+
+                        .image {
+                            padding: 25px 25px 0px 25px;
+                        }
+                    }
+
+                    .swiper-container {
+                        max-width: 100%;
+                        overflow: hidden;
+                        padding: 10px 0;
+                        margin: 0 5px;
+                        position: relative;
+
+                        .swiper-slide {
+                            width: 50%;
+                            height: auto;
+                            margin-right: 10px;
+
+                            &:nth-child(-n+1) {
+                                width: calc(100% - 10px);
+                            }
+                        }
+
+                        .swiper-button-next, .swiper-button-prev {
+                            background: #fff;
+                            width: 30px;
+                            height: 30px;
+                            @include border($color-border, $border-base);
+
+                            @include mq(xs,max) {
+                                display: none;
+                            }
+
+                            &:before {
+                                font-family: Faprika;
+                                font-size: 30px;
+                                color: $color-primary;
+                                font-weight: 300;
+                                display: block;
+                                text-align: center;
+                            }
+
+                            &.swiper-button-disabled {
+                                pointer-events: initial;
+                            }
+                        }
+
+                        .swiper-button-next {
+                            right: -1px;
+
+                            &:before {
+                                content: "\f105";
+                            }
+                        }
+
+                        .swiper-button-prev {
+                            left: -1px;
+
+                            &:before {
+                                content: "\f104";
+                            }
+                        }
+                    }
+
+                    .quantity {
+
+                        @include flexbox;
+                        @include justify-content(center);
+
+
+                        .quantity-panel-small {
+                            @include flexbox;
+                            @include justify-content(center);
+                            background: white;
+                            border-radius: 12px;
+                            padding-right: 1px;
+                            border: 1px solid #e8e8e8;
+                            width: 98px;
+
+                            .quantity-panel-button {
+
+                                .btn-minus, .btn-plus {
+                                    height: 40px !important;
+                                    width: 30px !important;
+                                    background: #e6e7e8;
+                                    color: #58595b;
+                                    font-size: 12px;
+                                    cursor: pointer;
+                                    transition: all ease 0.2s;
+                                    -webkit-transition: all ease 0.2s;
+                                    -moz-transition: all ease 0.2s;
+                                    -ms-transition: all ease 0.2s;
+                                    -o-transition: all ease 0.2s;
+                                    padding: 7px;
+                                }
+
+                                .btn-minus {
+                                    border-top-left-radius: 12px;
+                                    border-bottom-left-radius: 12px;
+                                    background: #cecece;
+
+                                    > span {
+                                        &:before {
+                                            content: "\2d";
+                                            font-style: initial;
+                                            font-family: "Faprika";
+                                            font-size: 20px;
+                                        }
+                                    }
+
+                                    &:hover {
+                                        span {
+                                            color: white;
+                                        }
+                                    }
+                                }
+
+                                .btn-plus {
+                                    border-top-right-radius: 12px;
+                                    border-bottom-right-radius: 12px;
+                                    background: #d8d8d8;
+                                    padding: 7px;
+
+                                    > span {
+                                        &:before {
+                                            content: "\2b";
+                                            font-style: initial;
+                                            font-family: "Faprika";
+                                            font-size: 20px;
+                                        }
+                                    }
+
+                                    &:hover {
+                                        span {
+                                            color: white;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        .qty-input {
+                            border: 0;
+                            color: #646464;
+                            width: 15px;
+                            font-size: 14px;
+                            margin: 0 10px;
+                        }
+
+                        .qty-input {
+                            &:focus {
+                                outline: none;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        @include mq(sm) {
+            .campaign {
+                .campaign-title {
+                    @include centered;
+                    @include flex-direction(column);
+                    position: relative;
+                    margin: 10px 0;
+
+                    h4 {
+                        font-size: 20px;
+                        color: $gray-darker;
+                        font-weight: 600;
+                        line-height: 28px;
+                        background: $body-bg;
+                        padding: 0 20px;
+                        z-index: 1;
+                    }
+
+                    h6 {
+                        font-size: 14px;
+                        color: $gray-dark;
+                        font-weight: 400;
+                        line-height: 20px;
+                        background: $body-bg;
+                        padding: 0 20px;
+                        z-index: 1;
+                    }
+
+                    &:before {
+                        content: "";
+                        border-bottom: 1px solid $color-border;
+                        width: 100%;
+                        position: absolute;
+                        left: 0;
+
+                        @at-root .ie & {
+                            top: 50%;
+                        }
+                    }
+                }
+
+                .campaign-products {
+                    margin: 0 -10px;
+
+                    .campaign-group-title {
+                        margin-bottom: 20px;
+                        margin-top: 20px;
+                        text-align: center;
+                        font-size: 16px;
+                        font-weight: 600;
+                        color: #212121;
+                        margin-top: 20px;
+                        background: #f3f6f9;
+                        z-index: 1;
+                        line-height: 0px;
+
+                        span {
+                            background: #f3f6f9;
+                            padding: 0 10px;
+                            z-index: 1;
+                        }
+                    }
+
+                    .campaign-product-wrap {
+                        .campaign-product-item {
+                            @include flex(0 33.33333%);
+                            max-width: 33.33333%;
+                            padding: 10px;
+                        }
+
+                        .swiper-container {
+                            margin: 0 10px;
+
+                            .swiper-slide {
+                                width: 33.33333333333333%;
+                                height: auto;
+                                margin-right: 25px;
+
+                                &:nth-child(-n+2) {
+                                    width: calc(33.33333333333333% - 25px);
+                                }
+                            }
+
+                            .swiper-button-next, .swiper-button-prev {
+                                background: #fff;
+                                /*width: 40px;*/
+                                height: 40px;
+                                @include border($color-border, $border-base);
+
+                                &:before {
+                                    font-family: Faprika;
+                                    font-size: 40px;
+                                    color: $color-primary;
+                                    font-weight: 300;
+                                    display: block;
+                                    text-align: center;
+                                }
+                            }
+
+                            .swiper-button-next {
+                                left: initial;
+                            }
+
+                            .swiper-button-prev {
+                                right: initial;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        @include mq(md) {
+            .campaign {
+
+                .campaign-title {
+                    @include centered;
+                    @include flex-direction(column);
+                    position: relative;
+                    margin: 10px 0;
+
+                    h4 {
+                        font-size: 20px;
+                        color: $gray-darker;
+                        font-weight: 600;
+                        line-height: 28px;
+                        background: $body-bg;
+                        padding: 0 20px;
+                        z-index: 1;
+                    }
+
+                    h6 {
+                        font-size: 14px;
+                        color: $gray-dark;
+                        font-weight: 400;
+                        line-height: 20px;
+                        background: $body-bg;
+                        padding: 0 20px;
+                        z-index: 1;
+                    }
+
+                    &:before {
+                        content: "";
+                        border-bottom: 1px solid $color-border;
+                        width: 100%;
+                        position: absolute;
+                        left: 0;
+
+                        @at-root .ie & {
+                            top: 50%;
+                        }
+                    }
+                }
+
+                .campaign-products {
+
+                    .campaign-product-wrap {
+                        .campaign-product-item {
+                            @include flex(0 25%);
+                            max-width: 25%;
+                        }
+
+                        .swiper-container {
+                            .swiper-slide {
+                                width: 25%;
+                                height: auto;
+                                margin-right: 20px;
+
+                                &:nth-child(-n+3) {
+                                    width: calc(25% - 20px);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        .campaign-button {
+            border: 1px solid #e2e6eb;
+            background: #fff;
+            padding: 20px;
+            margin: 15px 0px;
+            width: 100%;
+
+            .campaign-add-to-cart {
+                height: 40px;
+                line-height: 38px;
+                text-transform: uppercase;
+                cursor: pointer;
+                transition: all .3s ease;
+                padding: 0 15px;
+                font-weight: 600;
+                color: #fff;
+                background: #4b71fc;
+                border: 1px solid #4b71fc;
+                border-radius: 3px;
+                width: 100%;
+                position: relative;
+            }
+        }
+    }
+}

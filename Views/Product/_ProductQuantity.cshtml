@@ -1,0 +1,77 @@
+﻿@model ProductDetailsModel.AddToCartModel
+@{
+    //other variables
+    var random = CommonHelper.GenerateRandomInteger();
+}
+@if (Model.AllowCustomerSelectQuantity)
+{
+    <div class="quantity-box">
+        <div class="select">
+            <select asp-for="EnteredQuantity">
+                @{decimal stepQuantity = Model.OrderMinimumQuantity;}
+                @while (stepQuantity <= Model.OrderMaximumQuantity)
+                {
+                    <option value="@stepQuantity.ToString("N0")">@stepQuantity.ToString("N0")</option>
+                    stepQuantity += Model.StockQuantityStep == decimal.Zero ? decimal.One : Model.StockQuantityStep;
+                }
+            </select>
+        </div>
+    </div>
+}
+else
+{
+    if (Model.AllowCustomerWriteQuantity)
+    {
+        <div class="inputs">
+            <span id="minus-button-@(random)" class="minus">-</span>
+            @if (Model.AllowDecimalStockQuantity)
+            {
+                <input asp-for="EnteredQuantity" value="@Model.EnteredQuantity.FormatInvariant()" type="number" min="@(Model.OrderMinimumQuantity.FormatInvariant())" step="@(Model.StockQuantityStep.FormatInvariant())" class="qty-input" />
+            }
+            else
+            {
+                <input asp-for="EnteredQuantity" value="@Model.EnteredQuantity.ToInt()" type="number" min="@(Model.OrderMinimumQuantity.FormatInvariant())" step="@(Model.StockQuantityStep.FormatInvariant())" class="qty-input" />
+            }
+            <span id="plus-button-@(random)" class="plus">+</span>
+        </div>
+
+        <script asp-location="Footer">
+            $(document).ready(function () {
+                // This button will decrement the value till 1
+                $("#minus-button-@(random)").on('click', function (e) {
+                    // Stop acting like a button
+                    e.preventDefault();
+                    // Get current element
+                    var el = $('#@Html.IdFor(model => model.EnteredQuantity)')[0];
+                    //step down
+                    el.stepDown();
+                    //trigger change
+                    $('#@Html.IdFor(model => model.EnteredQuantity)').trigger('change');
+                });
+
+                // This button will increment the value
+                $('#plus-button-@(random)').on('click', function (e) {
+                    // Stop acting like a button
+                    e.preventDefault();
+                    // Get current element
+                    var el = $('#@Html.IdFor(model => model.EnteredQuantity)')[0];
+                    //step up
+                    el.stepUp();
+                    //trigger change
+                    $('#@Html.IdFor(model => model.EnteredQuantity)').trigger('change');
+                });
+            });
+        </script>
+    }
+    else
+    {
+        if (Model.AllowDecimalStockQuantity)
+        {
+            <input asp-for="EnteredQuantity" value="@Model.EnteredQuantity.FormatInvariant()" type="hidden" />
+        }
+        else
+        {
+            <input asp-for="EnteredQuantity" value="@Model.EnteredQuantity.ToInt()" type="hidden" />
+        }
+    }
+}

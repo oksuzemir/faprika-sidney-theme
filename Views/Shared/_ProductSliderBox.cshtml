@@ -1,0 +1,22 @@
+﻿@model ProductOverviewModel
+
+@if (Model.PictureModels.Count > 1)
+{
+    <!-- Swiper -->
+    <div class="swiper-master">
+        <div class="swiper-wrapper">
+            @foreach (var pic in Model.PictureModels)
+            {
+                <div class="swiper-slide">
+                     @*Required swiper-lazy class and image source specified in data-src attribute*@ 
+                    <img data-src="@pic.ImageUrl" src="@Url.Content("~/" + Model.LazyLogoName)" alt="@Model.Name" class="swiper-lazy">
+                </div>
+            }
+        </div>
+        <!-- Add Scrollbar -->
+        <div class="swiper-scrollbar"></div>
+    </div>
+}
+
+    
+

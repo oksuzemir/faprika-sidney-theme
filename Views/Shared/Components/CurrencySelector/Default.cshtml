@@ -1,0 +1,26 @@
+﻿@model CurrencySelectorModel
+@using Microsoft.AspNetCore.Http
+@using Faprika.Core
+@inject IWebHelper webHelper
+@inject IHttpContextAccessor httpContextAccessor
+
+<div class="country-selector">
+    <span>@T("Header.CurrencySelector.Title")</span>
+    @{
+        var currencies = Model.AvailableCurrencies.Select(x => new SelectListItem
+        {
+            Text = x.Name,
+            Value = webHelper.ModifyQueryString(Url.RouteUrl("ChangeCurrency", new { customerCurrency = x.Id }, webHelper.CurrentRequestProtocol), "returnurl", webHelper.GetRawUrl(httpContextAccessor.HttpContext.Request)),
+            Selected = x.Id.Equals(Model.CurrentCurrencyId)
+        });
+        <select id="currencyId" name="currencyId" asp-items="@currencies" onchange="change_currency(this.value);"></select>
+    }
+</div>
+
+<script asp-location="Footer">
+    function change_currency(value) {
+        if (confirm('@T("Header.CurrencySelector.Confirm")')) {
+            setLocation(value);
+        }
+    }
+</script>

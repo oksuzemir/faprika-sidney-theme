@@ -1,0 +1,136 @@
+﻿@import "../helpers/all";
+@import "../variables/variables-dev";
+
+
+.wishlist-page {
+    padding: 60px 0 10px 0;
+
+    .wishlist-empty-content {
+        @include border($color-border, $border-base);
+        @include centered();
+        @include flex-direction(column);
+        background: #fff;
+        height: 50vh;
+        padding: 0 15px;
+
+        span {
+            text-align: center;
+
+            @at-root .ie & {
+                max-width: 100%;
+            }
+        }
+
+        strong {
+            @include flexbox;
+            @include flex-direction(column);
+            text-align: center;
+            margin-bottom: 10px;
+
+            @at-root .ie & {
+                max-width: 100%;
+            }
+
+            &:before {
+                content: "\f11a";
+                font-family: "Faprika";
+                font-weight: 300;
+                font-size: 100px;
+                color: $gray-dark;
+                margin-bottom: 30px;
+            }
+        }
+
+        a {
+            @include button($color-primary, $btn-height-md);
+            margin-top: 30px;
+        }
+    }
+
+    .page-container {
+
+        .wishlist-header {
+            @include flexbox;
+            @include align-items(center);
+            @include justify-content(space-between);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid $color-border;
+
+            h2 {
+                font-size: 14px;
+                font-weight: 600;
+                color: $gray-darker;
+
+                @at-root .ie & {
+                    max-width: 100%;
+                }
+            }
+
+            .breadcrumb {
+                @include breadcrumb;
+            }
+        }
+
+        .wishlist-content {
+            margin: -5px;
+
+            .product-wrap {
+                @include flexbox;
+                @include flex-wrap(wrap);
+                width: 100%;
+
+                .product-item {
+                    flex: 0 0 50%;
+                    max-width: 50%;
+                    padding: 5px;
+
+                    @include productBox;
+
+                    .product {
+                        .buttons {
+                            button.remove-to-wishlist {
+                                content: "\f004";
+                                font-family: "Faprika";
+                                font-size: 20px;
+                                color: #333;
+                                font-weight: 300;
+                                -webkit-transition: color 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+                                transition: color 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+                                top: 10px;
+
+                                &:before {
+                                    content: "\f00d";
+                                }
+
+                                &:hover {
+                                    &:before {
+                                        content: "\f00d";
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @include mq(md) {
+        padding: 20px 0;
+
+        .page-container {
+            .wishlist-content {
+                margin: -15px;
+
+                .product-wrap {
+                    .product-item {
+                        flex: 0 0 25%;
+                        max-width: 25%;
+                        padding: 15px;
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,11 @@
+﻿@model CategoryModel
+
+@if (Model.Products.Count > 0)
+{
+    @foreach (var product in Model.Products)
+    {
+        <div class="product-item">
+            @await Html.PartialAsync("_ProductBox", product)
+        </div>
+    }
+}

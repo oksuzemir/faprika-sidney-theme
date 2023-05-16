@@ -1,0 +1,107 @@
+﻿@model BlogPostListModel
+@{
+    //title
+    Html.AddTitleParts(T("Blog").Text);
+
+    //register CSS
+    Html.AddCssFileParts(ResourceLocation.Head, "~/Themes/Sidney/Content/css/pages/blog.min.css", "~/Themes/Sidney/Content/css/pages/blog.css");
+}
+<div class="page blog-page">
+    <div class="page-container">
+        <div class="blog-sidebar">
+            <div class="blog-sidebar-content">
+                @await Component.InvokeAsync("BlogMonths")
+                @await Component.InvokeAsync("BlogTags")
+                @await Component.InvokeAsync("BlogCategories")
+            </div>
+        </div>
+        <div class="page-body">
+            <div class="blog-page-content">
+                <div class="page-title">
+                    <h1>
+                        @if (string.IsNullOrEmpty(Model.PagingFilteringContext.Tag))
+                        {
+                            if (Model.PagingFilteringContext.GetParsedMonth().HasValue)
+                            {
+                                @string.Format(T("Blog.FilteredByMonth").Text, Model.PagingFilteringContext.GetParsedMonth().Value.Year, Model.PagingFilteringContext.GetParsedMonth().Value.ToString("MMMM"))
+                            }
+                            else
+                            {
+                                @T("Blog")
+                            }
+                        }
+                        else
+                        {
+                            @string.Format(T("Blog.TaggedWith").Text, Model.PagingFilteringContext.Tag)
+                        }
+                    </h1>
+                    <div class="breadcrumb">
+                        <ul>
+                            <li>
+                                <a href="@Url.RouteUrl("HomePage")" title="@T("Breadcrumb.Top")">@T("Breadcrumb.Top")</a>
+                                <span class="delimiter">></span>
+                            </li>
+                            <li>
+                                <span class="current-item">@T("Blog")</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="blog-posts">
+                    @foreach (var item in Model.BlogPosts)
+                    {
+                        <div class="post">
+
+                            <div class="post-content">
+                                @if (item.PictureModel.FullSizeImageUrl.HasValue())
+                                {
+                                    <div class="post-picture">
+                                        <img alt="@item.Title" src="@item.PictureModel.ImageUrl" />
+                                    </div>
+                                }
+                                <div class="post-inner">
+                                    <div class="post-head">
+                                        <a class="post-title" href="@Url.RouteUrl("BlogPost", new {SeName = item.SeName})">@item.Title</a>
+                                        <span class="post-date">@item.CreatedOn.ToString("D")</span>
+                                    </div>
+
+                                    <div class="post-body">
+                                        @Html.Raw(!string.IsNullOrEmpty(item.BodyOverview) ? item.BodyOverview : item.Body)
+                                    </div>
+
+                                    <div class="blog-details">
+                                        @if (item.Tags.Count > 0)
+                                        {
+                                            <div class="tags">
+                                                @*<label>@T("Blog.Tags"):</label>*@
+                                                <ul>
+                                                    @for (var i = 0; i < item.Tags.Count; i++)
+                                                    {
+                                                        var tag = item.Tags[i];
+                                                        <li><a href="@Url.RouteUrl("BlogByTag", new {tag = tag})">@tag</a></li>
+                                                    }
+                                                </ul>
+                                            </div>
+                                        }                                    
+                                        <div class="buttons">
+                                            <a href="@Url.RouteUrl("BlogPost", new {SeName = item.SeName})" class="read-more">@T("Blog.MoreInfo")</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+            @{
+                var pager = Html.Pager(Model.PagingFilteringContext).QueryParam("pagenumber");
+            }
+            @if (!pager.IsEmpty())
+            {
+                <div class="pager">
+                    @pager
+                </div>
+            }
+        </div>
+    </div>
+</div>

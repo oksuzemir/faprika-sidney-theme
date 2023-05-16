@@ -1,0 +1,21 @@
+﻿@model object
+@inject IWorkContext workContext
+@using Faprika.Core.Domain.Localization
+
+@{
+    //register CSS and JS
+    //select2
+    Html.AppendScriptParts(ResourceLocation.Footer, $"~/lib/select2/4.0.8/js/lang/{workContext.WorkingLanguage.GetSeoCode()}.js");
+    Html.AppendScriptParts(ResourceLocation.Footer, "~/lib/select2/4.0.8/js/select2.min.js", "~/lib/select2/4.0.8/js/select2.js");
+    Html.AddCssFileParts(ResourceLocation.Footer, "~/lib/select2/4.0.8/css/select2.min.css", "~/lib/select2/4.0.8/css/select2.css");
+}
+
+<select asp-for="@Model" asp-items="@((IEnumerable<SelectListItem>)ViewData["SelectList"])"></select>
+<script asp-location="Footer">
+    $(document).ready(function () {
+        $('#@Html.IdForModel()').select2({
+            width: 'auto',
+            language: "@workContext.WorkingLanguage.UniqueSeoCode"
+        });
+    });
+</script>

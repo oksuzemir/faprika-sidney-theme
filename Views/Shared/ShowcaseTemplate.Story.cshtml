@@ -1,0 +1,64 @@
+﻿@model IList<ShowcaseModel>
+@using Newtonsoft.Json
+@{
+    string stories = JsonConvert.SerializeObject(Model.Where(x => x.ShowcaseTemplateViewPath == "ShowcaseTemplate.Story"));
+
+    //lazy
+    Html.AppendScriptParts(ResourceLocation.Footer, "~/lib/jquery-lazy/jquery.lazy.min.js", "~/lib/jquery-lazy/jquery.lazy.js");
+
+    //Story
+    Html.AppendScriptParts(ResourceLocation.Footer, "~/lib/zuck.js/zuck.min.js", "~/lib/zuck.js/zuck.js");
+    Html.AddCssFileParts(ResourceLocation.Footer, "~/lib/zuck.js/zuck.min.css", "~/lib/zuck.js/zuck.css");
+
+}
+
+<div class="story-container">
+    <div id="stories" class="storiesWrapper"></div>
+    <script asp-location="Footer">
+
+        $(document).ready(function ()
+        {
+            var timestamp = function () {
+                var timeIndex = 0;
+                var shifts = [35, 60, 60 * 3, 60 * 60 * 2, 60 * 60 * 25, 60 * 60 * 24 * 4, 60 * 60 * 24 * 10];
+                var now = new Date();
+                var shift = shifts[timeIndex++] || 0;
+                var date = new Date(now - shift * 1000);
+                return date.getTime() / 1000;
+            };
+
+            var allStories = @Html.Raw(stories);
+
+            jsonStory = [
+            ];
+
+            $.each(allStories, function (i, story) {
+
+                jsonStory.push({
+                    id: i.toString(),
+                    photo: story.AvailableShowcasePictures[0].PictureUrl,
+                    name: story.Name,
+                    link: "#",
+                    lastUpdated: timestamp(),
+                    seen: false,
+                    items: [],
+                });
+
+                $.each(story.AvailableProducts, function (y, product) {
+                    jsonStory[i].items.push({
+                        id: "",
+                        length: 3,
+                        type: "Photo",
+                        src: product.DefaultPictureModel.ImageUrl,
+                        preview: product.DefaultPictureModel.ImageUrl,
+                        link: product.SeName,
+                        linkText: product.Name,
+                        time: timestamp(),
+                        seen: false,
+                    });
+                });
+            });
+            initStory(jsonStory);
+        });
+    </script>
+</div>

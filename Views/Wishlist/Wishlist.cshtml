@@ -1,0 +1,61 @@
+@model WishlistModel
+@{
+    //title
+    Html.AddTitleParts(T("PageTitle.Wishlist").Text);
+
+    //register CSS and JS
+    Html.AddCssFileParts(ResourceLocation.Head, "~/Themes/Sidney/Content/css/pages/wishlist.min.css", "~/Themes/Sidney/Content/css/pages/wishlist.css");
+}
+<div class="page wishlist-page">
+    @if (Model.Items.Count > 0)
+    {
+        <div class="page-container">
+            <div class="wishlist-header">
+                <h2>@(string.Format(T("Wishlist").Text, Model.Items.Count))</h2>
+                <div class="breadcrumb">
+                    <ul>
+                        <li>
+                            <a href="@Url.RouteUrl("HomePage")" title="@T("Breadcrumb.Top")">@T("Breadcrumb.Top")</a>
+                            <span class="delimiter">></span>
+                        </li>
+                        <li>
+                            <span class="current-item">@T("PageTitle.Wishlist")</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="wishlist-content">
+                <div class="product-wrap">
+                    @foreach (var product in Model.Items)
+                    {
+                        <div class="product-item">
+                            @await Html.PartialAsync("_ProductBox", product)
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="wishlist-empty-container">
+            <div class="wishlist-empty-content">
+                <strong>@T("Wishlist.NoResults.Title")</strong>
+                <span>@T("Wishlist.NoResults.Text")</span>
+                <a href="@Url.RouteUrl("HomePage")">
+                    @T("Common.StartShopping")
+                </a>
+            </div>
+        </div>
+    }
+
+</div>
+
+<script asp-location="Footer">
+    $(document).ready(function () {
+        $(document).on("removeproducttowishlist", function () {
+            window.location.reload();
+        });
+    });
+</script>
+

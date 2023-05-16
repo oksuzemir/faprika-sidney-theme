@@ -1,0 +1,65 @@
+﻿@model CatalogPagingFilteringModel.PriceRangeFilterModel
+@{
+    //register CSS and JS
+    //noUiSlider
+    Html.AppendScriptParts(ResourceLocation.Footer, "~/lib/noUiSlider/12.1.0/js/nouislider.min.js", "~/lib/noUiSlider/12.1.0/js/nouislider.js");
+    Html.AddCssFileParts(ResourceLocation.Footer, "~/lib/noUiSlider/12.1.0/css/nouislider.min.css", "~/lib/noUiSlider/12.1.0/css/nouislider.css");
+    Html.AppendScriptParts(ResourceLocation.Footer, "~/lib/noUiSlider/12.1.0/js/wNumb.min.js", "~/lib/noUiSlider/12.1.0/js/wNumb.js");
+}
+
+@if (Model.Enabled)
+{
+    <div class="filter-box price-filter">
+        <div class="title">
+            @T("Filtering.PriceRangeFilter")
+        </div>
+        <div id="price-range-filter"></div>
+        <div class="price-range-value">
+            <span id="slider-value-lower"></span>
+            <span class="price-range-value-seperator">-</span>
+            <span id="slider-value-upper"></span>
+        </div>
+
+        <script asp-location="Footer">
+            $(document).ready(function () {
+
+                var slider = document.getElementById('price-range-filter');
+                var sliderValues = [
+                    document.getElementById('slider-value-lower'),
+                    document.getElementById('slider-value-upper')
+                ];
+
+                noUiSlider.create(slider, {
+                    connect: true,
+                    start: [@Model.FilteredMinPrice, @Model.FilteredMaxPrice],
+                    step: 1,
+                    range: {
+                        'min': @Model.MinPriceValue,
+                        'max': @Model.MaxPriceValue,
+                    },
+                    format: wNumb({
+                        decimals: 3,
+                        thousand: '.',
+                        suffix: ' @Model.CurrencyCode'
+                    })
+                });
+
+                slider.noUiSlider.on('update', function (values, handle) {
+                    sliderValues[handle].innerHTML = values[handle];
+                });
+
+                slider.noUiSlider.on('end', function (values, handle, unencoded) {
+
+                    var filterUrl = '@Html.Raw(Model.FilterUrl)';
+                    var minPrice = Math.round(unencoded[0]);
+                    var maxPrice = Math.round(unencoded[1]);
+
+                    filterUrl = filterUrl.replace("fromPrice-toPrice", minPrice + '-' + maxPrice);
+
+                    window.location.href = filterUrl;
+
+                });
+            });
+        </script>
+    </div>
+}

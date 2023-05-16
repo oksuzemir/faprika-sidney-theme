@@ -1,0 +1,148 @@
+﻿[
+  {
+    "outputFile": "Content/css/global.css",
+    "inputFile": "Content/scss/global.scss",
+    "sourceMap": true
+  },
+  {
+    "outputFile": "Content/css/components/header.css",
+    "inputFile": "Content/scss/components/_header.scss",
+    "sourceMap": true
+  },
+  {
+    "outputFile": "Content/css/components/header-blank.css",
+    "inputFile": "Content/scss/components/_header-blank.scss",
+    "sourceMap": true
+  },
+  {
+    "outputFile": "Content/css/pages/_homepage.css",
+    "inputFile": "Content/scss/pages/_homepage.scss",
+    "sourceMap": true
+  },
+  {
+    "outputFile": "Content/css/components/slider.css",
+    "inputFile": "Content/scss/components/_slider.scss",
+    "sourceMap": true
+  },
+  {
+    "outputFile": "Content/css/components/showcase.css",
+    "inputFile": "Content/scss/components/_showcase.scss",
+    "sourceMap": true
+  },
+  {
+    "outputFile": "Content/css/components/showcase-image-slider.css",
+    "inputFile": "Content/scss/components/_showcase-image-slider.scss",
+    "sourceMap": true
+  },
+  {
+    "outputFile": "Content/css/components/menu.css",
+    "inputFile": "Content/scss/components/_menu.scss",
+    "sourceMap": true
+  },
+  {
+    "outputFile": "Content/css/components/twolevel-menu.css",
+    "inputFile": "Content/scss/components/_twolevel-menu.scss",
+    "sourceMap": true
+  },
+  {
+    "outputFile": "Content/css/components/threelevel-menu.css",
+    "inputFile": "Content/scss/components/_threelevel-menu.scss",
+    "sourceMap": true
+  },
+  {
+    "outputFile": "Content/css/components/mobile-menu.css",
+    "inputFile": "Content/scss/components/_mobile-menu.scss",
+    "sourceMap": true
+  },
+  {
+    "outputFile": "Content/css/components/footer.css",
+    "inputFile": "Content/scss/components/_footer.scss",
+    "sourceMap": true
+  },
+  {
+    "outputFile": "Content/css/components/copyright.css",
+    "inputFile": "Content/scss/components/_copyright.scss",
+    "sourceMap": true
+  },
+  {
+    "outputFile": "Content/css/pages/account.css",
+    "inputFile": "Content/scss/pages/_account.scss",
+    "sourceMap": true
+  },
+  {
+    "outputFile": "Content/css/pages/contact.css",
+    "inputFile": "Content/scss/pages/_contact.scss",
+    "sourceMap": true
+  },
+  {
+    "outputFile": "Content/css/pages/catalog.css",
+    "inputFile": "Content/scss/pages/_catalog.scss",
+    "sourceMap": true
+  },
+  {
+    "outputFile": "Content/css/pages/product-simple.css",
+    "inputFile": "Content/scss/pages/_product-simple.scss",
+    "sourceMap": true
+  },
+  {
+    "outputFile": "Content/css/pages/auth.css",
+    "inputFile": "Content/scss/pages/_auth.scss",
+    "sourceMap": true
+  },
+  {
+    "outputFile": "Content/css/pages/topic.css",
+    "inputFile": "Content/scss/pages/_topic.scss",
+    "sourceMap": true
+  },
+  {
+    "outputFile": "Content/css/pages/help.css",
+    "inputFile": "Content/scss/pages/_help.scss",
+    "sourceMap": true
+  },
+  {
+    "outputFile": "Content/css/pages/checkout.css",
+    "inputFile": "Content/scss/pages/_checkout.scss",
+    "sourceMap": true
+  },
+  {
+    "outputFile": "Content/css/pages/cart.css",
+    "inputFile": "Content/scss/pages/_cart.scss",
+    "sourceMap": true
+  },
+  {
+    "outputFile": "Content/css/pages/wishlist.css",
+    "inputFile": "Content/scss/pages/_wishlist.scss",
+    "sourceMap": true
+  },
+  {
+    "outputFile": "Content/css/pages/search.css",
+    "inputFile": "Content/scss/pages/_search.scss",
+    "sourceMap": true
+  },
+  {
+    "outputFile": "Content/css/pages/error-page.css",
+    "inputFile": "Content/scss/pages/_error-page.scss",
+    "sourceMap": true
+  },
+  {
+    "outputFile": "Content/css/pages/under-construction.css",
+    "inputFile": "Content/scss/pages/_under-construction.scss",
+    "sourceMap": true
+  },
+  {
+    "outputFile": "Content/css/plugins/toastr.css",
+    "inputFile": "Content/scss/plugins/toastr.scss",
+    "sourceMap": true
+  },
+  {
+    "outputFile": "Content/css/pages/blog.css",
+    "inputFile": "Content/scss/pages/_blog.scss",
+    "sourceMap": true
+  },
+  {
+    "outputFile": "Content/css/pages/campaign.css",
+    "inputFile": "Content/scss/pages/_campaign.scss",
+    "sourceMap": true
+  }
+
+]

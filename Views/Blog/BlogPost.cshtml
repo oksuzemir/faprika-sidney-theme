@@ -1,0 +1,151 @@
+﻿@model BlogPostModel
+@{
+    //title
+    Html.AddTitleParts(!string.IsNullOrEmpty(Model.MetaTitle) ? Model.MetaTitle : Model.Title);
+    //meta
+    Html.AddMetaDescriptionParts(Model.MetaDescription);
+    Html.AddMetaKeywordParts(Model.MetaKeywords);
+
+    //register CSS
+    Html.AddCssFileParts(ResourceLocation.Head, "~/Themes/Sidney/Content/css/pages/blog.min.css", "~/Themes/Sidney/Content/css/pages/blog.css");
+}
+<div class="page blogpost-page">
+    <div class="page-container">
+
+        <div class="blog-sidebar">
+            <div class="blog-sidebar-content">
+                @await Component.InvokeAsync("BlogMonths")
+                @await Component.InvokeAsync("BlogTags")
+            </div>
+        </div>
+
+        <div class="page-body">
+            <div class="blog-page-content">
+                <div class="page-title">
+                    <h1>@Model.Title</h1>
+                    <div class="breadcrumb">
+                        <ul>
+                            <li>
+                                <a href="@Url.RouteUrl("HomePage")" title="@T("Breadcrumb.Top")">@T("Breadcrumb.Top")</a>
+                                <span class="delimiter">></span>
+                            </li>
+                            <li>
+                                <a href="@Url.RouteUrl("Blog")">@T("Blog")</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                @if (Model.PictureModel.FullSizeImageUrl.HasValue())
+                {
+                    <div class="post-picture">
+                        <img alt="@Model.Title" src="@Model.PictureModel.FullSizeImageUrl" />
+                    </div>
+                }
+
+                <div class="post-date">
+                    @Model.CreatedOn.ToString("D")
+                </div>
+
+                <div class="post-body">
+                    @Html.Raw(Model.Body)
+                </div>
+                @if (Model.Tags.Count > 0)
+                {
+                    <div class="tags">
+                        <label>@T("Blog.Tags"):</label>
+                        <ul>
+                            @for (var i = 0; i < Model.Tags.Count; i++)
+                            {
+                                var tag = Model.Tags[i];
+                                <li><a href="@Url.RouteUrl("BlogByTag", new {tag = tag})" alt="@tag" title="@tag">@tag</a></li>
+                            }
+                        </ul>
+                    </div>
+                }
+            </div>
+
+            <div class="blog-review">
+                @if (Model.AllowComments)
+                {
+                    <div class="send-comment">
+                        <div class="fieldset new-comment" id="comments">
+                            <div class="title">
+                                <strong>@T("Blog.Comments.LeaveYourComment")</strong>
+                            </div>
+                            @{
+                                var success = TempData["faprika.blog.addcomment.success"] as string;
+                                var error = TempData["faprika.blog.addcomment.error"] as string;
+                            }
+                            @if (success.HasValue())
+                            {
+                                <script asp-location="Footer">
+                                    $(document).ready(function () {
+                                        displayNotification('@success', 'success');
+                                    });
+                                </script>
+                            }
+                            @if (error.HasValue())
+                            {
+                                <script asp-location="Footer">
+                                    $(document).ready(function () {
+                                        displayNotification('@error', 'error');
+                                    });
+                                </script>
+                            }
+
+                            <form asp-route="BlogPost" asp-route-sename="@Model.SeName" method="post">
+                                <div class="form-fields">
+                                    <div class="inputs">
+                                        <textarea asp-for="AddNewComment.CommentText" placeholder="@T("Blog.Comments.CommentText")" class="enter-comment-text"></textarea>
+                                        <span asp-validation-for="AddNewComment.CommentText"></span>
+                                    </div>
+                                </div>
+                                <div class="buttons">
+                                    <input type="submit" name="add-comment" class="blog-post-add-comment-button" value="@T("Blog.Comments.SubmitButton")" />
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    if (Model.Comments.Count > 0)
+                    {
+                        <div class="all-comments">
+                            <div class="comment-list">
+                                <div class="title">
+                                    <strong>@T("Blog.Comments")</strong>
+                                </div>
+                                <div class="comments">
+                                    @foreach (var comment in Model.Comments)
+                                    {
+                                    <div class="comment blog-comment">
+                                        <div class="comment-content">
+                                            <div class="user-avatar">
+                                                <span>@comment.CustomerAvatarName</span>
+                                            </div>
+                                            <div class="blog-review-info">
+                                                <div class="comment-info">
+                                                    <div class="user-info">
+                                                        <span class="username">@(comment.CustomerName)</span>
+                                                    </div>
+                                                </div>
+                                                <span class="separator">|</span>
+                                                <div class="comment-time">
+                                                    @*<label>@T("Blog.Comments.CreatedOn"):</label>*@
+                                                    <span class="stat-value">@comment.CreatedOn.ToString("g")</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="comment-body">
+                                            @Html.Raw(Faprika.Core.Html.HtmlHelper.FormatText(comment.CommentText, false, true, false, false, false, false))
+                                        </div>
+                                    </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>

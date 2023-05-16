@@ -1,0 +1,100 @@
+﻿@model HelpModel
+@using Faprika.Core.Domain.Seo
+@inject SeoSettings seoSettings
+@{
+    Layout = "_Root";
+
+    //title
+    Html.AddTitleParts(!string.IsNullOrEmpty(Model.MetaTitle) ? Model.MetaTitle : Model.Title);
+    //meta
+    Html.AddMetaDescriptionParts(Model.MetaDescription);
+    Html.AddMetaKeywordParts(Model.MetaKeywords);
+
+    if (seoSettings.CanonicalUrlsEnabled)
+    {
+        var helpUrl = Url.RouteUrl("Help", new { SeName = Model.SeName }, this.Url.ActionContext.HttpContext.Request.Scheme);
+        Html.AddCanonicalUrlParts(helpUrl);
+    }
+
+    Html.AddCssFileParts(ResourceLocation.Head, "~/Themes/Sidney/Content/css/pages/help.min.css");
+
+}
+
+<div class="page help-page">
+    <div class="page-container">
+        @if (Model.AvailableHelps.Any())
+        {
+
+            <div class="side-navigation">
+                <div class="nav-title">
+                    <strong>@T("Help")</strong>
+                </div>
+                <div class="nav-wrap">
+                    <ul class="nav-list">
+                        @foreach (var help in Model.AvailableHelps)
+                        {
+                            <li>
+                                <a href="@Url.RouteUrl("Help", new { SeName=help.SeName })">@help.Title</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+            <div class="page-body">
+                <div class="help-header">
+                    <h1>@Model.Title</h1>
+                    <div class="breadcrumb">
+                        <ul>
+                            <li>
+                                <a href="@Url.RouteUrl("HomePage")" title="@T("Breadcrumb.Top")">@T("Breadcrumb.Top")</a>
+                                <span class="delimiter"></span>
+                            </li>
+                            <li>
+                                <a href="@Url.RouteUrl("HelpIndex")" title="@T("Help")">@T("Help")</a>
+                                <span class="delimiter"></span>
+                            </li>
+                            <li>
+                                <span class="current-item">@Model.Title</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                @foreach (var question in Model.HelpQuestions)
+                {
+                    <div class="help-tabs">
+                        <label>@question.Question</label>
+                        <span class="answer">@Html.Raw(question.Answer)</span>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="no-data">
+
+            </div>
+        }
+    </div>
+</div>
+
+
+<script asp-location="Footer">
+    $(function () {
+        function collapseHandler() {
+            var $el = $(this).parent();
+
+            if (!$el.hasClass("active")) {
+
+                //remove all active class
+                $el.siblings().removeClass('active');
+
+                //add class
+                $el.addClass('active');
+
+            } else {
+                $el.removeClass('active');
+            }
+        }
+        $('.help-tabs label').on('click', collapseHandler);
+    })
+</script>

@@ -1,0 +1,229 @@
+﻿@import "../variables/_variables-dev.scss";
+
+@mixin hover {
+    &:hover {
+        @content;
+    }
+}
+
+@mixin hover-focus {
+    &:hover,
+    &:focus {
+        @content;
+    }
+}
+
+@mixin plain-hover-focus {
+    &,
+    &:hover,
+    &:focus {
+        @content;
+    }
+}
+
+@mixin hover-focus-active {
+    &:hover,
+    &:focus,
+    &:active {
+        @content;
+    }
+}
+
+@mixin mq($width, $type: min) {
+    @if map_has_key($wrapper-breakpoints, $width) {
+        $width: map_get($wrapper-breakpoints, $width);
+
+        @if $type == max {
+            $width: $width - 1px;
+        }
+
+        @media only screen and (#{$type}-width: $width) {
+            @content;
+        }
+    }
+}
+
+@mixin transition($time) {
+    -webkit-transition: all $time linear 0s;
+    -moz-transition: all $time linear 0s;
+    -o-transition: all $time linear 0s;
+    transition: all $time linear 0s;
+}
+
+@mixin border($color, $radius) {
+    border: 1px solid $color;
+    border-radius: $radius;
+}
+
+@mixin shadow {
+    -webkit-box-shadow: 0px 3px 10px -2px rgba(0,0,0,0.3);
+    -moz-box-shadow: 0px 3px 10px -2px rgba(0,0,0,0.3);
+    box-shadow: 0px 3px 10px -2px rgba(0,0,0,0.3);
+}
+
+@mixin noselect {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+@mixin lazy {
+    animation: LazyLoad 2s infinite linear forwards;
+    -webkit-animation: LazyLoad 2s infinite linear forwards;
+    background: #f6f7f8;
+    background: linear-gradient(to left,#f6f7f8 0,#edeef1 20%,#f6f7f8 40%,#f6f7f8 100%);
+    background-size: 1150px 104px;
+
+    .lazy-complete {
+        min-width: 100%;
+        min-height: 100%;
+    }
+
+    @keyframes LazyLoad {
+        0% {
+            background-position: -1170px 0
+        }
+
+        100% {
+            background-position: 1170px 0
+        }
+    }
+
+    @-webkit-keyframes LazyLoad {
+        0% {
+            background-position: -1170px 0
+        }
+
+        100% {
+            background-position: 1170px 0
+        }
+    }
+}
+
+@mixin button($type: null, $height: $btn-height-sm) {
+    height: $height;
+    line-height: $height - 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all .3s ease;
+    padding: 0 15px;
+    font-weight: 600;
+
+    @if ($type == null) {
+        color: $color-primary;
+        @include border($color-border, $border-base);
+    }
+    @else {
+        color: #fff;
+        background: $type;
+        @include border($type, $border-base);
+    }
+}
+
+@mixin breadcrumb {
+    display: block;
+
+    ul {
+        @include flexbox;
+        @include flex-wrap(wrap);
+
+        li {
+            font-size: 11px;
+            color: $gray-dark;
+            text-transform: capitalize;
+
+            a {
+                color: $gray-dark;
+                font-size: 11px;
+            }
+
+            .delimiter {
+                font-size: 0;
+
+                &:before {
+                    content: "\f105";
+                    font-family: "Faprika";
+                    color: $color-primary;
+                    font-size: 12px;
+                    font-weight: 400;
+                    margin: 0 5px;
+                }
+            }
+        }
+    }
+}
+
+@mixin tooltip($width, $icon) {
+    position: relative;
+    display: inline-block;
+
+    &:before {
+        content: $icon;
+        font-family: "Faprika";
+        color: $color-danger;
+        font-weight: 300;
+        right: 0;
+        cursor: pointer;
+        font-size: 20px;
+    }
+
+    span {
+        visibility: hidden;
+        width: $width;
+        background-color: $gray-dark;
+        color: #fff;
+        text-align: center;
+        padding: 6px 4px;
+        border-radius: 3px;
+        position: absolute;
+        z-index: 1;
+        bottom: 125%;
+        left: 50%;
+        margin-left: ( - $width / 2);
+        opacity: 0;
+        transition: opacity 0.3s;
+
+
+        &:after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: $gray-dark transparent transparent transparent;
+        }
+    }
+
+    &:hover {
+        span {
+            visibility: visible;
+            opacity: 1;
+        }
+    }
+}
+
+@mixin vendorize($property, $value) {
+    -webkit-#{$property}: $value;
+    -moz-#{$property}: $value;
+    -ms-#{$property}: $value;
+    -o-#{$property}: $value;
+    #{$property}: $value;
+}
+
+@mixin clear() {
+    &:before, &:after {
+        content: "\0020";
+        display: block;
+        height: 0;
+        overflow: hidden;
+    }
+
+    &:after {
+        clear: both;
+    }
+}

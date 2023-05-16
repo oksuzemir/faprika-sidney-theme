@@ -1,0 +1,53 @@
+﻿@import "../helpers/all";
+@import "../variables/variables-dev";
+
+.copyright {
+    border-top: 1px solid $color-border;
+    background: #fff;
+
+    &-container {
+        height: 50px;
+        @include centered;
+
+        span {
+            font-size: 10px;
+
+            .brand {
+                color: #4b71fc;
+            }
+        }
+    }
+
+    @include mq(sm) {
+        &-container {
+            span {
+                font-size: 13px;
+            }
+        }
+    }
+
+    @include mq(sm, max) {
+        &-container {
+            height: auto;
+
+            span {
+                font-size: 13px;
+                padding: 15px 0;
+
+                span {
+                    display: none;
+                }
+
+                & > a:first-child {
+                    text-align: center;
+                    display: block;
+
+                    svg {
+                        width: 110px;
+                        padding-bottom: 15px;
+                    }
+                }
+            }
+        }
+    }
+}

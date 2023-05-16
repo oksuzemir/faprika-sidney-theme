@@ -1,0 +1,25 @@
+﻿@using Faprika.Core.Domain.Seo
+@inject SeoSettings seoSettings
+@{
+    //register css
+    Html.AppendCssFileParts(ResourceLocation.Footer, "~/Themes/Sidney/Content/css/pages/_homepage.min.css", "~/Themes/Sidney/Content/css/pages/_homepage.css");
+
+    //register Canonical
+    if (seoSettings.CanonicalUrlsEnabled)
+    {
+        var indexUrl = Url.RouteUrl("HomePage", null, this.Url.ActionContext.HttpContext.Request.Scheme);
+        Html.AddCanonicalUrlParts(indexUrl);
+    }
+}
+<div class="page home-page">
+    @await Component.InvokeAsync("PushNotification")
+    @await Component.InvokeAsync("Slider")  
+    @await Component.InvokeAsync("HomepageShowcases")
+
+    <div class="description-wrapper">
+        <div class="description-container">
+            @await Component.InvokeAsync("TopicBlock", new { systemName = "HomePageText" })
+        </div>
+    </div>
+</div>
+

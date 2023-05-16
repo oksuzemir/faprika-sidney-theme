@@ -1,0 +1,185 @@
+﻿@model ProductDetailsModel
+@using Microsoft.AspNetCore.Http.Extensions
+@using Faprika.Core.Domain.Seo;
+@inject IWebHelper webHelper 
+@inject SeoSettings seoSettings
+@inject IWebHelper webHelper 
+@inject IStoreContext storeContext
+
+@{
+    Layout = "_Root.WithoutFooter";
+
+    //title
+    Html.AddTitleParts(!string.IsNullOrEmpty(Model.MetaTitle) ? Model.MetaTitle : Model.Name);
+    //meta
+    Html.AddMetaDescriptionParts(Model.MetaDescription);
+    Html.AddMetaKeywordParts(Model.MetaKeywords);
+
+    //canonical URL
+    if (seoSettings.CanonicalUrlsEnabled)
+    {
+        var productUrl = Url.RouteUrl("Product", new { SeName = Model.SeName }, this.Url.ActionContext.HttpContext.Request.Scheme);
+        Html.AddCanonicalUrlParts(productUrl);
+    }
+
+    //open graph META tags
+    if (seoSettings.OpenGraphMetaTags)
+    {
+        Html.AddHeadCustomParts("<meta property=\"og:type\" content=\"product\" />");
+        Html.AddHeadCustomParts("<meta property=\"og:title\" content=\"" + Html.Encode(Model.Name) + "\" />");
+        Html.AddHeadCustomParts("<meta property=\"og:description\" content=\"" + Html.Encode(Faprika.Core.Html.HtmlHelper.StripTags(Model.MetaDescription)) + "\" />");
+        Html.AddHeadCustomParts("<meta property=\"og:image\" content=\"" + Model.DefaultPictureModel.ImageUrl + "\" />");
+        Html.AddHeadCustomParts("<meta property=\"og:image:url\" content=\"" + Model.DefaultPictureModel.ImageUrl + "\" />");
+        Html.AddHeadCustomParts("<meta property=\"og:url\" content=\"" + webHelper.GetThisPageUrl(false)  + "\" />");
+        Html.AddHeadCustomParts("<meta property=\"og:site_name\" content=\"" + Html.Encode(storeContext.CurrentStore.Name) + "\" />");
+    }
+
+    //Twitter META tags
+    if (seoSettings.TwitterMetaTags)
+    {
+        Html.AddHeadCustomParts("<meta property=\"twitter:card\" content=\"summary\" />");
+        Html.AddHeadCustomParts("<meta property=\"twitter:site\" content=\"" + Html.Encode(storeContext.CurrentStore.Name) + "\" />");
+        Html.AddHeadCustomParts("<meta property=\"twitter:title\" content=\"" + Html.Encode(Model.Name) + "\" />");
+        Html.AddHeadCustomParts("<meta property=\"twitter:description\" content=\"" + Html.Encode(Faprika.Core.Html.HtmlHelper.StripTags(Model.MetaDescription)) + "\" />");
+        Html.AddHeadCustomParts("<meta property=\"twitter:image\" content=\"" + Model.DefaultPictureModel.ImageUrl + "\" />");
+        Html.AddHeadCustomParts("<meta property=\"twitter:url\" content=\"" + webHelper.GetThisPageUrl(false) + "\" />");
+    }
+
+    //register CSS and JS
+    Html.AddCssFileParts(ResourceLocation.Head, "~/Themes/Sidney/Content/css/pages/product-simple.min.css", "~/Themes/Sidney/Content/css/pages/product-simple.css");
+    Html.AppendScriptParts(ResourceLocation.Footer, "~/lib/sticky-sidebar/sticky-sidebar.min.js", "~/lib/sticky-sidebar/sticky-sidebar.js");
+    Html.AppendScriptParts(ResourceLocation.Footer, "~/lib/sticky-sidebar/ResizeSensor.min.js", "~/lib/sticky-sidebar/ResizeSensor.js");
+}
+
+<div class="product-details-page">
+    <form asp-route="Product" asp-route-sename="@Model.SeName" method="post" id="product-details-form">
+        @await Html.PartialAsync("_ProductBreadcrumb", Model.Breadcrumb)
+        <div class="product-details-container" itemscope itemtype="http://schema.org/Product" data-productid="@Model.Id">
+            @await Html.PartialAsync("_ProductDetailsPictures", Model)
+            <div class="overview">
+                <div class="overview-head">
+                    <div class="product-name">
+                        <h1 itemprop="name">@Model.Name</h1>
+                    </div>
+                    <div class="prices">
+                        @{
+                            var dataDictPrice = new ViewDataDictionary(ViewData);
+                            dataDictPrice.TemplateInfo.HtmlFieldPrefix = $"price_{Model.Id}";
+                            @await Html.PartialAsync("_ProductPrice", Model.ProductPrice, dataDictPrice)
+
+                            @*@await Html.PartialAsync("_ProductTierPrices", Model.TierPrices)*@
+                        }
+                        @*@await Html.PartialAsync("_Discounted", Model.ProductPrice)*@
+                    </div>
+                    @if (Model.ShortDescription.HasValue())
+                    {
+                        <div class="description">
+                            <p>@Model.ShortDescription</p>
+                        </div>
+                    }
+                    <div class="details">
+                        @await Html.PartialAsync("_SKU_GTIN", Model)
+                        @await Html.PartialAsync("_ProductManufacturers", Model.ProductManufacturers)
+                        @await Html.PartialAsync("_Availability", Model)
+                        @await Html.PartialAsync("_DeliveryInfo", Model)
+                        @await Html.PartialAsync("_ProductSpecifications", Model.ProductSpecifications)
+                    </div>
+                </div>
+                @await Component.InvokeAsync("SameProducts", new { productId = Model.Id })
+                @await Html.PartialAsync("_ProductBundles", Model)
+                <div class="attributes">
+                    @if (Model.DisplaySizeTable)
+                    {
+                        <span onclick="javascript:OpenWindow('@(Url.RouteUrl("TopicPopup", new {SystemName = "sizetable" }))', '@T("Products.SizeTable")'); return false;">@T("Products.SizeTable")</span>
+                    }
+
+                    @if (Model.ProductType == Faprika.Core.Domain.Catalog.ProductType.SerialProduct)
+                    {
+                        var dataDictAttributes = new ViewDataDictionary(ViewData);
+                        dataDictAttributes.TemplateInfo.HtmlFieldPrefix = $"attributes_{Model.Id}";
+                        @await Html.PartialAsync("_ProductAttributesSerialProduct", Model.ProductAttributeCombinations, dataDictAttributes)
+                    }
+                    else
+                    {
+                        var dataDictAttributes = new ViewDataDictionary(ViewData);
+                        dataDictAttributes.TemplateInfo.HtmlFieldPrefix = $"attributes_{Model.Id}";
+                        @await Html.PartialAsync("_ProductAttributes", Model.ProductAttributes, dataDictAttributes)
+                    }
+
+                    @{
+                        var dataDictAddToCart = new ViewDataDictionary(ViewData);
+                        dataDictAddToCart.TemplateInfo.HtmlFieldPrefix = $"addtocart_{Model.Id}";
+                    }
+                    @await Html.PartialAsync("_CustomerEntersPrice", Model.AddToCart, dataDictAddToCart)
+                    <div class="buttons">
+                        @await Html.PartialAsync("_ProductQuantity", Model.AddToCart, dataDictAddToCart)
+                        @await Html.PartialAsync("_AddToCart", Model.AddToCart, dataDictAddToCart)
+                        @await Html.PartialAsync("_AddToWishlist", Model.AddToCart, dataDictAddToCart)
+                    </div>
+                    @*<div class="order-buttons">
+                        <div class="order-by-stock-alarm dropdown-wrapper">
+                            <span class="dropdown-toggle">
+                                Gelince haber ver
+                            </span>
+                            <div class="dropdown-menu">
+                                <div class="title">
+                                    <span>Gelince haber ver</span>
+                                    <span class="dropdown-close"></span>
+                                </div>
+                                <div class="stock-alarm-area">
+                                    <span>
+                                        Bu ürünü takip edin, stok ve fırsatlardan ilk siz haberdar olun.
+                                    </span>
+                                    <div class="inputs">
+                                        <label for="FirstName">İsim</label>
+                                        <div class="input-validate">
+                                            <input type="text" id="" name="" value="">
+                                        </div>
+                                    </div>
+                                    <div class="inputs">
+                                        <label for="FirstName">E-posta</label>
+                                        <div class="input-validate">
+                                            <input type="email" id="" name="" value="">
+                                        </div>
+                                    </div>
+                                    <div class="inputs options">
+                                        <input type="checkbox" id="" name="" value="true">
+                                        <label for="">İlgimi çekebilecek kampanyalarla ilgili e-mail almak istiyorum.</label>
+                                    </div>
+                                    <button type="button" class="button">
+                                        <span>Gelince Haber Ver</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="order-by-discount-alarm">İndirim alarmı kur</button>
+                        <a href="https://wa.me/" class="order-by-whatsapp">Whatsapp ile sipariş ver</a>
+                        <a href="tel:" class="order-by-phone">Telefon ile sipariş ver</a>
+                    </div>*@
+                </div>
+                @await Html.PartialAsync("_ProductAccordion", Model)
+            </div>
+        </div>
+        @*@await Html.PartialAsync("_ProductTabs", Model)*@
+        @await Component.InvokeAsync("RelatedProducts", new { productId = Model.Id, categoryId = Model.Breadcrumb.CategoryId })
+        @await Component.InvokeAsync("RecentlyViewedProductsBlock")
+    </form>
+</div>
+<script asp-location="Footer">
+    $(document).ready(function () {
+        if (ResponsiveToolkit.is('>=md')) {
+            var topSpacing = ResponsiveToolkit.is('>md') ? 30 : 60;
+            var stickyGallery = new StickySidebar('.gallery-fixed', {
+                topSpacing: topSpacing,
+                bottomSpacing: 30,
+                containerSelector: '.product-details-container',
+                innerWrapperSelector: '.gallery-inner'
+            });
+
+            $(document).on('onTabChange onAccordionChange', function () {
+                stickyGallery.updateSticky();
+                $('html, body').animate({ scrollTop: '+=1px' }, 0);
+            });
+        }
+    });
+</script>

@@ -1,0 +1,46 @@
+﻿@model int[]
+@inject IWorkContext workContext
+@using Faprika.Core.Domain.Localization
+
+@{
+    //register CSS and JS
+    //select2
+    Html.AppendScriptParts(ResourceLocation.Footer, $"~/lib/select2/4.0.8/js/lang/{workContext.WorkingLanguage.GetSeoCode()}.js");
+    Html.AppendScriptParts(ResourceLocation.Footer, "~/lib/select2/4.0.8/js/select2.min.js", "~/lib/select2/4.0.8/js/select2.js");
+    Html.AddCssFileParts(ResourceLocation.Footer, "~/lib/select2/4.0.8/css/select2.min.css", "~/lib/select2/4.0.8/css/select2.css");
+}
+
+<select asp-for="@Model" asp-items="@((IEnumerable<SelectListItem>)ViewData["SelectList"])"></select>
+<script asp-location="Footer">
+    $(document).ready(function () {
+        var $el = $('#@Html.IdForModel()');
+        $el.select2({
+            width: 'auto',
+            language: "@workContext.WorkingLanguage.GetSeoCode()",
+            hideSelected: true
+        });
+
+        var $hasAll = $("#@Html.IdForModel() option[value='0']").length > 0;
+        if ($hasAll) {
+
+            $el.on("select2:select", function (e) {
+                var $this = $(this);
+                var $val = $this.val();
+                if (e.params.data["id"] === "0") {
+                    $this.select2("val", "0");
+                }
+                else if ($val.indexOf("0") !== -1) {
+                    $val = $.grep($val, function (value) {
+                        return value !== "0";
+                    });
+                    $this.select2("val", $val);
+                }
+            });
+            $el.on("change", function (e) {
+                var $this = $(this);
+                if ($this.val().length == 0)
+                    $this.select2("val", "0");
+            });
+        }
+    });
+</script>

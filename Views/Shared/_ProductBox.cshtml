@@ -1,0 +1,73 @@
+﻿@model ProductOverviewModel
+@{
+    //register CSS and JS
+    //product-box
+    Html.AppendScriptParts(ResourceLocation.Footer, "~/Themes/Sidney/Content/js/product-box.min.js", "~/Themes/Sidney/Content/js/product-box.js");
+
+    //swiper
+    Html.AppendScriptParts(ResourceLocation.Footer, "~/lib/swiper/4.4.5/js/swiper.min.js", "~/lib/swiper/4.4.5/js/swiper.js");
+    Html.AddCssFileParts(ResourceLocation.Footer, "~/lib/swiper/4.4.5/css/swiper.min.css", "~/lib/swiper/4.4.5/css/swiper.css");
+
+    //lazy
+    Html.AppendScriptParts(ResourceLocation.Footer, "~/lib/jquery-lazy/jquery.lazy.min.js", "~/lib/jquery-lazy/jquery.lazy.js");
+
+    //prepare AJAX link
+    var addtocartlink = Url.RouteUrl("AddProductToCart-Catalog", new { productId = Model.Id, quantity = 1, loadAttribute = true });
+    var addtowishlistlink = Url.RouteUrl("AddProductToWishlist", new { productId = Model.Id });
+    var removetowishlistlink = Url.RouteUrl("RemoveProductToWishlist", new { productId = Model.Id });
+}
+<div class="product@(Model.IsOutOfStock ? " out-of-stock" : "")@(Model.VideoAutoPlay ? " video-auto-play" : "")" data-productid="@Model.Id">
+    <form method="post" id="product-catalog-form-@Model.Id">
+        <div class="image">
+            <a href="@Url.RouteUrl("Product", new { SeName = Model.SeName })" title="@Model.Name">
+                <figure class="product-image-wrapper">
+                    <img class="product-image" alt="@Model.Name" src="@Url.Content("~/" + Model.LazyLogoName)" data-src="@Model.DefaultPictureModel.ImageUrl" title="@Model.Name" />
+                    @await Html.PartialAsync("_ProductSliderBox", Model)
+                </figure>
+                @await Html.PartialAsync("_ProductTagBox", Model)
+                @await Html.PartialAsync("_ProductVideoBox", Model)
+                @if (Model.IsOutOfStock)
+                {
+                    <div class="out-of-stock-in"><span>@T("Products.Availability.OutOfStock")</span></div>
+                }
+            </a>
+            <div class="buttons">
+                @if (Model.InWishlist)
+                {
+                    <button type="button" class="remove-to-wishlist" onclick="AjaxCart.removeproducttowishlist('@removetowishlistlink', this);return false;"></button>
+                }
+                else
+                {
+                    <button type="button" class="add-to-wishlist" onclick="AjaxCart.addproducttowishlist('@addtowishlistlink', this);return false;"></button>
+                }
+                @if (Model.AllowAddToCartOnCatalog && !Model.IsOutOfStock)
+                {
+                    <button type="button" class="add-to-cart" onclick="AjaxCart.addproducttocart_catalog('@addtocartlink', '#product-catalog-form-@Model.Id', this);return false;"></button>
+                }
+                @if (Model.VideoUrl.HasValue())
+                {
+                    <button type="button" class="video-play"></button>
+                    <button type="button" class="video-pause"></button>
+                }
+            </div>
+        </div>
+        @await Html.PartialAsync("_ProductOtherColors", Model)
+        <div class="product-info">
+            @await Html.PartialAsync("_ProductManufacturerBox", Model)
+            <h2 class="name">
+                <a href="@Url.RouteUrl("Product", new {SeName = Model.SeName})">@Model.Name</a>
+            </h2>
+            <div class="prices">
+                <span class="price">@Model.ProductPrice.Price</span>
+                @if (!string.IsNullOrEmpty(Model.ProductPrice.OldPrice))
+                {
+                    <span class="old-price">@Model.ProductPrice.OldPrice</span>
+                }
+                @if (Model.ProductPrice.DisplayDiscountedMessage)
+                {
+                    <span class="discount">@Model.ProductPrice.Discount</span>
+                }
+            </div>
+        </div>
+    </form>
+</div>

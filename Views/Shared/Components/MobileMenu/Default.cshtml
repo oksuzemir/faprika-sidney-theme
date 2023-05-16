@@ -1,0 +1,68 @@
+﻿@model TopMenuModel
+@{
+    Html.AddCssFileParts(ResourceLocation.Head, "~/Themes/Sidney/Content/css/components/mobile-menu.min.css", "~/Themes/Sidney/Content/css/components/mobile-menu.css");
+}
+<div class="mobile-menu dropdown-menu">
+    <div class="mobile-menu-header">
+        <span id="headerData" data-menu="main-menu">@T("Common.AllCategories")</span>
+        <span class="dropdown-close"></span>
+    </div>
+    <ul>
+        @{
+            var rootTopMenus = Model.TopMenus.ToList();
+        }
+        @foreach (var topMenu in rootTopMenus)
+        {
+            @await Html.PartialAsync("MobileMenuTemplate.Default", topMenu)
+        }
+    </ul>
+</div>
+
+<script asp-location="Footer">
+    $(function () {
+        var dataCount = [];
+
+        function changeDataMenu() {
+            var arrLast = dataCount[dataCount.length - 1];
+            var currText = $("li[data-menu='" + arrLast + "']").find('span').html();
+
+            if (!dataCount.length == 0) {
+                $('#headerData').attr('data-menu', arrLast);
+                $('#headerData').html(currText).addClass('nav-active');
+            }
+            else {
+                $('#headerData').attr('data-menu', '');
+                $('#headerData').html('@T("Common.AllCategories")').removeClass('nav-active');
+            }
+        }
+
+        $('.mobile-menu li span').on('click', function (e) {
+            e.preventDefault();
+
+            $(this).hide();
+            $(this).siblings('ul').show();
+            $(this).parent().siblings('li').hide();
+
+            dataCount.push($(this).parent().data('menu'));
+
+            changeDataMenu();
+        });
+
+        $('#headerData').on('click', function () {
+            var $back = $(this).attr('data-menu');
+
+            //Delete last array's last element
+            dataCount.splice(-1, 1);
+
+            changeDataMenu();
+
+            $('.mobile-menu li').each(function () {
+                if ($(this).data('menu') == $back) {
+                    $(this).siblings('li').show();
+                    $(this).find('span').show();
+                    $(this).find('ul').hide();
+                }
+            })
+        });
+    })
+</script>

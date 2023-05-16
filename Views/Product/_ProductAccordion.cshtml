@@ -1,0 +1,41 @@
+﻿@model ProductDetailsModel
+@{
+    Html.AppendScriptParts(ResourceLocation.Footer, "~/lib/jquery-simpleaccordion/jquery-simpleaccordion.min.js", "~/lib/jquery-simpleaccordion/jquery-simpleaccordion.js");
+}
+
+<div class="accordion-container">
+    <div class="accordions">
+        <section class="accordion-menu">
+            <span class="accordion-title active" data-target="accordion-fulldescription">@T("Products.FullDescription")</span>
+            <div class="accordion-item accordion-fulldescription active">
+                @if (!string.IsNullOrEmpty(Model.FullDescription))
+                {
+                    <div class="full-description" itemprop="description">
+                        @Html.Raw(Model.FullDescription)
+                    </div>
+                }
+            </div>
+            @if (Model.ProductReviews.AllowCustomerReviews)
+            {
+                <span class="accordion-title" data-target="accordion-reviews">@T("Products.Reviews")</span>
+                <div class="accordion-item accordion-reviews">
+                    @await Html.PartialAsync("_ProductReviews", Model.ProductReviews)
+                </div>
+            }
+
+            @foreach (var topic in Model.Topics)
+            {
+                <span class="accordion-title" data-target="accordion-topic-@topic.Id">@topic.Title</span>
+                <div class="accordion-item accordion-topic-@topic.Id">
+                    @Html.Raw(topic.Body)
+                </div>
+            }
+        </section>
+    </div>
+</div>
+
+<script asp-location="Footer">
+    $(document).ready(function () {
+        $('.accordion-container').simpleAccordion();
+    });
+</script>

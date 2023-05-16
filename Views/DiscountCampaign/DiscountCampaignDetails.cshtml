@@ -1,0 +1,319 @@
+﻿@model DiscountCampaignModel
+@{
+    //Layout = "_Root";
+
+    //title
+    Html.AddTitleParts(T("PageTitle.DsicountCampaign").Text);
+    //lazy
+    Html.AppendScriptParts(ResourceLocation.Footer, "~/lib/jquery-lazy/jquery.lazy.min.js", "~/lib/jquery-lazy/jquery.lazy.js");
+
+    //register CSS and JS
+    Html.AddCssFileParts(ResourceLocation.Footer, "~/Themes/Sidney/Content/css/pages/campaign.min.css", "~/Themes/Sidney/Content/css/pages/campaign.css");
+}
+<div class="page campaign-page">
+    <div class="page-container">
+        <div class="page-body">
+            <div class="campaign-content">
+                <div class="page-title">
+                    <h1>  @Model.Title </h1>
+                </div>
+                <div class="campaigns">
+                    <div class="campaign">
+                        <div class="campaign-content detail">
+                            @if (@Model.PictureModel.FullSizeImageUrl.HasValue())
+                            {
+                                <div class="campaign-picture" style="position:relative;">
+                                    <a href="@Url.RouteUrl("DiscountCampaignDetails", "DiscountCampaignDetail")" aria-label="item">
+                                        <img src="@Model.PictureModel.FullSizeImageUrl" class="img-responsive img-rounded" />
+                                    </a>
+                                </div>
+                            }
+                            <div class="campaign-inner">
+                                <div class="campaign-body">
+                                    @if (!Model.Published)
+                                    {
+                                        <div class="description">
+                                            <h1>@T("DiscountCampaign.Published.Description")</h1>
+                                        </div>
+                                    }
+                                    @if (!String.IsNullOrWhiteSpace(Model.StartDate) && !String.IsNullOrWhiteSpace(Model.EndDate))
+                                    {
+                                        <div class="expiration-date">
+                                            <strong>@T("DiscountCampaign.CampaignValidityDate") </strong>
+                                            <span class="expiration-date-startdate">@Model.StartDate</span> / <span class="expiration-date-enddate">@Model.EndDate</span>
+                                        </div>
+                                    }
+                                    <div class="description">
+                                        <h4>@T("DiscountCampaign.CampaignSummary")</h4>
+                                        @Html.Raw(Model.Description)
+                                    </div>
+                                    @if (DateTime.Now > Convert.ToDateTime(Model.EndDate))
+                                    {
+                                        <div class="campaign-timebox">
+                                            @T("DiscountCampaign.CampaignTheEnd")
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @foreach (var item in Model.DiscountCampaignGroup)
+        {
+            <div class="campaign">
+                <div class="campaign-title">
+                    <h4>  @item.Title </h4>
+                </div>
+                <div id="campaignProducts" class="simple-campaign campaign-scope-@Model.Id">
+                    <div class="campaign-products-item" data-quantity="@item.Quantity" data-name="@item.Title">
+                        <div  class="campaign-products">
+                            <div class="campaign-product-wrap">
+                                @if (!item.ProductSliderEnabled || item.Products.Count <= 4)
+                                {
+                                    @* Grid Products*@
+                                    @foreach (var product in item.Products)
+                                    {
+                                        <div class="campaign-product-item product__wrapper"  data-id="@product.Id">
+                                            @await Html.PartialAsync("_ProductBoxCampaign", product)
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    @*Slide Products*@
+                                    <!-- Swiper -->
+                                    <div class="campaign-product-slider-@item.Id swiper-container">
+                                        <div class="campaign-product-slider__wrapper swiper-wrapper">
+                                            @foreach (var product in item.Products)
+                                            {
+                                                <div class="swiper-slide product__wrapper"  data-id="@product.Id">
+                                                    @await Html.PartialAsync("_ProductBoxCampaign", product)
+                                                </div>
+                                            }
+                                        </div>
+                                        <!-- Add Arrows -->
+                                        <div class="swiper-button-next"></div>
+                                        <div class="swiper-button-prev"></div>
+                                    </div>
+                                    <script asp-location="Footer">
+                                            $(document).ready(function () {
+                                            var swiper = new Swiper('.campaign-product-slider-@item.Id', {
+                                                // Disable preloading of all images
+                                                preloadImages: false,
+                                                // Enable lazy loading
+                                                lazy: {
+                                                    elementClass: 'product-image',
+                                                },
+                                                pagination: {
+                                                    el: '.swiper-pagination',
+                                                    clickable: true,
+                                                },
+                                                navigation: {
+                                                    nextEl: '.swiper-button-next',
+                                                    prevEl: '.swiper-button-prev',
+                                                },
+                                                autoplay: false,
+                                                breakpointsInverse: true,
+                                                breakpoints: {
+
+                                                    320: {
+                                                        slidesPerView: 2,
+                                                        spaceBetween: 10
+                                                    },
+                                                    768: {
+                                                        slidesPerView: 3,
+                                                        spaceBetween: 25
+                                                    },
+                                                    992: {
+                                                        slidesPerView: 4,
+                                                        spaceBetween: 20
+                                                    }
+                                                }
+                                            });
+                                        });
+                                    </script>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+        @if ((Model.DiscountCampaignGroup.Select(x => x.Products.Any()).ToList().Count > 0) && (DateTime.Now < Convert.ToDateTime(Model.EndDate)))
+        {
+            <div class="campaign-button">
+                <button class="campaign-add-to-cart button">@T("DiscountCampaign.SelectedProductAddToCard")</button>
+            </div>
+        }
+
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    $(function () {      
+
+        $('.lazy-image').each(function () {
+            var imgSrc = $(this).attr('data-original');
+            $(this).attr('src', imgSrc);
+        });
+
+        // Campaign Products
+        $("#campaignProducts .product").on("click", function (e) {
+            e.preventDefault();
+            var quantityBox = $('.quantity-panel-small');
+            if ($(this).children('.product-info').children('.quantity').length === 0) {
+                toastr.options.positionClass = 'toast-top-full-width';
+                toastr.warning('@T("DiscountCampaign.Details.OutOfStock")');
+
+                //bootbox.dialog({
+                //    message: 'Ürünün stoğu tükenmiştir. Lütfen başka bir ürün seçiniz.',
+                //    buttons: {
+                //        danger: {
+                //            label: "TAMAM",
+                //            className: "btn btn-primary btn-block",
+                //        }
+                //    }
+                //});
+            } else {
+                if (!quantityBox.is(e.target) && quantityBox.has(e.target).length === 0) {
+                    $(this).toggleClass('selected');
+                } else {
+                    $(this).addClass('selected');
+                }
+            }
+        });
+
+        // Click to Campaign AddtoCart Button
+        $('.campaign-add-to-cart').on('click', function (e) {
+            e.preventDefault();
+            var $hasNotError = true;
+
+            toastr.options = {
+                "closeButton": true,
+                "debug": false,
+                "newestOnTop": true,
+                "progressBar": true,
+                "positionClass": "toast-top-full-width",// "toast-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "3000",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+
+            $('#campaignProducts .campaign-products-item').each(function () {
+                var $wrapper = $(this);
+                var groupQuantity = $wrapper.data('quantity');
+                var groupName = $wrapper.data('name');
+                var selectedQuantity = 0;
+                $('.product', $wrapper).each(function () {
+                    var $item = $(this);
+                    if ($item.hasClass('selected')) {
+                        selectedQuantity = parseFloat(selectedQuantity) + parseFloat($('.qty-input', $item).val());
+                    }
+                });
+
+                if (groupQuantity > 0) {
+                    if (groupQuantity > selectedQuantity) {
+                        var qty = groupQuantity - selectedQuantity;
+                        //alert(groupName + qty + 'adet ürün daha eklemelisiniz.');
+                        toastr.warning(groupName + ' ' + qty + '@T("DiscountCampaign.Details.AddProduct")');
+                        //bootbox.dialog({
+                        //    className: "campaign-modal",
+                        //    message: groupName + ' ' + qty + ' adet ürün daha eklemelisiniz.',
+                        //    buttons: {
+                        //        danger: {
+                        //            label: "TAMAM",
+                        //            className: "btn btn-primary btn-block",
+                        //        }
+                        //    }
+                        //});
+                        $hasNotError = false;
+                        return false;
+                    }
+
+                    if (groupQuantity < selectedQuantity) {
+                        var qty = selectedQuantity - groupQuantity;
+                        //alert(groupName + qty + 'adet ürün çıkarmalısınız.');
+                        toastr.warning(groupName + ' ' + qty +  '@T("DiscountCampaign.Details.ProductRemove")');
+                        //bootbox.dialog({
+                        //    className: "campaign-modal",
+                        //    message: groupName + ' ' + qty + ' adet ürün çıkarmalısınız.',
+                        //    buttons: {
+                        //        danger: {
+                        //            label: "TAMAM",
+                        //            className: "btn btn-primary btn-block",
+                        //        }
+                        //    }
+                        //});
+                        $hasNotError = false;
+                        return false;
+                    }
+                }
+            });
+
+            if ($hasNotError) {
+
+                var dict = {};
+                var count = 0;
+                var postData = {};
+                $('#campaignProducts .campaign-products-item').each(function () {  
+                    var $wrapper = $(this);
+                    var groupQuantity = $wrapper.data('quantity');
+                    var groupName = $wrapper.data('name');
+                    var selectedQuantity = 0;
+                 
+                    $('.product', $wrapper).each(function () {
+                        var $item = $(this);
+                        if ($item.hasClass('selected')) {
+                            var $el = $item.closest('.product__wrapper');
+                            dict["[" + count + "].Key"] = $el.data('id');
+                            dict["[" + count + "].Value"] = $('.qty-input', $item).val();
+                            var keyName = "[" + count + "].Key";
+                            var key = $el.data('id');
+                            var valueName = "[" + count + "].Value";
+                            var value = $('.qty-input', $item).val();
+                            postData[keyName] = key;
+                            postData[valueName] = value;
+                            count++;
+                            //urls.push('/sepete-ekle/katalog/' + $el.data('id') + '/' + $('.qty-input', $item).val() + '?forceredirection=false');
+                        }
+                    });
+                });
+                
+                addAntiForgeryToken(postData);
+
+                //add to cart
+                AjaxCart.addproducttocart_campaign(postData);
+            }
+        });
+
+        // Quantity
+        $(".quantity-panel-button").on("click", function () {
+            var $button = $(this);
+            var oldValue = $button.parent().find("input.qty-input").val();
+            if ($button.find('.btn-plus').length > 0) {
+                var newVal = parseFloat(oldValue) + 1;
+            } else {
+                // Don't allow decrementing below zero
+                if (oldValue > 1) {
+                    var newVal = parseFloat(oldValue) - 1;
+                } else {
+                    newVal = 1;
+                }
+            }
+            $button.parent().find("input.qty-input").val(newVal);
+        });
+
+    });
+
+</script>

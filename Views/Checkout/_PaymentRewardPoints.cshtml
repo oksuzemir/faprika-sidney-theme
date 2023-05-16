@@ -1,0 +1,60 @@
+﻿@model CheckoutPaymentModel
+
+@if (Model.DisplayRewardPoints && Model.PaymentMethods.Count > 0)
+{
+    <div class="reward-points">
+        <div class="reward-points-header">
+            @T("Checkout.RewardPoints.Title")
+        </div>
+        <div class="reward-points-content">
+
+            <a href="@Url.RouteUrl("CheckoutSelectRewardPoints", new { select = !Model.UseRewardPoints,orderGuid = Model.orderGuid })" class="@(Model.UseRewardPoints ? "active" : "")">
+                <span>@string.Format(T("Checkout.UseRewardPoints").Text, Model.RewardPointsBalance, Model.RewardPointsAmount)</span>
+            </a>
+
+            @if (Model.UseRewardPoints && Model.AllowCustomerEnteredAmount)
+            {
+                <div class="reward-points-inputs">
+                    <faprika-editor asp-for="RewardPointsCustomerEnteredAmount" asp-class="ignore-validation" />
+                    <button type="button" class="button-save one-click-button">Kaydet</button>
+                </div>
+
+                <script asp-location="Footer">
+                    $(document).ready(function () {
+
+                        $(".reward-points .reward-points-inputs .button-save").on("click", function () {
+
+                            var postData = {
+                                amount: $('#@Html.IdFor(model => model.RewardPointsCustomerEnteredAmount)').val()
+                            };
+                            addAntiForgeryToken(postData);
+
+                            $.ajax({
+                                cache: false,
+                                type: "POST",
+                                url: "@(Url.RouteUrl("CheckoutSaveRewardPoints"))",
+                                data: postData,
+                                success: function (data) {
+                                    location.reload();
+                                }
+                            });
+
+                        });
+
+                    });
+                </script>
+            }
+
+            @if (Model.RewardPointsEnoughToPayForOrder && Model.UseRewardPoints)
+            {
+                <script asp-location="Footer">
+                    $(document).ready(function () {
+                        $('#payment-method-block').hide();
+                        $('#payment-info-block').hide();
+                        $('#payment-not-required-block').show();
+                    });
+                </script>
+            }
+        </div>
+    </div>
+}

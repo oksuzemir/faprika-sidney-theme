@@ -1,0 +1,45 @@
+﻿@model TopicModel
+@using Faprika.Core.Domain.Seo
+@inject SeoSettings seoSettings
+@{
+    Layout = "_Root";
+
+    //title
+    Html.AddTitleParts(!string.IsNullOrEmpty(Model.MetaTitle) ? Model.MetaTitle : Model.Title);
+    //meta
+    Html.AddMetaDescriptionParts(Model.MetaDescription);
+    Html.AddMetaKeywordParts(Model.MetaKeywords);
+
+    if (seoSettings.CanonicalUrlsEnabled)
+    {
+        var topicUrl = Url.RouteUrl("Topic", new { SeName = Model.SeName }, this.Url.ActionContext.HttpContext.Request.Scheme);
+        Html.AddCanonicalUrlParts(topicUrl);
+    }
+
+    Html.AddCssFileParts(ResourceLocation.Head, "~/Themes/Sidney/Content/css/pages/topic.min.css");
+}
+
+<div class="page topic-page">
+    <div class="page-container">
+        @if (Model.AvailableTopicItems.Any())
+        {
+            <div class="side-navigation">
+                <div class="nav-title">
+                    <strong>@T("Topic.Navigation")</strong>
+                </div>
+                <div class="nav-wrap">
+                    <ul class="nav-list">
+                        @foreach (var topic in Model.AvailableTopicItems)
+                        {
+                            <li><a href="@Url.RouteUrl("Topic", new { SeName = topic.SeName })">@topic.Title</a></li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        }
+        <div class="topic-body">
+            <h1 class="topic-title">@Model.Title</h1>
+            <div class="topic-content">@Html.Raw(Model.Body)</div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,19 @@
+﻿@model ProductDetailsModel.AddToCartModel
+
+@if (Model.CustomerEntersPrice)
+{
+    <div class="customer-entered-price">
+        <div class="price-label">
+            @T("Products.EnterProductPrice")
+        </div>
+        <div class="price-input">
+            <input asp-for="CustomerEnteredPrice" value="@Model.CustomerEnteredPrice.FormatInvariant()" type="number" class="enter-price-input" />
+        </div>
+        @if (Model.CustomerEnteredPriceRange.HasValue())
+        {
+            <div class="price-range">
+                @Model.CustomerEnteredPriceRange
+            </div>
+        }
+    </div>
+}

@@ -1,0 +1,131 @@
+﻿@model ShowcaseModel
+@using Newtonsoft.Json
+@{
+    //register CSS and JS
+    Html.AddCssFileParts(ResourceLocation.Footer, "~/Themes/Sidney/Content/css/components/showcase-image-slider.min.css", "~/Themes/Sidney/Content/css/components/showcase-image-slider.css");
+
+    //lazy
+    Html.AppendScriptParts(ResourceLocation.Footer, "~/lib/jquery-lazy/jquery.lazy.min.js", "~/lib/jquery-lazy/jquery.lazy.js");
+
+    string mobileJson = JsonConvert.SerializeObject(Model.AvailableShowcasePictures.Where(x => x.Mobile).Take(1));
+    string tabletJson = JsonConvert.SerializeObject(Model.AvailableShowcasePictures.Where(x => x.Tablet).Take(1));
+    string desktopJson = JsonConvert.SerializeObject(Model.AvailableShowcasePictures.Where(x => x.Desktop).Take(1));
+}
+<div class="showcase">
+
+    @*Showcase Title*@
+    @if (Model.ShowName || Model.ShowDescription)
+    {
+        <div class="showcase-title">
+            @if (Model.ShowName)
+            {
+                <h4>@Model.Name</h4>
+            }
+            @if (Model.ShowDescription)
+            {
+                <h6>@Model.Description</h6>
+            }
+        </div>
+    }
+
+    @* Grid Pictures*@
+    <div class="left-slider-right-image showcase-scope-@Model.Id">
+        <div class="showcase-pictures"></div>
+
+        <script asp-location="Footer">
+            $(document).ready(function () {
+                // Variables
+                var mobileJson = @Html.Raw(mobileJson);
+                var tabletJson = @Html.Raw(tabletJson);
+                var desktopJson = @Html.Raw(desktopJson);
+
+                // Showcase Array
+                var showcases = new Array();
+
+                // Viewport Detect
+                if (ResponsiveToolkit.is('<=sm')) { showcases = mobileJson}
+                else if (ResponsiveToolkit.is('md')) { showcases = tabletJson}
+                else { showcases = desktopJson}
+
+                // Showcase Content Wrapper
+                var showcaseWrap = $('.showcase-scope-@(Model.Id) .showcase-pictures').empty();
+
+                // Each slide items in showcases
+                $.each(showcases, function (index, picture) {
+                    var showcaseItem = $('<div class="showcase-pictures-picture"><a href="' + picture.Url + '"><img data-src="' + picture.PictureUrl + '" alt="' + picture.Name + '" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" /></a></div>');
+                    showcaseWrap.append(showcaseItem);
+                });
+
+                $('img', showcaseWrap).lazy({
+                    effect: "fadeIn",
+                    effectTime: 500,
+                    threshold: 0,
+                    afterLoad: function (element) {
+                        //add load complete classes
+                        element.addClass("lazy-complete");
+                    }
+                });
+            });
+        </script>
+
+        <div class="showcase-products">
+            <div class="showcase-product-wrap">
+                @*Slide Products*@
+                <div class="showcase-product-slider-@Model.Id swiper-container">
+                    <div class="showcase-product-slider__wrapper swiper-wrapper">
+                        @foreach (var item in Model.AvailableProducts)
+                        {
+                            <div class="swiper-slide">
+                                @await Html.PartialAsync("_ProductBox", item)
+                            </div>
+                        }
+                    </div>
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                </div>
+                <script asp-location="Footer">
+                    $(document).ready(function () {
+                        var swiper = new Swiper('.showcase-product-slider-@Model.Id', {
+                            // Disable preloading of all images
+                            preloadImages: false,
+                            // Enable lazy loading
+                            lazy: {
+                                elementClass: 'product-image',
+                            },
+                            pagination: {
+                                el: '.swiper-pagination',
+                                clickable: true,
+                            },
+                            navigation: {
+                                nextEl: '.swiper-button-next',
+                                prevEl: '.swiper-button-prev',
+                            },
+                            autoplay: false,
+                            breakpointsInverse: true,
+                            breakpoints: {
+                                320: {
+                                    slidesPerView: 1,
+                                    spaceBetween: 10
+                                },
+                                768: {
+                                    slidesPerView: 2,
+                                    spaceBetween: 25
+                                },
+                                992: {
+                                    slidesPerView: 3,
+                                    spaceBetween: 20
+                                }
+                            }
+                        });
+                    });
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+

@@ -1,0 +1,420 @@
+@import "../helpers/all";
+@import "../variables/variables-dev";
+
+.auth-page {
+    @include flexbox;
+    min-height: 100vh;
+
+    @at-root .ie & {
+        display: table;
+        margin: 0 auto;
+    }
+
+    .page-container {
+        padding: 0;
+
+        @at-root .ie & {
+            display: table-cell;
+            vertical-align: middle;
+        }
+
+        .auth-form {
+            position: relative;
+            background: #fff;
+            padding: 15px;
+            margin: auto;
+            box-shadow: 0px 0px 12.87px 0.13px rgba(0, 0, 0, 0.13);
+            margin-bottom: 25px;
+
+
+            > a {
+                display: block;
+                text-align: center;
+                padding: 5px 0 15px 0;
+
+                img {
+                    max-width: 200px;
+                    max-height: 40px;
+                }
+            }
+
+            .inputs {
+                @include flexbox();
+                @include justify-content(space-between);
+                border: 0;
+                height: 45px;
+                color: $gray-light;
+
+                .input-validate {
+                    max-width: initial;
+
+                    @at-root .ie & {
+                        max-width: 100%;
+                    }
+                }
+
+                &.login-email {
+                    position: relative;
+
+                    input {
+                        padding-left: 30px;
+                    }
+
+                    &:after {
+                        content: "\f0e0";
+                        font-family: "Faprika";
+                        position: absolute;
+                        top: 16px;
+                        left: 10px;
+                        font-size: 14px;
+                    }
+                }
+
+                &.login-password {
+
+                    input {
+                        padding-left: 30px;
+                    }
+
+                    &:after {
+                        content: "\f023";
+                        font-family: "Faprika";
+                        position: absolute;
+                        top: 16px;
+                        left: 10px;
+                        font-size: 14px;
+                    }
+
+                    .forget-password {
+                        font-size: 12px;
+                        color: $color-primary;
+                        position: absolute;
+                        top: 10px;
+                        right: 10px;
+                        padding: 0;
+                    }
+                }
+
+                &.register-name {
+                    position: relative;
+
+                    input {
+                        padding-left: 30px;
+                    }
+
+                    &:after {
+                        content: "\f007";
+                        font-family: "Faprika";
+                        position: absolute;
+                        top: 16px;
+                        left: 10px;
+                        font-size: 14px;
+                    }
+                }
+
+                &.register-lastname {
+                    position: relative;
+
+                    input {
+                        padding-left: 30px;
+                    }
+
+                    &:after {
+                        content: "\f007";
+                        font-family: "Faprika";
+                        position: absolute;
+                        top: 16px;
+                        left: 10px;
+                        font-size: 14px;
+                    }
+                }
+
+                &.register-email {
+                    position: relative;
+
+                    input {
+                        padding-left: 30px;
+                    }
+
+                    &:after {
+                        content: "\f0e0";
+                        font-family: "Faprika";
+                        position: absolute;
+                        top: 16px;
+                        left: 10px;
+                        font-size: 14px;
+                    }
+                }
+
+                &.register-password {
+
+                    input {
+                        padding-left: 30px;
+                    }
+
+                    &:after {
+                        content: "\f023";
+                        font-family: "Faprika";
+                        position: absolute;
+                        top: 16px;
+                        left: 10px;
+                        font-size: 14px;
+                    }
+                }
+
+                &.password-recovery {
+                    input {
+                        padding-left: 30px;
+                    }
+
+                    &:after {
+                        content: "\f0e0";
+                        font-family: "Faprika";
+                        position: absolute;
+                        top: 16px;
+                        left: 10px;
+                        font-size: 14px;
+                    }
+                }
+
+                &.register-marketing {
+                    input[type=checkbox] + label:before {
+                        width: 30px;
+                    }
+
+                    input[type=checkbox]:checked + label:after {
+                        left: 5px;
+                    }
+
+                    label {
+                        font-size: 12px;
+                        line-height: 18px;
+                        color: $body-color;
+                    }
+                }
+            }
+
+            .buttons {
+                .login-button {
+                    @include button($color-primary, $btn-height-md);
+                    width: 100%;
+                    margin-top: 5px;
+                }
+
+                .guest-button {
+                    @include button(null, $btn-height-md);
+                    width: 100%;
+                    margin-top: 5px;
+                    display: block;
+                    text-align: center;
+                }
+
+                .register-button {
+                    @include button($color-primary, $btn-height-md);
+                    width: 100%;
+                    margin-top: 5px;
+                }
+
+                .password-recovery-button {
+                    @include button($color-primary, $btn-height-md);
+                    width: 100%;
+                    margin-top: 5px;
+                }
+
+                .register-continue-button {
+                    @include button($color-primary, $btn-height-md);
+                    width: 100%;
+                    margin-top: 5px;
+                }
+            }
+
+            .message {
+                font-size: 12px;
+                text-align: center;
+                padding: 10px 0;
+                line-height: 18px;
+
+                span {
+                    color: $color-primary;
+                    cursor: pointer;
+                }
+            }
+
+            .divider {
+                text-align: center;
+                padding: 10px 0;
+                position: relative;
+
+                span {
+                    background: #fff;
+                    padding: 0 10px;
+                    position: relative;
+                }
+
+                &:before {
+                    content: "";
+                    width: 100%;
+                    height: 1px;
+                    background: $color-border;
+                    position: absolute;
+                    left: 0;
+                    top: 50%;
+                }
+            }
+
+            .external-authentication {
+
+
+                .buttons {
+                    a {
+                        color: #fff;
+                        border-radius: 3px;
+                        line-height: 35px;
+                        cursor: pointer;
+                        padding: 0 15px;
+                        margin-bottom: 10px;
+                        display: block;
+                        text-align: center;
+                    }
+
+                    .button {
+                        &-facebook {
+                            background: #39599f;
+                            position: relative;
+
+                            &:before {
+                                content: "\f39e";
+                                font-family: "FaprikaBrand";
+                                position: absolute;
+                                left: 10px;
+                                font-size: 14px;
+                            }
+                        }
+
+                        &-instagram {
+                            background: #4c68d7;
+                            position: relative;
+
+                            &:before {
+                                content: "\f16d";
+                                font-family: "FaprikaBrand";
+                                position: absolute;
+                                left: 10px;
+                                font-size: 14px;
+                            }
+                        }
+
+                        &-google {
+                            background: #d34836;
+                            position: relative;
+
+                            &:before {
+                                content: "\f1a0";
+                                font-family: "FaprikaBrand";
+                                position: absolute;
+                                left: 10px;
+                                font-size: 14px;
+                            }
+                        }
+
+                        &-twitter {
+                            background: #1dcaff;
+                            position: relative;
+
+                            &:before {
+                                content: "\f099";
+                                font-family: "FaprikaBrand";
+                                position: absolute;
+                                left: 10px;
+                                font-size: 14px;
+                            }
+                        }
+
+                        &-microsoft {
+                            background: #00A1F1;
+                            position: relative;
+
+                            &:before {
+                                content: "\f17a";
+                                font-family: "FaprikaBrand";
+                                position: absolute;
+                                left: 10px;
+                                font-size: 14px;
+                            }
+                        }
+                    }
+                }
+            }
+
+            .message-error {
+                @include border($color-danger, $border-base);
+                padding: 10px;
+                font-size: 13px;
+                line-height: 15px;
+                text-align: center;
+                color: #fff;
+                background: lighten($color-danger, 10%);
+
+                ul {
+
+                    li {
+                        font-weight: 600;
+                    }
+                }
+            }
+
+            .return-register {
+                @include centered;
+
+                a {
+                    display: initial;
+                    color: $color-primary;
+                }
+            }
+
+            .result {
+                padding: 15px;
+                position: relative;
+                margin: 0 0 10px 0;
+                background-color: lighten($color-success, 32%);
+                border-left: 3px solid $color-success;
+                color: $color-success;
+            }
+        }
+
+        .bottom-wrap {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            box-shadow: 0px 0px 12.87px 0.13px rgba(0, 0, 0, 0.13);
+            text-align: center;
+            font-size: 12px;
+            background: #fff;
+            padding: 15px;
+
+            a {
+                color: $color-primary;
+            }
+        }
+    }
+
+
+    @include mq(xs) {
+        @include align-items(center);
+
+        .page-container {
+            .auth-form {
+                @include border($color-border, $border-base);
+                width: 340px;
+            }
+
+            .bottom-wrap {
+                @include border($color-border, $border-base);
+                position: relative;
+                margin: auto;
+                width: 340px;
+            }
+        }
+    }
+}

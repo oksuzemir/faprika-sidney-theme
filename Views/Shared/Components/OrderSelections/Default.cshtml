@@ -1,0 +1,49 @@
+﻿@model CheckoutSelectionsModel
+<div class="checkout-selections">
+    @if (Model.BillingAddress != null)
+    {
+    <div class="selection">
+        <div class="selection-card">
+            <div class="selection-head">
+                <span class="title">@T("Checkout.BillingAddress")</span>
+                <a asp-route="CheckoutAddress" class="edit-selection"></a>
+            </div>
+            <span class="details">
+                @Model.BillingAddress.Name<br />
+                @Model.BillingAddress.DistrictName, @Model.BillingAddress.StateProvinceName
+            </span>
+        </div>
+    </div>
+    }
+    @if (Model.ShippingAddress != null)
+    {
+        <div class="selection">
+            <div class="selection-card">
+                <div class="selection-head">
+                    <span class="title">@T("Checkout.ShippingAddress")</span>
+                    <a asp-route="CheckoutAddress" class="edit-selection"></a>
+                </div>
+                <span class="details">
+                    @Model.ShippingAddress.Name<br />
+                    @Model.ShippingAddress.DistrictName,
+                    @Model.ShippingAddress.StateProvinceName
+                </span>
+            </div>
+        </div>
+    }
+    @if (Model.ShippingMethod.HasValue())
+    {
+        <div class="selection">
+            <div class="selection-card">
+                <div class="selection-head">
+                    <span class="title">@T("Checkout.ShippingMethod")</span>
+                    <a asp-route="CheckoutShippingMethod" class="edit-selection"></a>
+                </div>
+                <span class="details truck">
+                    <span>@Model.ShippingMethod</span>
+                    <img src="@Model.ShippingLogoUrl" alt="@Model.ShippingMethod" class="shipping-method-logo">
+                </span>
+            </div>
+        </div>
+    }
+</div>

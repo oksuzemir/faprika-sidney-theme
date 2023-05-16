@@ -1,0 +1,16 @@
+﻿@model ProductOverviewModel
+
+@if (Model.ProductManufacturers.Count > 0)
+{
+    <div class="manufacturers">
+        @for (var i = 0; i < Model.ProductManufacturers.Count; i++)
+        {
+            var item = Model.ProductManufacturers[i];
+            <a href="@Url.RouteUrl("Manufacturer", new { SeName = item.SeName })">@item.Name</a>
+            if (i != Model.ProductManufacturers.Count - 1)
+            {
+                <span class="separator">,</span>
+            }
+        }
+    </div>
+}

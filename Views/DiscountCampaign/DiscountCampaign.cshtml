@@ -1,0 +1,123 @@
+﻿@model DiscountCampaignListModel
+@{
+    //Layout = "_Root";
+
+    //title
+    Html.AddTitleParts(T("PageTitle.DiscountCampaign").Text);
+    Html.AddCssFileParts(ResourceLocation.Head, "~/Themes/Sidney/Content/css/pages/campaign.min.css", "~/Themes/Sidney/Content/css/pages/campaign.css");
+
+}
+<div class="page campaign-page">
+    <div class="page-container">
+        <div class="page-body">
+            <div class="campaign-content">
+                <div class="page-title">
+                    <h1>@T("PageTitle.DiscountCampaign")</h1>
+                </div>
+                <div class="campaigns">
+                    @if (Model.DiscountCampaigns.Count > 0)
+                    {
+                        foreach (var item in Model.DiscountCampaigns)
+                        {
+                            <div id="camapaign_@item.Id" class="campaign">
+                                <div class="campaign-content">
+                                    @if (@item.PictureModel.FullSizeImageUrl.HasValue())
+                                    {
+                                        <div class="campaign-picture">
+                                            <a href="@Url.RouteUrl("DiscountCampaign", new { SeName = item.SeName })" aria-label="item">
+                                                <img src="@item.PictureModel.FullSizeImageUrl" alt="@item.Title" class="img-responsive img-rounded" />
+                                            </a>
+                                        </div>
+                                    }
+                                    <div class="campaign-timebox">
+                                    </div>
+                                    <div class="campaign-inner">
+                                        <div class="campaign-header">
+                                            @item.Title
+                                        </div>
+                                        <div class="campaign-body">
+                                            @if (!String.IsNullOrWhiteSpace(item.StartDate) && !String.IsNullOrWhiteSpace(item.EndDate))
+                                            {
+                                                <div class="expiration-date countDownParent">
+                                                    <strong>@T("DiscountCampaign.CampaignValidityDate")</strong>
+                                                    <span class="expiration-date-startdate">@item.StartDate</span> / <span class="expiration-date-enddate" data-date="@item.EndDate">@item.EndDate</span>
+                                                </div>
+                                            }
+                                            @if (!string.IsNullOrWhiteSpace(item.ShortDescription))
+                                            {
+                                                <div class="description">
+                                                    @Html.Raw(item.ShortDescription)
+                                                </div>
+                                            }
+                                        </div>
+                                        <div class="campaign-detail-button">
+                                            <a href="@Url.RouteUrl("DiscountCampaign", new { SeName = item.SeName })" class="morelink">@T("DiscountCampaign.CampaignDetail")</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            if (!String.IsNullOrWhiteSpace(item.EndDate))
+                            {
+                                <script async>
+                                        $(function () {
+                                            var camapaign_@item.Id = new timeCounter("camapaign_@item.Id");
+                                        });
+                                </script>
+                            }
+
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script async>
+
+    function getNormalisedDatetime(dString) { // yyyy-mm-dd hh:mm:ss
+        var parts = dString.split(" ");
+        var dParts = parts[0].split(".");
+        var tParts = parts[1].split(":");
+        return new Date(dParts[2], dParts[1] - 1, dParts[0], tParts[0], tParts[1], tParts[2]);
+    }
+
+    var timeCounter = function (el) {
+        this.self = document.getElementById(el);                            // ID Self
+        this.endDate = $(this.self).find('.expiration-date-enddate');      // Find endDate element
+        //this.endDateValue = this.endDate.text().split('.').reverse();       // endDate value formatted for Date method
+        this.countDownDate = getNormalisedDatetime(this.endDate.text());         // create new Date
+        this.timeBox = $(this.self).find('.campaign-timebox').addClass('box');      // add the result this box
+        this.setTime();                                                    // Trigger Set Time
+    };
+
+    timeCounter.prototype.setTime = function () {
+
+        var that = this; // this bind to that
+
+        setInterval(function () {
+            var now = new Date().getTime();                                 // Now
+            var distance = that.countDownDate - now;                        // Distance
+
+            // Time calculations for days, hours, minutes and seconds
+            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            if (days > 0) {
+                $(that.timeBox).html('@T("DiscountCampaign.EndOfTheCampaign")' + days + ' @T("DiscountCampaign.EndOfTheCampaign.Day") @T("DiscountCampaign.EndOfTheCampaign.Left")');    // much for one day
+            } else {
+                $(that.timeBox).html('@T("DiscountCampaign.EndOfTheCampaign")' + hours + ' @T("DiscountCampaign.EndOfTheCampaign.Hour")' + minutes + ' @T("DiscountCampaign.EndOfTheCampaign.Minute")' + seconds + ' @T("DiscountCampaign.EndOfTheCampaign.Second")@T("DiscountCampaign.EndOfTheCampaign.Left")');  // less for one day
+            }
+
+            // If the count down is finished, write some text
+            if (distance < 0) {
+                clearInterval(that.setInt);
+                $(that.timeBox).html('@T("DiscountCampaign.CampaignTheEnd")');
+            }
+
+        }, 1000);
+
+    }
+
+</script>
+

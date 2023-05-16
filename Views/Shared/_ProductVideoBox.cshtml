@@ -1,0 +1,10 @@
+﻿@model ProductOverviewModel
+
+@if (Model.VideoUrl.HasValue())
+{
+    <div class="product-video-wrapper">
+        <video data-url="@Model.VideoUrl" muted="muted" autoplay="" loop="" playsinline="" webkit-playsinline="">
+            <source src="" type="video/mp4">
+        </video>
+    </div>
+}

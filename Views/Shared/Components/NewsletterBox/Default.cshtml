@@ -1,0 +1,54 @@
+﻿@model NewsletterBoxModel
+<div class="newsletter">
+    <div class="newsletter-title">
+        <h5>@T("Newsletter.Title")</h5>
+        <p>@T("Newsletter.Description")</p>
+    </div>
+    <div class="newsletter-subscribe">
+        <div class="newsletter-email">
+            <input asp-for="NewsletterEmail" id="newsletter-email" class="newsletter-text" placeholder=@T("Newsletter.Email.Placeholder") />
+            <button type="button" id="newsletter-subscribe-button" class="newsletter-button"></button>
+        </div>
+        <div class="newsletter-validation">
+            <span asp-validation-for="NewsletterEmail"></span>
+        </div>
+    </div>
+
+    <script asp-location="Footer">
+        function newsletter_subscribe() {
+            var postData = {
+                email: $("#newsletter-email").val()
+            };
+            addAntiForgeryToken(postData);
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: "@(Url.RouteUrl("SubscribeNewsletter"))",
+                data: postData,
+                success: function (data) {
+                    if (data.success == true) {
+                        $('#newsletter-email').val('');
+                        displayNotification(data.result, 'success');
+                    } else {
+                        displayNotification(data.result, 'error');
+                    }
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                    subscribeProgress.hide();
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            $('#newsletter-subscribe-button').on('click', function () {
+                newsletter_subscribe();
+            });
+            $('#newsletter-email').on('keydown', function (event) {
+                if (event.keyCode == 13) {
+                    $("#newsletter-subscribe-button").click();
+                    return false;
+                }
+            });
+        });
+    </script>
+</div>

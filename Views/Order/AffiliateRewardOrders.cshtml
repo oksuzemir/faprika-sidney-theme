@@ -1,0 +1,192 @@
+﻿@model AffiliateRewardOrderListModel
+@{
+    //title
+    Html.AddTitleParts(T("Account.AffiliateRewards").Text);
+    Html.AddCssFileParts(ResourceLocation.Head, "~/Themes/Sidney/Content/css/pages/account.min.css");
+}
+
+<section class="page account-page affiliate-reward-order-page">
+    <div class="page-container">
+        <div class="page-left-sidebar">
+            @await Component.InvokeAsync("CustomerNavigation", new { selectedTabId = CustomerNavigationEnum.AffiliateRewards })
+        </div>
+        <div class="page-body">
+            <div class="affiliate-order-search">
+                <form asp-route="AffiliateRewardOrders" method="post">
+                    <div class="page-title">
+                        @T("Account.AffiliateRewards")
+                    </div>
+                    <div class="affiliate-order-search-box">
+                        <div class="input-group">
+                            <div class="inputs inputs-date">
+                                <label asp-for="StartDate"></label>
+                                <div class="inputs input-group">
+                                    <faprika-editor asp-for="StartDate" />
+                                    <faprika-editor asp-for="EndDate" />
+                                </div>
+                            </div>
+                            <div class="inputs">
+                                <label asp-for="InOrderStatusIds"></label>
+                                <faprika-select asp-for="InOrderStatusIds" asp-items="Model.AvailableOrderStatuses" asp-multiple="true" />
+                            </div>
+                        </div>
+                        <div class="button-group">
+                            <button type="button" class="button-histories" onclick="setLocation('@Url.RouteUrl("AffiliateRewardHistories")')">@T("Account.AffiliateRewards.Histories")</button>
+                            <button type="submit" name="search" class="button-search">@T("Common.Search")</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="message current-balance">
+                @T("AffiliateRewards.CurrentBalance", Model.AffiliateRewardBalance)
+            </div>
+            <div class="affiliate-reward-orders">
+
+                @if (Model.AffiliateRewardOrders.Count > 0)
+                {
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <colgroup>
+                                <col width="10%" />
+                                <col width="20%" />
+                                <col width="20%" />
+                                <col />
+                                <col />
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th class="order-number">
+                                        @T("Account.CustomerOrders.OrderNumber")
+                                    </th>
+                                    <th class="order-date">
+                                        @T("Account.CustomerOrders.OrderDate")
+                                    </th>
+                                    <th class="order-status">
+                                        @T("Account.CustomerOrders.OrderStatus")
+                                    </th>
+                                    <th class="order-total">
+                                        @T("Account.CustomerOrders.OrderTotal")
+                                    </th>
+                                    <th class="affiliate-reward">
+                                        @T("Account.CustomerOrders.AffiliateReward")
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var aro in Model.AffiliateRewardOrders)
+                                {
+                                    <tr>
+                                        <td class="order-number">
+
+                                            @if (aro.AffiliateRewardHistories.Any())
+                                            {
+                                                <button class="button-order-rewards" data-href="@aro.CustomOrderNumber">        </button>
+                                            }
+
+                                            <label>@T("Account.CustomerOrders.OrderNumber")</label>
+                                            <span>#@aro.CustomOrderNumber</span>
+                                        </td>
+                                        <td class="order-date">
+                                            <label>@T("Account.CustomerOrders.OrderDate")</label>
+                                            <span>@aro.CreatedOn</span>
+                                        </td>
+                                        <td class="order-status">
+                                            <label>@T("Account.CustomerOrders.OrderStatus")</label>
+                                            <span style="color: @aro.OrderStatusEnum.Color">@aro.OrderStatus</span>
+                                        </td>
+                                        <td class="order-total">
+                                            <label>@T("Account.CustomerOrders.OrderTotal")</label>
+                                            <span>@aro.OrderTotal</span>
+                                        </td>
+                                        <td class="affiliate-reward">
+                                            <label>@T("Account.CustomerOrders.AffiliateReward")</label>
+                                            <span class="@(aro.AffiliateRewardValue > decimal.Zero ? "increase" : "zero")">@aro.AffiliateReward</span>
+                                        </td>
+                                    </tr>
+                                    <tr class="order-rewards" id="@aro.CustomOrderNumber">
+                                        <td colspan="5">
+
+                                            <div class="table-wrapper">
+                                                <table class="data-table">
+                                                    <colgroup>
+                                                        <col width="20%" />
+                                                        <col width="10%" />
+                                                        <col width="10%" />
+                                                        <col />
+                                                    </colgroup>
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="date">
+                                                                @T("AffiliateRewards.Fields.Date")
+                                                            </th>
+                                                            <th class="points">
+                                                                @T("AffiliateRewards.Fields.Amount")
+                                                            </th>
+                                                            <th class="points-balance">
+                                                                @T("AffiliateRewards.Fields.AmountBalance")
+                                                            </th>
+                                                            <th class="reward-message">
+                                                                @T("AffiliateRewards.Fields.Message")
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach (var arh in aro.AffiliateRewardHistories)
+                                                        {
+                                                            <tr class="@(arh.Amount > decimal.Zero ? "increase" : "decrease")">
+                                                                <td class="date">
+                                                                    <label>@T("AffiliateRewards.Fields.Date")</label>
+                                                                    <span>@arh.CreatedOn</span>
+                                                                </td>
+                                                                <td class="points">
+                                                                    <label>@T("AffiliateRewards.Fields.Amount")</label>
+                                                                    <span>@arh.Amount</span>
+                                                                </td>
+                                                                <td class="points-balance">
+                                                                    <label>@T("AffiliateRewards.Fields.AmountBalance")</label>
+                                                                    <span>@arh.AmountBalance </span>
+                                                                </td>
+                                                                <td class="reward-message">
+                                                                    <label>@T("AffiliateRewards.Fields.Message")</label>
+                                                                    <span>@arh.Message</span>
+                                                                </td>
+                                                            </tr>
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    var pager = Html.Pager(Model.PagerModel);
+                    if (!string.IsNullOrEmpty(pager.ToHtmlString()))
+                    {
+                        <div class="pager">
+                            @pager
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="no-data">
+                        <span class="no-reward">@T("AffiliateRewards.NoHistory")</span>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+
+<script asp-location="Footer">
+    $(document).ready(function () {
+        $(".button-order-rewards").click(function () {
+            var $href = $(this).data('href');
+            $(this).toggleClass("active");
+            $("#" + $href).toggle();            
+        });
+    });
+</script>

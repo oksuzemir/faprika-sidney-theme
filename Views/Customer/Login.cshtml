@@ -1,0 +1,70 @@
+﻿@model LoginModel
+@inject IWebHelper webHelper
+@inject IEventPublisher eventPublisher
+@{
+    Layout = "_Root.Head";
+
+    Html.AddCssFileParts(ResourceLocation.Head, "~/Themes/Sidney/Content/css/pages/auth.min.css");
+
+    //title
+    Html.AddTitleParts(T("PageTitle.Login").Text);
+
+    //register URL with return URL (if specified)
+    var registerUrl = Url.RouteUrl("Register", new { returnUrl = this.Context.Request.Query["returnUrl"] }, webHelper.CurrentRequestProtocol);
+
+    //event
+    eventPublisher.Publish(new PageRenderingEvent(this.Html, false));
+}
+<main class="page auth-page">
+    <div class="page-container">
+        <div class="auth-form">
+            @await Component.InvokeAsync("Logo")
+            <form asp-route="Login" asp-route-returnurl="@Context.Request.Query["ReturnUrl"]" method="post" autocomplete="off">
+                <div asp-validation-summary="ModelOnly" class="message-error"></div>
+                <div class="inputs login-email">
+                    <div class="input-validate">
+                        <input asp-for="EmailOrPhone" class="input" autofocus="autofocus" placeholder="@T("Account.Login.Fields.EmailOrPhone")" />
+                        <span asp-validation-for="EmailOrPhone"></span>
+                    </div>
+                </div>
+                <div class="inputs login-password">
+                    <div class="input-validate">
+                        <input asp-for="Password" class="input" placeholder="@T("Account.Login.Fields.Password")" />
+                        <a asp-route="PasswordRecovery" class="forget-password">
+                            @T("Account.Login.ForgotPassword")
+                        </a>
+                    </div>
+                </div>
+                @if (Model.DisplayCaptcha)
+                {
+                    <div class="captcha-wrapper">
+                        <faprika-captcha />
+                    </div>
+                }
+                <div class="buttons">
+                    <button class="button login-button one-submit-button" type="submit">
+                        <span>@T("Account.Login.LoginButton")</span>
+                    </button>
+                    @if (Model.CheckoutAsGuest)
+                    {
+                        <a class="guest-button" href="@Url.RouteUrl("Checkout")">
+                            @T("Account.Login.CheckoutAsGuest")
+                        </a>
+                    }
+                </div>
+            </form>
+            <div class="external-authentication">
+                @await Component.InvokeAsync("ExternalMethods")
+            </div>
+        </div>
+
+        <div class="bottom-wrap">
+            <span>
+                @T("Account.Register.Text")
+                <a href="@registerUrl">
+                    <span>@T("Account.Register")</span>
+                </a>
+            </span>
+        </div>
+    </div>
+</main>

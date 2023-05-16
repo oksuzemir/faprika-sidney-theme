@@ -1,0 +1,72 @@
+﻿@model CheckoutPaymentModel
+@{
+    Layout = "_Root.Blank";
+
+    //title
+    Html.AddTitleParts(T("PageTitle.Checkout").Text);
+
+    //register CSS and JS
+    Html.AddCssFileParts(ResourceLocation.Head, "~/Themes/Sidney/Content/css/pages/checkout.min.css", "~/Themes/Sidney/Content/css/pages/checkout.css");
+}
+<div class="page checkout-page payment-info-page">
+    @*<div class="progress-container">
+            @await Component.InvokeAsync("CheckoutProgress", new { step = CheckoutProgressStep.Payment })
+        </div>*@
+    <div class="page-container">
+        <form asp-route="CheckoutPaymentInfo" method="post">
+            <div class="page-body">
+                <div class="payment-methods">
+                    @await Component.InvokeAsync("OrderSelections")
+
+                    @await Html.PartialAsync("_PaymentRewardPoints")
+
+                    <div class="payment-tabs">
+                        @if (Model.PaymentMethods.Count > 0)
+                        {
+                            <div class="payment-tabs-header" id="payment-method-block">
+                                @for (var i = 0; i < Model.PaymentMethods.Count; i++)
+                                {
+                                    var paymentMethod = Model.PaymentMethods[i];
+                                    var paymentMethodName = paymentMethod.Name;
+
+                                    <a href="@Url.RouteUrl("CheckoutSelectPaymentMethod", new { paymentmethod = paymentMethod.PaymentMethodSystemName, orderGuid = Model.orderGuid })" class="@(paymentMethod.Selected ? "active" : "")">
+                                        @paymentMethodName
+                                    </a>
+                                }
+                            </div>
+                            <div class="payment-tabs-content">
+                                <div class="info" id="payment-info-block">
+                                    @await Component.InvokeAsync(Model.PaymentViewComponentName)
+                                </div>
+                                <div class="payment-not-required" style="display:none;" id="payment-not-required-block">
+                                    @T("Checkout.RewardPoints.PaymentNotRequired")
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="payment-tabs-content">
+                                @T("Checkout.NoPaymentMethods")
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="page-right-sidebar">
+                <div class="sidebar-header">
+                    @T("Order.Totals.Title")
+                </div>
+                @await Component.InvokeAsync("OrderSummary", "ShoppingCart")
+                <div class="order-totals">
+                    @await Component.InvokeAsync("OrderTotals", new { isEditable = false, preparePaymentMethodAdditionalFee = true })
+                </div>
+                <div class="button">
+                    <button type="submit" value="@(Model.orderGuid)" name="nextstep" class="payment-info-next-step-button one-submit-button">
+                        <span>@T("Checkout.Payment.NextButton")</span>
+                    </button>
+                </div>
+            </div>
+            
+        </form>
+    </div>
+</div>

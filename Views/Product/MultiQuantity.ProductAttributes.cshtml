@@ -1,0 +1,56 @@
+﻿@model IList<ProductDetailsModel.ProductAttributeCombinationModel>
+@if (Model.Count > 0)
+{
+    <div class="attribute-item">
+        <div class="attribute-label">
+            <label class="text-prompt">
+                @T("Products.MultiQuantity.ProductAttribute.Title")
+            </label>
+        </div>
+    </div>
+
+    <table id="product-attributes-container">
+        <thead>
+            <tr>
+                <th>
+                    @foreach (var attribute in Model.First().Attributes)
+                    {
+                        var textPrompt = !string.IsNullOrEmpty(attribute.TextPrompt) ? attribute.TextPrompt : attribute.Name;
+                        <span>@textPrompt</span>
+                    }
+                </th>
+                <th>@T("Products.MultiQuantity.ProductAttribute.StockQuantity")</th>
+                <th>@T("Products.MultiQuantity.ProductAttribute.OrderAmount")</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var combination in Model.OrderBy(o => o.AttributeValues))
+            {
+                var controlId = $"product_attribute_combination_{combination.Id}";
+
+                var dataDictAddToCart = new ViewDataDictionary(ViewData);
+                dataDictAddToCart.TemplateInfo.HtmlFieldPrefix = controlId;
+
+                <tr>
+                    <td>
+                        <input id="@(controlId)" type="hidden" name="@(controlId)" data-qty="@combination.StockQuantity" value="@combination.Id" />
+                        <label>@combination.AttributeValues</label>
+                    </td>
+                    <td>@combination.StockQuantity.ToString("N0")</td>
+                    <td>
+                        @if (combination.StockQuantity > 0 || combination.AllowOutOfStockOrders)
+                        {
+                            @await Html.PartialAsync("MultiQuantity.ProductQuantity", combination.AddToCart, dataDictAddToCart)
+                        }
+                        else
+                        {
+                            <div class="inputs">
+                                <input value="0" disabled="disabled" type="number" class="qty-input" />
+                            </div>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

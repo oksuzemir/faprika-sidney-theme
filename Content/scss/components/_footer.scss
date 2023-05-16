@@ -1,0 +1,333 @@
+﻿@import "../helpers/all";
+@import "../variables/variables-dev";
+
+.footer {
+    background: #fff;
+    border-top: 1px solid $color-border;
+    font-size: 12px;
+
+    &-container {
+        .footer-top {
+            @include flexbox;
+            @include flex-wrap(wrap);
+            padding: 60px 0 0 0;
+
+            .footer-block {
+                @include flex(0 50%);
+                padding-bottom: 20px;
+
+
+                h5 {
+                    font-size: 14px;
+                    color: $gray-darker;
+                    font-weight: 600;
+                    margin-bottom: 25px;
+                }
+
+                ul {
+                    li {
+                        a {
+                            line-height: 25px;
+
+                            &:hover {
+                                color: $color-primary;
+                            }
+                        }
+                    }
+                }
+
+                .newsletter {
+                    margin-bottom: 10px;
+
+                    &-title {
+                        h5 {
+                            margin-bottom: 15px;
+                        }
+
+                        margin-bottom: 15px;
+                    }
+
+                    &-subscribe {
+
+                        .newsletter-email {
+                            @include border($color-border, $border-base);
+                            position: relative;
+
+                            input {
+                                height: 30px;
+                                border: none;
+                                padding: 0 15px;
+                                color: $gray-light;
+                                width: calc(100% - 30px);
+
+
+                                &::placeholder {
+                                    color: $gray-light;
+                                    opacity: 1;
+                                }
+
+                                &:-ms-input-placeholder {
+                                    color: $gray-light;
+                                }
+
+                                &::-ms-input-placeholder {
+                                    color: $gray-light;
+                                }
+                            }
+
+                            button {
+                                height: 30px;
+                                padding: 0 10px;
+                                border: none;
+                                border-left: 1px solid $color-border;
+                                position: absolute;
+                                right: 0;
+
+                                &:after {
+                                    content: "\f0e0";
+                                    font-family: "Faprika";
+                                    color: $color-primary;
+                                    font-size: 18px;
+                                }
+
+                                &:hover {
+                                    background: $color-primary;
+                                    border-top-right-radius: $border-base;
+                                    border-bottom-right-radius: $border-base;
+
+                                    &:after {
+                                        color: #fff;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                .contact {
+                    @include flexbox;
+                    @include flex-wrap(wrap);
+                    margin: 0 -10px;
+
+                    &-block {
+                        @include border($color-border, $border-base);
+                        @include flexbox;
+                        @include align-items(center);
+                        @include flex(1 100%);
+                        margin: 0 10px;
+                        font-size: 11px;
+                        min-width: 170px;
+                        margin-bottom: 10px;
+                        padding: 10px;
+
+                        .title {
+                            color: $gray-darker;
+                            font-weight: 600;
+                            margin-bottom: 5px;
+
+                            &.icon {
+                                &-headset {
+                                    &:before {
+                                        content: "\f590";
+                                    }
+                                }
+
+                                &-mail {
+                                    &:before {
+                                        content: "\f0e0";
+                                    }
+                                }
+
+                                &-map {
+                                    &:before {
+                                        content: "\f5a0";
+                                    }
+                                }
+                            }
+
+                            &:before {
+                                font-family: "Faprika";
+                                margin-right: 5px;
+                                font-size: 12px;
+                                font-weight: 400;
+                            }
+                        }
+
+                        span {
+                            line-height: 15px;
+                        }
+
+                        &.wide {
+                            @include flex(0 100%);
+                        }
+                    }
+                }
+
+                .social {
+                    padding: 10px 0 0 0;
+
+                    a {
+                        &.facebook {
+                            &:before {
+                                color: #3C5A99;
+                                content: "\f39e";
+                            }
+                        }
+
+                        &.instagram {
+                            background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
+                            -webkit-background-clip: text;
+                            background-clip: text;
+                            -webkit-text-fill-color: transparent;
+
+                            @at-root .ie & {
+                                background: transparent;
+                                color: #fd5949;
+                            }
+
+
+                            &:before {
+                                content: "\f16d";
+                            }
+                        }
+
+                        &.twitter {
+                            color: #1da1f2;
+
+                            &:before {
+                                content: "\f099";
+                            }
+                        }
+
+                        &.youtube {
+                            color: #ff0000;
+
+                            &:before {
+                                content: "\f167";
+                            }
+                        }
+
+                        &.pinterest {
+                            color: #bd081c;
+
+                            &:before {
+                                content: "\f231";
+                            }
+                        }
+
+                        &:before {
+                            font-family: "FaprikaBrand";
+                            font-size: 15px;
+                            margin-right: 10px;
+                        }
+                    }
+                }
+
+                &.wide {
+                    @include flex-basis(100%);
+                }
+            }
+        }
+
+        .footer-bottom {
+            @include flexbox;
+            @include justify-content(center);
+            @include align-items(flex-start);
+            padding-bottom: 20px;
+
+            img {
+                display: none;
+            }
+        }
+    }
+
+    @include mq(sm) {
+        &-container {
+            .footer-top {
+                padding: 60px 0 40px 0;
+
+                .footer-block {
+                    @include flex(0 25%);
+
+                    .contact {
+                        &-block {
+                            @include flex(1);
+                        }
+                    }
+
+                    &.wide {
+                        @include flex-basis(50%);
+                    }
+                }
+            }
+
+            .footer-bottom {
+                @include justify-content(space-between);
+
+                img {
+                    display: block;
+                    margin-right: 20px;
+                }
+            }
+        }
+    }
+
+    @include mq(md) {
+        &-container {
+            .footer-top {
+                .footer-block {
+                    @include flex(1);
+                    padding-bottom: 0;
+
+                    &.wide {
+                        @include flex-basis(15%);
+                    }
+                }
+            }
+
+            .footer-bottom {
+                @include justify-content(space-between);
+
+                img {
+                    display: block;
+                }
+            }
+        }
+    }
+
+    .go-to-top {
+        display: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 100%;
+        background: #fff;
+        position: fixed;
+        right: 20px;
+        bottom: 70px;
+        z-index: 99;
+        box-shadow: 0px 3px 20px -3px rgba(0, 0, 0, 0.25);
+        cursor: pointer;
+
+        &:before {
+            @include flexbox();
+            @include justify-content(center);
+            @include align-items(center);
+            content: "\f106";
+            font-family: "Faprika";
+            font-size: 25px;
+            color: $color-primary;
+            font-weight: 300;
+            width: 100%;
+            height: 100%;
+        }
+
+        &:hover {
+            border-radius: 100%;
+            background: $color-primary;
+
+            &:before {
+                color: #fff;
+            }
+        }
+    }
+}

@@ -1,0 +1,112 @@
+﻿@model ProductDetailsModel.AddToCartModel
+
+<div class="add-to-cart" id="addToCart">
+    <button type="button" id="add-to-cart-button-@Model.ProductId" class="button add-to-cart-button" data-productid="@Model.ProductId" onclick="AjaxCart.addproducttocart_details('@Url.RouteUrl("AddProductToCart-Details", new {productId = Model.ProductId})', '#product-details-form', this);return false;">
+        <span>@T("ShoppingCart.AddToCart")</span>
+    </button>
+    <script asp-location="Footer">
+        //when a customer clicks 'Enter' button we submit the "add to cart" button (if visible)
+        $(document).ready(function () {
+            $("#@Html.IdFor(model => model.EnteredQuantity)").on('keydown', function (e) {
+                if (event.keyCode == 13) {
+                    $("#add-to-cart-button-@Model.ProductId").trigger('click');
+                    return false;
+                }
+            });
+        });
+    </script>
+</div>
+@if (Model.DisplayBackInStockSubscription)
+{
+    <div class="add-to-cart" id="stockButtonContainer" style="display:none">
+
+        <button type="button" id="back-in-stock-notify-me" class="button add-to-cart-button">
+            @T("BackInStockSubscriptions.NotifyMe").Text
+        </button>
+
+        <script asp-location="Footer">
+
+        $(document).ready(function () {
+            $("#back-in-stock-notify-me").on('click', function () {                
+                var combinationId;
+                if ($('.attribute-input[id*=product_attribute_input_]').length > 0) {
+                    if ($('.attribute-item .attribute-input .dropdownlist-size').length > 0) {
+                        combinationId = $('.dropdownlist-size').children("option:selected").val();
+                        if (combinationId == 0) {
+                            alert("Lütfen " + $('.text-prompt').text().trim() + " seçiniz!");
+                            return;
+                        }
+                    }
+                    if ($('.attribute-item .attribute-input .radio-list').length > 0) {
+                        combinationId = $('.attribute-input[id*=product_attribute_input_] input:checked').data('combinationid');
+                        if (combinationId == null) {
+                            alert("Lütfen " + $('.text-prompt').text().trim() + " seçiniz!");
+                            return;
+                        }
+                    }
+                };
+
+                AjaxCart.setLoadWaiting(true, this);
+
+                var postData = {combinationId: combinationId, productId : @Model.ProductId };
+                addAntiForgeryToken(postData);
+                $.ajax({
+                    cache: false,
+                    type: "POST",
+                    data: postData,
+                    url: "@(Url.Action("SubscribePopupPOST", "BackInStockSubscription"))",
+                    success: function (data, textStatus, jqXHR) {                        
+                        if (!data.success && data.message == 'UnRegister')
+                            location.href = data.action;
+                        else if (data.success == true){
+                            displayNotification(data.message, 'success');
+                            AjaxCart.setSuccessClass();
+                        }
+                        else {
+                            displayNotification(data.message, 'error');
+                            //  location.reload();
+                        }
+                    },
+                    complete: AjaxCart.resetLoadWaiting,
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert('Bir Hata Oluştu Gelince Haber Ver Bildirimi Alınamadı.');
+                    }
+                });
+
+            });
+            if (@Model.ProductStockQuantity.ToInt() <= 0)
+            {
+                $("#addToCart").attr('style', 'display:none');
+                $("#stockButtonContainer").removeAttr('style', 'display:none');
+            }
+            else {
+                $("#stockButtonContainer").attr('style', 'display:none');
+                $("#addToCart").removeAttr('style', 'display:none');
+            }
+
+            $('.attribute-input .radio-list input').on('click', function () {
+                if ($(this).data('oos').toLowerCase() == "true") {
+                    $("#addToCart").attr('style', 'display:none');
+                    $("#stockButtonContainer").removeAttr('style', 'display:none');
+                }
+                else {
+                    $("#stockButtonContainer").attr('style', 'display:none');
+                    $("#addToCart").removeAttr('style', 'display:none');
+                }
+            });
+
+            $(".dropdownlist-size").change(function () {
+                if ($(this).children("option:selected").attr("data-oos") == "True") {
+                    $("#addToCart").attr('style', 'display:none');
+                    $("#stockButtonContainer").removeAttr('style', 'display:none');
+                }
+                else if ($(this).children("option:selected").attr("data-oos") == "False") {
+                    $("#stockButtonContainer").attr('style', 'display:none');
+                    $("#addToCart").removeAttr('style', 'display:none');
+                }
+            });
+        });
+
+        </script>
+    </div>
+}

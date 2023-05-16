@@ -1,0 +1,35 @@
+﻿@inherits Faprika.Framework.Mvc.Razor.FaprikaRazorPage<TModel>
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@*we remove the default InputTagHelper to prevent the checkbox duplicating: https://stackoverflow.com/questions/42544961/asp-net-core-custom-input-tag-helper-rendering-duplicate-checkboxes*@
+@removeTagHelper Microsoft.AspNetCore.Mvc.TagHelpers.InputTagHelper, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Faprika.Framework
+@*@addTagHelper *, MiniProfiler.AspNetCore.Mvc*@
+
+@*@using StackExchange.Profiling*@
+@using Microsoft.AspNetCore.Mvc.ViewFeatures
+@using Faprika
+@using Faprika.Core
+@using Faprika.Web.Extensions
+@using Faprika.Framework.UI
+@using Faprika.Framework.Extensions
+@using Faprika.Framework.Events
+@using Faprika.Framework.Themes
+@using Faprika.Services.Events
+@using Faprika.Services.Localization
+@using Faprika.Web.Models.Banners
+@using Faprika.Web.Models.Blogs
+@using Faprika.Web.Models.Catalog
+@using Faprika.Web.Models.Checkout
+@using Faprika.Web.Models.Cms
+@using Faprika.Web.Models.Common
+@using Faprika.Web.Models.Customer
+@using Faprika.Web.Models.Media
+@using Faprika.Web.Models.News
+@using Faprika.Web.Models.Newsletter
+@using Faprika.Web.Models.Order
+@using Faprika.Web.Models.ShoppingCart
+@using Faprika.Web.Models.Topics
+@using Faprika.Web.Models.Helps
+@using Faprika.Web.Models.Wishlist
+@using Faprika.Web.Models.Vendors
+@using Faprika.Web.Models.DiscountCampaign

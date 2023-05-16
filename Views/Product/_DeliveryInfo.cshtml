@@ -1,0 +1,23 @@
+﻿@model ProductDetailsModel
+@if (Model.IsFreeShipping)
+{
+    <div class="free-shipping">
+        <span class="label">@T("Products.Shipping")</span>
+        <span class="value"> @T("Products.FreeShipping")</span>
+    </div>
+}
+
+<div class="delivery-date" style="@(Model.DeliveryDate.HasValue() ? "" : "display:none;")">
+    <span class="label">@T("Products.DeliveryDate")</span>
+    <span class="value" id="delivery-date-value-@Model.Id">@Model.DeliveryDate</span>
+</div>
+
+<script asp-location="Footer">
+    $(document).on("product_attributes_changed", function (data) {
+        if (data.changedData.deliveryMessage) {
+            $(".delivery-date").show();
+        } else {
+            $(".delivery-date").hide();
+        }
+    });
+</script>

@@ -1,0 +1,41 @@
+﻿@model VendorInfoModel
+@{ 
+    //title
+    Html.AddTitleParts("Tedarikçi Bilgilerim");
+    //page class
+    Html.AddCssFileParts(ResourceLocation.Head, "~/Themes/Sidney/Content/css/pages/account.min.css");
+}
+<section class="page account-page customer-info-page">
+    <div class="page-container">
+        <div class="page-left-sidebar">
+            @await Component.InvokeAsync("CustomerNavigation", new { selectedTabId = CustomerNavigationEnum.VendorInfo })
+        </div>
+        <div class="page-body">
+            <form asp-route="CustomerVendorInfo" method="post">
+                <div asp-validation-summary="ModelOnly" class="message-error"></div>
+                <div class="page-title">Tedarikçi Bilgilerim</div>
+                <div class="inputs">
+                    <label asp-for="Name"></label>
+                    <div class="input-validate">
+                        <input asp-for="Name" />
+                        <span asp-validation-for="Name"></span>
+                    </div>
+                </div>
+                <div class="inputs">
+                    <label asp-for="Email"></label>
+                    <div class="input-validate">
+                        <input asp-for="Email" />
+                        <span asp-validation-for="Email"></span>
+                    </div>
+                </div>
+                <div class="inputs">
+                    <label asp-for="Description"></label>
+                    <div class="input-validate">
+                        <faprika-textarea class="textarea" asp-for="Description" />
+                        <span asp-validation-for="Description"></span>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>

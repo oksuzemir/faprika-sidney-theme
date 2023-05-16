@@ -1,0 +1,135 @@
+﻿@model string
+@inject ICountryService countryService
+
+@using Faprika
+@using Faprika.Services.Directory
+@using Newtonsoft.Json
+@{
+    //register CSS and JS
+    Html.AddCssFileParts("~/lib/intl-tel-input/css/intlTelInput.min.css");
+    Html.AddScriptParts(ResourceLocation.Footer, "~/lib/intl-tel-input/js/intlTelInput.min.js");
+
+    //other variables
+    var random = CommonHelper.GenerateRandomInteger();
+    var clientId = "phone" + random;
+
+    //phone countries
+    var countryCodes = countryService.GetAllCountriesForPhone(showHidden: true).Select(c => c.TwoLetterIsoCode);
+    var AvailablePhoneCountriesJson = JsonConvert.SerializeObject(countryCodes);
+
+}
+<div class="input-phone">
+    @Html.TextBoxFor(model => model, new { type = "tel" })
+</div>
+<script asp-location="Footer">
+    $(document).ready(function () {
+
+        // get the country data from the plugin
+        var telInput = $('#@Html.IdForModel()'),
+            errorMsg = $("#@(clientId + "error")"),
+            validMsg = $("#@(clientId + "valid")");
+
+        // init plugin
+        telInput.intlTelInput({
+            nationalMode: false,
+            formatOnDisplay: false,
+            preferredCountries: ["tr"],
+            onlyCountries: @Html.Raw(AvailablePhoneCountriesJson),
+            utilsScript: "/lib/intl-tel-input/js/utils.js"
+        });
+
+        var reset = function () {
+            telInput.removeClass("error");
+            errorMsg.addClass("hide");
+            validMsg.addClass("hide");
+        };
+
+        var format = function () {
+            var countryData = telInput.intlTelInput("getSelectedCountryData");
+            var countryCode = "+" + countryData.dialCode;
+            var value = telInput.intlTelInput("getNumber");
+
+            if (value.length < countryCode.length) {
+                value = countryCode;
+            }
+
+            telInput.intlTelInput('setNumber', value);
+        };
+
+        // on paste: format
+        telInput.on('paste', function (e) {
+            setTimeout(function () {
+                var countryData = telInput.intlTelInput("getSelectedCountryData");
+                var countryCode = "+" + countryData.dialCode;
+
+                if (countryData.dialCode != undefined) {
+                    var iso2 = countryData.iso2;
+                    var inputValue = telInput.val().replace(/\D/g, '');
+
+                    if (inputValue == "")
+                        telInput.intlTelInput('setCountry', countryData.iso2);
+
+                    if (inputValue.indexOf(countryData.dialCode) != 0)
+                        inputValue = countryData.dialCode + inputValue;
+
+                    if (inputValue.indexOf("+") != 0)
+                        inputValue = "+" + inputValue;
+
+                    telInput.val(inputValue);
+
+                    if (!intlTelInputUtils.isValidNumber(inputValue, iso2)) {
+                        var start = inputValue.length - 1;
+
+                        while (true) {
+                            if (start < 0)
+                                break;
+
+                            var tempValue = inputValue.substr(start);
+
+                            if (intlTelInputUtils.isValidNumber(tempValue, iso2)) {
+                                telInput.val(countryCode + tempValue);
+                                break;
+                            }
+
+                            start--;
+                        }
+                    }
+                }
+
+                format();
+            }, 100);
+        });
+
+        // on keyup: format
+        telInput.on('keyup', function (e) {
+            setTimeout(function () {
+                format();
+            }, 150);
+        });
+
+        // on country change: reset value
+        telInput.on('countrychange', function (e) {
+            var countryData = telInput.intlTelInput("getSelectedCountryData");
+            var countryCode = "+" + countryData.dialCode;
+
+            if (countryData.dialCode == undefined)
+                telInput.intlTelInput('setNumber', countryCode);
+        });
+
+        // on blur: validate
+        telInput.blur(function () {
+            reset();
+            if ($.trim(telInput.val())) {
+                if (telInput.intlTelInput("isValidNumber")) {
+                    validMsg.removeClass("hide");
+                } else {
+                    telInput.addClass("error");
+                    errorMsg.removeClass("hide");
+                }
+            }
+        });
+
+        // on keyup / change flag: reset
+        telInput.on("keyup change", reset);
+    });
+</script>

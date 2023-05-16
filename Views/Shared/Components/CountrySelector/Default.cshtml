@@ -1,0 +1,26 @@
+﻿@model CountrySelectorModel
+@using Microsoft.AspNetCore.Http
+@using Faprika.Core
+@inject IWebHelper webHelper
+@inject IHttpContextAccessor httpContextAccessor
+
+<div class="country-selector">
+    <span>@T("Header.CountrySelector.Title")</span>
+    @{
+        var countries = Model.AvailableCountries.Select(x => new SelectListItem
+        {
+            Text = x.Name,
+            Value = webHelper.ModifyQueryString(Url.RouteUrl("ChangeCountry", new { countryid = x.Id }, webHelper.CurrentRequestProtocol), "returnurl", webHelper.GetRawUrl(httpContextAccessor.HttpContext.Request)),
+            Selected = x.Id.Equals(Model.CurrentCountryId)
+        });
+        <select id="countryid" name="countryid" asp-items="@countries" onchange="change_country(this.value);"></select>
+    }
+</div>
+
+<script asp-location="Footer">
+    function change_country(value) {
+        if (confirm('@T("Header.CountrySelector.Confirm")')) {
+            setLocation(value);
+        }
+    }
+</script>

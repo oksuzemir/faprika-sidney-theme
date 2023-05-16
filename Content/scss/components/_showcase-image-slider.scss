@@ -1,0 +1,226 @@
+﻿@import "../helpers/all";
+@import "../variables/variables-dev";
+
+.showcase-container {
+    .showcase {
+        .left-image-right-slider {
+            @include flexbox;
+            @include flex-wrap(wrap);
+            margin: 0;
+
+            .showcase-pictures {
+                @include flex(0 50%);
+                max-width: 50%;
+                padding: 5px 5px 5px 0;
+                margin: 0;
+
+                .showcase-pictures-picture {
+                    padding: 0;
+                    margin: 0;
+                    box-shadow: 0 0 7px #d3d3d3;
+
+                    img {
+                        object-fit: fill;
+                    }
+                }
+            }
+
+            .showcase-products {
+                @include flex(0 50%);
+                max-width: 50%;
+                padding: 5px 0 5px 5px;
+                margin: 0;
+
+                .swiper-container {
+                    padding: 0;
+                    margin: 0;
+
+                    .swiper-wrapper {
+                        .swiper-slide {
+                            height: auto;
+                        }
+                    }
+                }
+            }
+        }
+
+        .left-slider-right-image {
+            @include flexbox;
+            @include flex-wrap(wrap);
+            margin: 0;
+
+            .showcase-pictures {
+                @include flex(0 50%);
+                max-width: 50%;
+                padding: 5px 0 5px 5px;
+                margin: 0;
+                order: 1;
+
+                .showcase-pictures-picture {
+                    padding: 0;
+                    margin: 0;
+                    box-shadow: 0 0 7px #d3d3d3;
+
+                    img {
+                        object-fit: fill;
+                    }
+                }
+            }
+
+            .showcase-products {
+                @include flex(0 50%);
+                max-width: 50%;
+                padding: 5px 5px 5px 0;
+                margin: 0;
+
+                .swiper-container {
+                    padding: 0;
+                    margin: 0;
+
+                    .swiper-wrapper {
+                        .swiper-slide {
+                            height: auto;
+                        }
+                    }
+                }
+            }
+        }
+
+        @include mq(sm) {
+            .left-image-right-slider {
+                @include flexbox;
+                @include flex-wrap(wrap);
+
+                .showcase-pictures {
+                    @include flex(0 33.333333%);
+                    max-width: 33.333333%;
+                    padding: 5px 20px 5px 0;
+                }
+
+                .showcase-products {
+                    @include flex(0 66.666667%);
+                    max-width: 66.666667%;
+                    padding: 5px 0 5px 0;
+
+                    .showcase-product-wrap {
+                        .swiper-container {
+                            .swiper-wrapper {
+                                .swiper-slide {
+                                    width: 50%;
+                                    height: auto;
+                                    margin-right: 25px;
+
+                                    &:nth-child(-n+1) {
+                                        width: calc(50% - 25px);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            .left-slider-right-image {
+                @include flexbox;
+                @include flex-wrap(wrap);
+
+                .showcase-pictures {
+                    @include flex(0 33.333333%);
+                    max-width: 33.333333%;
+                    padding: 5px 0 5px 20px;
+                }
+
+                .showcase-products {
+                    @include flex(0 66.666667%);
+                    max-width: 66.666667%;
+                    padding: 5px 0 5px 0;
+
+                    .showcase-product-wrap {
+                        .swiper-container {
+                            .swiper-wrapper {
+                                .swiper-slide {
+                                    width: 50%;
+                                    height: auto;
+                                    margin-right: 25px;
+
+                                    &:nth-child(-n+1) {
+                                        width: calc(50% - 25px);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        @include mq(md) {
+            .left-image-right-slider {
+                @include flexbox;
+                @include flex-wrap(wrap);
+
+                .showcase-pictures {
+                    @include flex(0 25%);
+                    max-width: 25%;
+                    padding: 5px 20px 5px 0;
+                }
+
+                .showcase-products {
+                    @include flex(0 75%);
+                    max-width: 75%;
+                    padding: 5px 0 5px 0;
+
+                    .showcase-product-wrap {
+                        .swiper-container {
+                            .swiper-wrapper {
+                                .swiper-slide {
+                                    width: 33.33333333333333%;
+                                    height: auto;
+                                    margin-right: 20px;
+
+                                    &:nth-child(-n+2) {
+                                        width: calc(33.33333333333333% - 20px);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            .left-slider-right-image {
+                @include flexbox;
+                @include flex-wrap(wrap);
+
+                .showcase-pictures {
+                    @include flex(0 25%);
+                    max-width: 25%;
+                    padding: 5px 0 5px 20px;
+                }
+
+                .showcase-products {
+                    @include flex(0 75%);
+                    max-width: 75%;
+                    padding: 5px 0 5px 0;
+
+                    .showcase-product-wrap {
+                        .swiper-container {
+                            .swiper-wrapper {
+                                .swiper-slide {
+                                    width: 33.33333333333333%;
+                                    height: auto;
+                                    margin-right: 20px;
+
+                                    &:nth-child(-n+2) {
+                                        width: calc(33.33333333333333% - 20px);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+

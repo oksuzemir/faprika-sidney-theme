@@ -1,0 +1,143 @@
+﻿@model SubmitReturnRequestModel
+@inject IEventPublisher eventPublisher
+@{
+    //title
+    Html.AddTitleParts(T("Account.CustomerOrders.ReturnItems").Text);
+    Html.AddCssFileParts(ResourceLocation.Head, "~/Themes/Sidney/Content/css/pages/account.min.css");
+    //event
+    eventPublisher.Publish(new PageRenderingEvent(this.Html, false));
+}
+<section class="page account-page order-return-info-page order-details-page">
+    <div class="page-container">
+        <div class="page-left-sidebar">
+            @await Component.InvokeAsync("CustomerNavigation", new { selectedTabId = CustomerNavigationEnum.ReturnRequests })
+        </div>
+        <div class="page-body">
+            @if (!string.IsNullOrEmpty(Model.Result))
+            {
+                <div class="order-returns-box">
+                    <div class="page-title">
+                        @Model.Result
+                    </div>
+
+                    <div class="buttons">
+                        <button type="submit" class="button" onclick="setLocation('@Url.RouteUrl("CustomerReturnRequests")')">@T("account.customerreturnrequests")</button>
+                    </div>
+
+
+                </div>
+            }
+            else
+            {
+                <div class="order-returns">
+                    <form asp-route="ReturnRequest" method="post">
+                        <div class="page-title">
+                            @T("ReturnRequests.SelectProduct(s)")
+                        </div>
+                        <div class="section">
+                            <div class="cart-wrap">
+                                <div class="cart-item-header">
+                                    <div class="product-image">
+                                    </div>
+                                    <div class="product-details">
+                                        <div class="product-info">
+                                            <span>@T("CartHeader.Product.Name")</span>
+                                        </div>
+                                        <div class="product-unit-price">
+                                            <span>@T("CartHeader.Product.UnitPrice")</span>
+                                        </div>
+                                        <div class="variant-box">
+                                            <div class="product-quantity">
+                                                <span>@T("CartHeader.Product.Quantity")</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                @foreach (var item in Model.Items)
+                                {
+                                    <div class="cart-item">
+                                        <div class="product-image">
+                                            <a href="@Url.RouteUrl("Product", new {SeName = item.ProductSeName})">
+                                                <img alt="@item.ProductName" src="@item.DefaultPictureModel.ImageUrl" title="@item.ProductName" />
+                                            </a>
+                                        </div>
+                                        <div class="product-details">
+                                            <div class="product-info">
+                                                <a href="@Url.RouteUrl("Product", new {SeName = item.ProductSeName})" class="product-name">
+                                                    @item.ProductName
+                                                </a>
+                                                <div class="attributes">
+                                                    @T("ShoppingCart.SKU"): @item.Sku
+                                                </div>
+                                                @if (!string.IsNullOrEmpty(item.AttributeInfo))
+                                                {
+                                                    <div class="attributes">
+                                                        @Html.Raw(item.AttributeInfo)
+                                                    </div>
+                                                }
+                                            </div>
+                                            <div class="product-unit-price">
+                                                <span>@item.UnitPrice</span>
+                                            </div>
+                                            <input type="hidden" name="pvAvailableQuantity@(item.Id)" id="pvAvailableQuantity@(item.Id)" value="@item.AvailableQuantity" />
+                                            <div class="variant-box">
+                                                <div class="product-quantity">
+                                                    @if (item.AvailableQuantity > 0)
+                                                    {
+
+                                                        <select name="pvQuantity@(item.Id)" id="pvQuantity@(item.Id)" class="form-control input-sm">
+
+                                                            @for (int i = 0; i < item.AvailableQuantity + 1; i++)
+                                                            {
+                                                                if (item.AvailableQuantity == i)
+                                                                {
+                                                                    <option selected="selected" value="@i">@i</option>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <option value="@i">@i</option>
+                                                                }
+                                                            }
+                                                        </select>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span>0</span>
+                                                    }
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <div class="order-returns-box">
+                            <div class="input-group">
+                                <div class="inputs">
+                                    <faprika-label asp-for="ReturnReasonId" />
+                                    <faprika-select asp-for="ReturnReasonId" asp-items="Model.AvailableReturnReasons" asp-select2="true" />
+                                    <span asp-validation-for="ReturnReasonId"></span>
+                                </div>
+                                <div class="inputs">
+                                    <faprika-label asp-for="ReturnActionId" />
+                                    <faprika-select asp-for="ReturnActionId" asp-items="Model.AvailableReturnActions" asp-select2="true" />
+                                    <span asp-validation-for="ReturnActionId"></span>
+                                </div>
+                                <div class="inputs">
+                                    <label asp-for="Comments" asp-postfix=":"></label>
+                                    <textarea asp-for="Comments" class="comment"></textarea>
+                                    <span asp-validation-for="Comments"></span>
+                                </div>
+                            </div>
+                            <div class="button-group">
+                                <button type="submit" class="button-returns one-submit-button">@T("returnrequests.requestdetail.button")</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            }
+        </div>
+    </div>
+</section>

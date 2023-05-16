@@ -1,0 +1,45 @@
+﻿@model ProductDetailsModel
+@if (Model.ProductBundleModels.Any())
+{
+<div class="product-bundles">
+    <div class="product-bundles-title">
+        <span>
+            @T("Products.Bundles")
+        </span>
+    </div>
+    <div class="variant-list">
+        @foreach (var item in Model.ProductBundleModels)
+        {
+            <div class="variant-item" data-productid="@item.ProductId">
+                @if (!string.IsNullOrWhiteSpace(item.DefaultPictureModel.ImageUrl))
+                {
+                    <div class="variant-picture">
+                        <a asp-route="Product" asp-route-sename="@item.SeName">
+                            <img alt="@item.Name" src="@item.DefaultPictureModel.ImageUrl"
+                                 title="@item.Name" id="main-product-img-@item.ProductId" />
+                        </a>
+                    </div>
+                }
+                <div class="variant-overview">
+                    @if (!string.IsNullOrWhiteSpace(item.Name))
+                    {
+                        <div class="variant-name">
+                            <span>@item.Name</span>
+                        </div>
+                    }
+                    <div class="product-price">
+                        <span itemprop="price" content="@item.PriceValue.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)" class="price-value-@(item.ProductId)">
+                            @Html.Raw(item.Price)
+                        </span>
+                    </div>
+
+                    @{
+                        var dataDictAttributes = new ViewDataDictionary(ViewData);
+                        dataDictAttributes.TemplateInfo.HtmlFieldPrefix = string.Format("attributes_{0}", item.ProductId);
+                        @await Html.PartialAsync("_ProductAttributes", item.ProductAttributes, dataDictAttributes)}
+                </div>
+            </div>
+        }
+    </div>
+</div>
+}

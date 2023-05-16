@@ -1,0 +1,17 @@
+﻿@{
+    Layout = "_Root.Blank";
+
+    //title
+    Html.AddTitleParts(T("PageTitle.UnderConstruction").Text);
+    Html.AddCssFileParts(ResourceLocation.Head, "~/Themes/Sidney/Content/css/components/header-blank.min.css");
+    Html.AddCssFileParts(ResourceLocation.Head, "~/Themes/Sidney/Content/css/pages/under-construction.min.css", "~/Themes/Sidney/Content/css/pages/under-construction.css");
+}
+
+<div class="page under-construction-page">
+    <div class="page-container">
+        <div class="under-construction-content">
+            <h1>@T("UnderConstruction.Title")</h1>
+            <span>@T("UnderConstruction.Text")</span>
+        </div>
+    </div>
+</div>

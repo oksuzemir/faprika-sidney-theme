@@ -1,0 +1,81 @@
+﻿@import "../helpers/all";
+@import "../variables/variables-dev";
+
+.main-slider {
+    overflow: hidden;
+    max-width: 100%;
+    margin: 0 auto;
+
+    .swiper-container {
+        width: 100%;
+        height: 100%;
+        position: relative;
+
+        .swiper-slide {
+
+            img {
+                display: block;
+                width: 100%;
+                object-fit: cover;
+                height: 100%;
+            }
+        }
+
+        .swiper-button-next, .swiper-button-prev {
+            background: rgba(0, 0, 0, 0.30);
+            width: 40px;
+            height: 40px;
+            border-radius: 3px;
+
+            &:hover {
+                background: rgba(0, 0, 0, 0.50);
+            }
+
+            &:before {
+                font-family: Faprika;
+                font-size: 35px;
+                color: white;
+                font-weight: 300;
+                display: block;
+                text-align: center;
+                line-height: 41px;
+            }
+        }
+
+        .swiper-button-next {
+            margin-top: -20px;
+
+            &:before {
+                content: "\f105";
+            }
+        }
+
+        .swiper-button-prev {
+            margin-top: -20px;
+
+            &:before {
+                content: "\f104";
+            }
+        }
+
+        .swiper-pagination {
+            .swiper-pagination-bullet-active {
+                background-color: $color-primary;
+            }
+        }
+    }
+
+    @include mq(sm,max) {
+        .swiper-container {
+            .swiper-button-next, .swiper-button-prev {
+                display: none;
+            }
+        }
+    }
+
+    @include mq(md,max) {
+        overflow: hidden;
+        width: 100% !important;
+        height: auto !important;
+    }
+}

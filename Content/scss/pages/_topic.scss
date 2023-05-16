@@ -1,0 +1,162 @@
+﻿@import "../helpers/all";
+@import "../variables/variables-dev";
+
+.topic-page {
+    margin: 60px 0 10px 0;
+
+    .page-container {
+        @include flexbox;
+        @include align-items(flex-start);
+        @include flex-direction(column);
+
+
+        .side-navigation {
+            @include border($color-border, $border-base);
+            background: #fff;
+            width: 100%;
+            margin-bottom: 10px;
+
+            .nav-title {
+                font-size: 20px;
+                @include flexbox();
+                @include align-items(center);
+                @include justify-content(space-between);
+                padding: 0 15px;
+                line-height: 48px;
+                cursor: pointer;
+                position: relative;
+
+                @at-root .ie & {
+                    display: block;
+                }
+
+
+                strong {
+                    position: relative;
+                    display: block;
+                    text-transform: capitalize;
+                    font-size: 15px;
+                    font-weight: 600;
+                    color: $gray-darker;
+                }
+
+                &:before {
+                    content: "\f107";
+                    font-family: "Faprika";
+                    position: absolute;
+                    right: 15px;
+                    font-size: 15px;
+                }
+            }
+
+            &.open {
+                .nav-title {
+                    &:before {
+                        -webkit-transform: rotate(180deg);
+                        -ms-transform: rotate(180deg);
+                        transform: rotate(180deg);
+                    }
+                }
+            }
+
+            .nav-wrap {
+                overflow: hidden;
+
+                .nav-list {
+                    padding: 0 15px;
+
+                    li {
+                        a {
+                            font-size: 13px;
+                            display: block;
+                            line-height: 40px;
+                            position: relative;
+
+
+                            &:after {
+                                content: "\f105";
+                                font-family: "Faprika";
+                                font-size: 15px;
+                                font-weight: 400;
+                                position: absolute;
+                                right: 0;
+                            }
+                        }
+
+                        &:not(:last-child) {
+                            border-bottom: 1px solid $color-border;
+                        }
+
+                        &:first-child {
+                            border-top: 1px solid $color-primary;
+                        }
+                    }
+                }
+            }
+        }
+
+        .topic-body {
+            @include flex(1);
+            @include border($color-border, $border-base);
+            background: #fff;
+            padding: 20px;
+
+            @at-root .ie & {
+                flex:1 1 auto;
+                max-width:100%;
+            }
+
+            .topic-title {
+                font-size: 14px;
+                color: $gray-darker;
+                font-weight: 700;
+                padding-bottom: 20px;
+            }
+
+            .topic-content {
+                font-size: 13px;
+                color: $gray-dark;
+                line-height: 24px;
+            }
+        }
+    }
+
+    @include mq(sm) {
+        .page-container {
+            @include flex-direction(row);
+
+            .side-navigation {
+                @include flex(0);
+                @include flex-basis(220px);
+                margin-right: 30px;
+
+                .nav-title {
+                    padding: 0 20px;
+
+                    &:before {
+                        display: none;
+                    }
+                }
+
+                .nav-wrap {
+                    .nav-list {
+                        padding: 0 20px;
+                    }
+                }
+            }
+        }
+    }
+
+    @include mq(md) {
+        margin: 20px 0;
+
+        .page-container {
+            .sidebar {
+                margin-right: 30px;
+            }
+
+            .topic-body {
+            }
+        }
+    }
+}

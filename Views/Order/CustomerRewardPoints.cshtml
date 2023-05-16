@@ -1,0 +1,94 @@
+﻿@model CustomerRewardPointsModel
+@{
+    //title
+    Html.AddTitleParts(T("PageTitle.Account").Text);
+    Html.AddCssFileParts(ResourceLocation.Head, "~/Themes/Sidney/Content/css/pages/account.min.css");
+}
+
+<section class="page account-page reward-points-page">
+    <div class="page-container">
+        <div class="page-left-sidebar">
+            @await Component.InvokeAsync("CustomerNavigation", new { selectedTabId = CustomerNavigationEnum.RewardPoints })
+        </div>
+        <div class="page-body">
+            <div class="message current-balance">
+                @T("RewardPoints.CurrentBalance", Model.RewardPointsBalance, Model.RewardPointsAmount)
+            </div>
+            @if (Model.MinimumRewardPointsBalance > 0)
+            {
+                <div class="message min-balance">
+                    @T("RewardPoints.MinimumBalance", Model.MinimumRewardPointsBalance, Model.MinimumRewardPointsAmount)
+                </div>
+            }
+            <div class="reward-points-history">
+
+                @if (Model.RewardPoints.Count > 0)
+                {
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <colgroup>
+                                <col width="25%" />
+                                <col width="10%" />
+                                <col width="10%" />
+                                <col />
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th class="date">
+                                        @T("RewardPoints.Fields.Date")
+                                    </th>
+                                    <th class="points">
+                                        @T("RewardPoints.Fields.Points")
+                                    </th>
+                                    <th class="points-balance">
+                                        @T("RewardPoints.Fields.PointsBalance")
+                                    </th>
+                                    <th class="reward-message">
+                                        @T("RewardPoints.Fields.Message")
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (var i = 0; i < Model.RewardPoints.Count; i++)
+                                {
+                                    var item = Model.RewardPoints[i];
+                                    <tr class="@(item.Points > 0 ? "increase" : "decrease")">
+                                        <td class="date">
+                                            <label>@T("RewardPoints.Fields.Date")</label>
+                                            <span>@item.CreatedOn</span>
+                                        </td>
+                                        <td class="points">
+                                            <label>@T("RewardPoints.Fields.Points")</label>
+                                            <span>@item.Points</span>
+                                        </td>
+                                        <td class="points-balance">
+                                            <label>@T("RewardPoints.Fields.PointsBalance")</label>
+                                            <span>@item.PointsBalance </span>
+                                        </td>
+                                        <td class="reward-message">
+                                            <label>@T("RewardPoints.Fields.Message")</label>
+                                            <span>@item.Message</span>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    var pager = Html.Pager(Model.PagerModel);
+                    if (!string.IsNullOrEmpty(pager.ToHtmlString()))
+                    {
+                        <div class="pager">
+                            @pager
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="no-data">
+                        <span class="no-reward">@T("RewardPoints.NoHistory")</span>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>

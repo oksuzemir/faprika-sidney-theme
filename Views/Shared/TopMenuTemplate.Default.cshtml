@@ -1,0 +1,59 @@
+﻿@model TopMenuModel.TopMenuLineModel
+@using Faprika.Core.Domain.Common
+@{
+    Html.AddCssFileParts(ResourceLocation.Head, "~/Themes/Sidney/Content/css/components/menu.min.css", "~/Themes/Sidney/Content/css/components/menu.css");
+}
+@{
+    //submenus
+    var subMenus = Model.SubMenus;
+
+    //open in new window
+    string target = "_self";
+    if (Model.OpenNewWindow)
+    {
+        target = "_blank";
+    }
+
+    //font weight
+    string fontWeight = "normal";
+    if (Model.FontWeightBold)
+    {
+        fontWeight = "bold";
+    }
+
+    //font style
+    string fontStyle = "normal";
+    if (Model.FontStyleItalic)
+    {
+        fontStyle = "italic";
+    }
+
+    //menu direction
+    string directionClass = "";
+    //only root level
+    @if (Model.Level == 1)
+    {
+        if (Model.TopMenuDirection == TopMenuDirection.Right)
+        {
+            directionClass = "right";
+        }
+    }
+}
+
+<li class="one-level @directionClass @(subMenus.Any() ? "has-sub" : "")">
+    <a href="@Model.Url" target="@target" style="font-weight: @(fontWeight); font-style: @(fontStyle);">
+        @Model.Name
+    </a>
+    @{
+        if (subMenus.Count > 0)
+        {
+            <ul>
+                @foreach (var subMenu in subMenus)
+                {
+                    @await Html.PartialAsync("TopMenuTemplate.Default", subMenu)
+                }
+            </ul>
+        }
+    }
+</li>
+

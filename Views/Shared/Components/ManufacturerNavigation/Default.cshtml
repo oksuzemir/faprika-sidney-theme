@@ -1,0 +1,17 @@
+﻿@model ManufacturerNavigationModel
+@if (Model.Manufacturers.Count > 0)
+{
+    <div class="block block-manufacturer-navigation">
+        <div class="title">
+            <strong>@T("Manufacturers")</strong>
+        </div>
+        <div class="listbox">
+            <ul class="list">
+                @foreach (var manufacturer in Model.Manufacturers)
+                {
+                    <li class="@(manufacturer.IsActive ? "active" : "")"><a href="@Url.RouteUrl("Manufacturer", new { SeName = manufacturer.SeName })">@manufacturer.Name</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}

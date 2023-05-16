@@ -1,0 +1,11 @@
+﻿@model List<ExternalAuthenticationMethodModel>
+@if (Model.Any())
+{
+    <div class="divider">
+        <span>@T("Common.Or")</span>
+    </div>
+}
+@foreach (var authenticationMethod in Model)
+{
+    @await Component.InvokeAsync(authenticationMethod.ViewComponentName)
+}

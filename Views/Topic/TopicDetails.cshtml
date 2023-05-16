@@ -1,0 +1,29 @@
+﻿@model TopicModel
+@using Faprika.Core.Domain.Seo
+@inject SeoSettings seoSettings
+@{
+    Layout = "_Root";
+
+    //title
+    Html.AddTitleParts(!string.IsNullOrEmpty(Model.MetaTitle) ? Model.MetaTitle : Model.Title);
+    //meta
+    Html.AddMetaDescriptionParts(Model.MetaDescription);
+    Html.AddMetaKeywordParts(Model.MetaKeywords);
+
+    if (seoSettings.CanonicalUrlsEnabled)
+    {
+        var topicUrl = Url.RouteUrl("Topic", new { SeName = Model.SeName }, this.Url.ActionContext.HttpContext.Request.Scheme);
+        Html.AddCanonicalUrlParts(topicUrl);
+    }
+
+    Html.AddCssFileParts(ResourceLocation.Head, "~/Themes/Sidney/Content/css/pages/topic.min.css", "~/Themes/Sidney/Content/css/pages/topic.css");
+}
+
+<div class="page topic-page">
+    <div class="page-container">
+        <div class="topic-body">
+            <h1 class="topic-title" id="ph-title">@Model.Title</h1>
+            <div class="topic-content">@Html.Raw(Model.Body)</div>
+        </div>
+    </div>
+</div>

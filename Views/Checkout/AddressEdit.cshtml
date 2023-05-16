@@ -1,0 +1,39 @@
+﻿@model AddressModel
+@{
+    Layout = "_Root.Blank";
+
+    //title
+    Html.AddTitleParts(T("PageTitle.Checkout").Text);
+    //register CSS and JS
+    Html.AddCssFileParts(ResourceLocation.Head, "~/Themes/Sidney/Content/css/pages/checkout.min.css", "~/Themes/Sidney/Content/css/pages/checkout.css");
+}
+<div class="page checkout-page address-page address-page-add">
+    @*<div class="progress-container">
+            @await Component.InvokeAsync("CheckoutProgress", new { step = CheckoutProgressStep.Address })
+        </div>*@
+    <div class="page-container">
+        <form asp-route="CheckoutAddressEdit" method="post" id="checkoutaddress-form">
+            <div class="page-body">
+                <div class="page-title">
+                    @T("Checkout.Address.Edit")
+                </div>
+                @await Html.PartialAsync("_CreateOrUpdateAddress")
+            </div>
+            <div class="page-right-sidebar">
+                <div class="sidebar-header">
+                    @T("Order.Totals.Title")
+                </div>
+                @await Component.InvokeAsync("OrderSummary")
+                <div class="order-totals">
+                    @await Component.InvokeAsync("OrderTotals", new { isEditable = false, preparePaymentMethodAdditionalFee = false })
+                </div>
+                <div class="button">
+                    <button type="button" class="back-step-button" onclick="setLocation('@Url.RouteUrl("CheckoutAddress")'); return false;">@T("Common.Back")</button>
+                    <button type="submit" name="nextstep" class="new-address-next-step-button one-submit-button">
+                        <span>@T("Checkout.Address.NextButton")</span>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

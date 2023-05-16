@@ -1,0 +1,31 @@
+﻿@model NewsItemListModel
+
+@if (Model.NewsItems.Count > 0)
+{
+    <div class="button-news dropdown-wrapper">
+        <span class="dropdown-toggle">
+            @T("Header.News")
+            <span class="qty-bubble qty-news">@Model.NewsItems.Count</span>
+        </span>
+        <div class="dropdown-menu">
+
+            <div class="title">
+                <span>@T("Header.News.Title")</span>
+            </div>
+            <div class="news">
+                @foreach (var item in Model.NewsItems)
+                {
+                    <div class="news-item">
+                        <div class="news-head">
+                            <a class="news-title" href="@item.Url">@item.Title</a>
+                            <span class="news-date">@item.CreatedOn.ToString("dd.MM.yyyy")</span>
+                        </div>
+                        <div class="news-body">
+                            @item.Description
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}

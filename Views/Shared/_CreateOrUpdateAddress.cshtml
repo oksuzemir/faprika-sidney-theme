@@ -1,0 +1,193 @@
+﻿@model AddressModel
+
+@using Faprika.Core.Domain.Common
+
+<script asp-location="Footer">
+    $(document).ready(function () {
+        $("#@Html.IdFor(model => model.CountryId)").on('change', function (e) {
+            var selectedItem = $(this).val();
+            var ddlStates = $("#@Html.IdFor(model => model.StateProvinceId)");
+            $.ajax({
+                cache: false,
+                type: "GET",
+                url: "@(Url.Action("GetStatesByCountryId", "Country"))",
+                data: { "countryId": selectedItem, "addSelectStateItem": "true" },
+                success: function (data) {
+                    ddlStates.html('');
+                    $.each(data, function (id, option) {
+                        ddlStates.append($('<option></option>').val(option.id).html(option.name));
+                    });
+                    ddlStates.trigger('change');
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    console.log('Failed to retrieve states.');
+                }
+            });
+        });
+        $("#@Html.IdFor(model => model.StateProvinceId)").on('change', function (e) {
+            var selectedItem = $(this).val();
+            var ddlDistricts = $("#@Html.IdFor(model => model.DistrictId)");
+            $.ajax({
+                cache: false,
+                type: "GET",
+                url: "@(Url.Action("GetDistrictsByStateProvinceId", "Country"))",
+                data: { "stateProvinceId": selectedItem, "addSelectDistrictItem": "true" },
+                success: function (data) {
+                    ddlDistricts.html('');
+                    $.each(data, function (id, option) {
+                        ddlDistricts.append($('<option></option>').val(option.id).html(option.name));
+                    });
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    console.log('Failed to retrieve districts.');
+                }
+            });
+        });
+    });
+</script>
+
+<input asp-for="Id" type="hidden" />
+
+<div class="inputs">
+    <label asp-for="Name"></label>
+    <div class="input-validate">
+        <input asp-for="Name" placeholder="@T("Address.Fields.Name.PlaceHolder")" />
+        <span asp-validation-for="Name"></span>
+    </div>
+</div>
+<div class="input-group">
+    <div class="inputs">
+        <label asp-for="FirstName"></label>
+        <div class="input-validate">
+            <input asp-for="FirstName" />
+            <span asp-validation-for="FirstName"></span>
+        </div>
+    </div>
+    <div class="inputs">
+        <label asp-for="LastName"></label>
+        <div class="input-validate">
+            <input asp-for="LastName" />
+            <span asp-validation-for="LastName"></span>
+        </div>
+    </div>
+</div>
+<div class="inputs">
+    <label asp-for="Email"></label>
+    <div class="input-validate">
+        <input asp-for="Email" />
+        <span asp-validation-for="Email"></span>
+    </div>
+</div>
+<div class="inputs">
+    <label asp-for="Phone"></label>
+    <div class="input-validate">
+        <faprika-input asp-for="Phone" asp-template="Phone" />
+    </div>
+</div>
+<div class="inputs">
+    <label asp-for="CountryId"></label>
+    <faprika-select asp-for="CountryId" asp-items="Model.AvailableCountries" />
+    @if (Model.ShippingCountryName.HasValue())
+    {
+        <div class="shipping-country-info"><span>@string.Format(T("Address.ShippingCountryInfo").Text, Model.ShippingCountryName)</span></div>
+    }
+</div>
+<div class="input-group">
+    <div class="inputs">
+        <label asp-for="StateProvinceId"></label>
+        <div class="input-validate">
+            <faprika-select asp-for="StateProvinceId" asp-items="Model.AvailableStates" />
+        </div>
+    </div>
+    <div class="inputs">
+        <label asp-for="DistrictId"></label>
+        <div class="input-validate">
+            <faprika-select asp-for="DistrictId" asp-items="Model.AvailableDistricts" />
+        </div>
+    </div>
+</div>
+<div class="inputs">
+    <label asp-for="AddressDetail"></label>
+    <div class="input-validate">
+        <faprika-textarea class="textarea" asp-for="AddressDetail" placeholder="@T("Address.Fields.AddressDetail.PlaceHolder")" />
+        <span asp-validation-for="AddressDetail"></span>
+    </div>
+</div>
+
+@if (Model.InvoiceTypeEnabled)
+{
+    <div class="inputs">
+        <label asp-for="InvoiceTypeId"></label>
+        <div class="input-validate">
+            <faprika-select asp-for="InvoiceTypeId" asp-items="Model.AvailableInvoiceTypes" />
+        </div>
+    </div>
+
+    if (Model.IdentityNumberEnabled)
+    {
+        <div class="inputs individual-type">
+            <label asp-for="IdentityNumber"></label>
+            <div class="input-validate">
+                <input asp-for="IdentityNumber" type="tel" maxlength="11" />
+                <span asp-validation-for="IdentityNumber"></span>
+            </div>
+        </div>
+    }
+
+    if (Model.CompanyEnabled)
+    {
+        <div class="inputs corporate-type">
+            <label asp-for="Company"></label>
+            <div class="input-validate">
+                <input asp-for="Company" />
+                <span asp-validation-for="Company"></span>
+            </div>
+        </div>
+    }
+
+    if (Model.TaxOfficeEnabled)
+    {
+        <div class="inputs corporate-type">
+            <label asp-for="TaxOffice"></label>
+            <div class="input-validate">
+                <input asp-for="TaxOffice" />
+                <span asp-validation-for="TaxOffice"></span>
+            </div>
+        </div>
+    }
+
+    if (Model.TaxNumberEnabled)
+    {
+        <div class="inputs corporate-type">
+            <label asp-for="TaxNumber"></label>
+            <div class="input-validate">
+                <input asp-for="TaxNumber" type="tel" maxlength="11" />
+                <span asp-validation-for="TaxNumber"></span>
+            </div>
+        </div>
+    }
+
+    <script asp-location="Footer">
+        $(document).ready(function () {
+
+            $("#@Html.IdFor(model => model.InvoiceTypeId)").on('change', toggleInvoiceType);
+
+            toggleInvoiceType();
+        });
+
+        function toggleInvoiceType() {
+            var individualTypeId = "@((int)InvoiceType.Individual)";
+
+            var selectedInvoiceTypeId = $("#@Html.IdFor(model => model.InvoiceTypeId)").val();
+            if (selectedInvoiceTypeId == individualTypeId) {
+                $('.individual-type').show();
+                $('.corporate-type').hide();
+            } else {
+                $('.individual-type').hide();
+                $('.corporate-type').show();
+            }
+        }
+    </script>
+}
+
+

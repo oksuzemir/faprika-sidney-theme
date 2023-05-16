@@ -1,0 +1,13 @@
+﻿@model PushNotificationModel
+@{
+    Html.AddScriptParts(ResourceLocation.Footer, "https://www.gstatic.com/firebasejs/4.13.0/firebase.js", excludeFromBundle: true);
+    Html.AddScriptParts(ResourceLocation.Footer, "~/js/public.pushnotification.min.js");
+}
+
+<script asp-location="Footer">
+    $(document).ready(function () {
+        PushNotifications.init("@Model.PublicApiKey", "@Model.SenderId", "@Model.ProjectId", "@Model.AuthDomain", "@Model.StorageBucket",
+            "@Model.DatabaseUrl", "@Url.Action("PushProcess", "Common")");
+        PushNotifications.process();
+    });
+</script>

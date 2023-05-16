@@ -1,0 +1,11 @@
+﻿@model ProductOverviewModel
+
+@if (Model.OtherColorsModels != null && Model.OtherColorsModels.Count > 1)
+{
+    <div class="other-color-options">
+        <div>
+            <span class="other-color-option"></span><span class="other-color-option"></span>
+        </div>
+        <span class="other-color-variant-count">@Model.OtherColorsModels.Count</span>
+    </div>
+}

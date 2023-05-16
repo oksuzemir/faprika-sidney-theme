@@ -1,0 +1,15 @@
+@model Decimal
+@{ 
+    //mask money
+    Html.AppendScriptParts(ResourceLocation.Footer, "~/lib/jquery-maskmoney/jquery.maskMoney.min.js", "~/lib/jquery-maskmoney/jquery.maskMoney.js");
+}
+@Html.TextBoxFor(model => model, ViewData["htmlAttributes"])
+<script>
+    $(document).ready(function() {
+        $("#@Html.IdForModel()").maskMoney({
+            allowZero: true,
+            thousands: '.',
+            decimal: ','
+        });
+    });
+</script>

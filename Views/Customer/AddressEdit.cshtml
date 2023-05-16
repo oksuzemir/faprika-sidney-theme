@@ -1,0 +1,28 @@
+﻿@model AddressModel
+@{
+    //title
+    Html.AddTitleParts(T("Account.CustomerAddresses").Text);
+    Html.AddCssFileParts(ResourceLocation.Head, "~/Themes/Sidney/Content/css/pages/account.min.css");
+}
+
+<section class="page account-page address-edit-page">
+    <div class="page-container">
+        <div class="page-left-sidebar">
+            @await Component.InvokeAsync("CustomerNavigation", new { selectedTabId = CustomerNavigationEnum.Addresses })
+        </div>
+        <div class="page-body">
+            <form asp-route="CustomerAddressEdit" method="post">
+                <div asp-validation-summary="ModelOnly" class="message-error"></div>
+                <div class="page-title">
+                    @T("PageTitle.Address.Edit")
+                </div>
+                @await Html.PartialAsync("_CreateOrUpdateAddress")
+                <div class="buttons">
+                    <button type="submit" class="button save-address-button">
+                        @T("Common.Save")
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>

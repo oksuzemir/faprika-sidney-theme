@@ -1,0 +1,251 @@
+﻿@model VendorModel
+@using Faprika.Core.Domain.Seo
+@inject SeoSettings seoSettings
+@{
+    //title
+    Html.AddTitleParts(!string.IsNullOrEmpty(Model.MetaTitle) ? Model.MetaTitle : Model.Name);
+    //meta
+    Html.AddMetaDescriptionParts(Model.MetaDescription);
+    Html.AddMetaKeywordParts(Model.MetaKeywords);
+
+    if (seoSettings.CanonicalUrlsEnabled)
+    {
+        var vendorUrl = Url.RouteUrl("Vendor", new { SeName = Model.SeName }, this.Url.ActionContext.HttpContext.Request.Scheme);
+        Html.AddCanonicalUrlParts(vendorUrl);
+    }
+
+    //register CSS
+    Html.AddCssFileParts(ResourceLocation.Head, "~/Themes/Sidney/Content/css/pages/catalog.min.css", "~/Themes/Sidney/Content/css/pages/catalog.css");
+}
+
+<div class="page catalog-page sidebar-page default">
+    <div class="autohide-menu">
+        <div class="category-filter">
+            <span>
+                @T("Filtering.SpecificationFilter.Title")
+                @if (Model.PagingFilteringContext.SpecificationFilter.AlreadyFilteredItems.Count > 0)
+                {
+                    <label class="count">@(string.Format(T("Filtering.SpecificationFilter.Count").Text, Model.PagingFilteringContext.SpecificationFilter.AlreadyFilteredItems.Count))</label>
+                }
+            </span>
+        </div>
+        <div class="category-sort">
+            @await Html.PartialAsync("_CatalogSort", Model.PagingFilteringContext)
+        </div>
+    </div>
+    <div class="header-container">
+        <div class="header-wrap">
+            <div class="header-info">
+                <div>
+                    <h1 class="title">@Model.Name</h1>
+                    @*breadcrumb*@
+                    <div class="breadcrumb">
+                        <ul>
+                            <li>
+                                <a href="@Url.RouteUrl("HomePage")" title="@T("Breadcrumb.Top")">@T("Breadcrumb.Top")</a>
+                                <span class="delimiter">></span>
+                            </li>
+                            <li>
+                                <span class="current-item">@Model.Name</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                @if (Model.Products.Count > 0)
+                {
+                    @await Html.PartialAsync("_CatalogHideOutOfStock", Model.PagingFilteringContext)
+                }
+            </div>
+            <div class="header-filters">
+                <div class="filter-wrap">
+                    <div class="filter-left">
+                        @if (Model.PagingFilteringContext.SpecificationFilter.Enabled)
+                        {
+                            @await Html.PartialAsync("_FilterNotFilteredSpecsBox.Default", Model.PagingFilteringContext.SpecificationFilter)
+                        }
+                    </div>
+                    <div class="filter-right">
+                        @if (Model.Products.Count > 0)
+                        {
+                            @await Html.PartialAsync("_CatalogSort", Model.PagingFilteringContext)
+                            @await Html.PartialAsync("_CatalogViewMode", Model.PagingFilteringContext)
+                        }
+                    </div>
+                    <div class="mobile-hide-stock">
+                        @if (Model.Products.Count > 0)
+                        {
+                            @await Html.PartialAsync("_CatalogHideOutOfStock", Model.PagingFilteringContext)
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="page-container">
+        <div class="sidebar">
+            <div class="sidebarOut">
+                <div class="sidebar-header">
+                    <span>@T("Filtering.SpecificationFilter.Title")</span>
+                    <span class="sidebar-close"></span>
+                </div>
+                <div class="sidebar-content">
+                    @if (Model.PagingFilteringContext.SpecificationFilter.Enabled)
+                    {
+                        @await Html.PartialAsync("_FilterFilteredSpecsBox", Model.PagingFilteringContext.SpecificationFilter)
+                    }
+                    @await Component.InvokeAsync("CategoryNavigation", new { currentCategoryId = Model.Id })
+                    @if (Model.PagingFilteringContext.SpecificationFilter.Enabled)
+                    {
+                        @await Html.PartialAsync("_FilterNotFilteredSpecsBox", Model.PagingFilteringContext.SpecificationFilter)
+                    }
+                    @if (Model.PagingFilteringContext.PriceRangeFilter.Enabled)
+                    {
+                        @await Html.PartialAsync("_FilterPriceBox", Model.PagingFilteringContext.PriceRangeFilter)
+                    }
+                    @if (Model.Products.Count > 0)
+                    {
+                        @await Html.PartialAsync("_CatalogHideOutOfStock", Model.PagingFilteringContext)
+                    }
+                </div>
+                @if (Model.PagingFilteringContext.SpecificationFilter.Enabled)
+                {
+                    <div class="sidebar-footer">
+                        <button type="button" onclick="CatalogFilter.applyFilter();return false;">Filtrele</button>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="product-grid">
+            @if (Model.Products.Count > 0)
+            {
+                @*picture*@
+                @if (Model.PictureModel.FullSizeImageUrl.HasValue())
+                {
+                    <div class="catalog-picture">
+                        <img alt="@Model.Name" src="@Model.PictureModel.FullSizeImageUrl" />
+                    </div>
+                }
+
+                <div class="item-grid @(Model.PagingFilteringContext.v == "f" ? "grid-4" : "grid-3")">
+                    @foreach (var product in Model.Products)
+                    {
+                        <div class="product-item">
+                            @await Html.PartialAsync("_ProductBox", product)
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="no-result">
+                    <div class="no-result-content">
+                        <h1>@T("Search.NoResults.Title")</h1>
+                    </div>
+                </div>
+            }
+            @{
+                var pager = Html.Pager(Model.PagingFilteringContext).QueryParam("pagenumber");
+            }
+            @if (!pager.IsEmpty())
+            {
+                <div class="pager">
+                    @pager
+                </div>
+            }
+        </div>
+    </div>
+
+    @*contact vendor*@
+    @if (Model.AllowCustomersToContactVendors)
+    {
+        <div style="background-color: white;padding: 15px 15px 15px 15px; margin-top:10px;">
+            <center>
+                <input type="button" value="Tedarikçi İle İletişime Geç" style="color: #4b71fc; border: 0; font-weight: bold; font-size: large; cursor: pointer;" onclick="setLocation('@Url.RouteUrl("ContactVendor", new { vendorId = Model.Id })')" />
+            </center>
+        </div>
+    }
+    @*description*@
+    @if (Model.Description.HasValue())
+    {
+        <div class="description-wrapper">
+            <div class="description-container">
+                @Html.Raw(Model.Description)
+            </div>
+        </div>
+    }
+</div>
+
+<script asp-location="Footer">
+    //Manufacturer Lazy Load Funtion
+    $(document).ready(function () {
+        $('.catalog-picture img').lazy({
+            effect: "fadeIn",
+            effectTime: 500,
+            threshold: 0,
+            afterLoad: function (element) {
+                //add load complete classes
+                element.addClass("lazy-complete");
+            }
+        });
+    });
+
+    //Manufacturer Fixed Head
+    $(document).ready(function () {
+        if (ResponsiveToolkit.is('>md')) {
+            $(window).on('scroll', function () {
+                var sticky = $('.header-wrap');
+                var stickyInner = $('.header-filters');
+                var header = $('.header').outerHeight();
+                var topFilter = $('.header-info').outerHeight();
+                var marginOffset = parseInt($('.catalog-page').css("margin-top"));
+                var height = header + topFilter + marginOffset;
+                scroll = $(window).scrollTop();
+                if (scroll >= height) sticky.addClass("fixed-filters"), stickyInner.addClass("fixed-container");
+                else sticky.removeClass("fixed-filters"), stickyInner.removeClass("fixed-container")
+            });
+        }
+    });
+
+
+    //Mobile Filter Open/Close Funtion
+    (function ($) {
+        var trigger = $('.category-filter span');
+        var filter = $('.sidebar');
+        var close = $('.sidebar-close');
+
+        function openFilter() {
+            filter.show();
+            $('body').css('overflow', 'hidden');
+        }
+
+        function closeFilter() {
+            filter.hide();
+            $('body').css('overflow', 'scroll');
+        }
+
+        $(document).ready(function () {
+            trigger.on('click', openFilter);
+            close.on('click', closeFilter);
+        });
+    })(jQuery);
+
+    //Mobile Filter FilterBox Collapse Function
+    (function ($) {
+        var filterItem = $('.filter-box .title');
+
+        function collapseHandler() {
+            var $this = $(this);
+            var isActive = $this.parent('.filter-box').hasClass('active');
+
+            $(".filter-box").removeClass("active");
+
+            if (!isActive) {
+                $this.parent('.filter-box').addClass('active');
+            }
+        }
+
+        $(document).ready(function () {
+            filterItem.on('click', collapseHandler);
+        });
+    })(jQuery);
+</script>

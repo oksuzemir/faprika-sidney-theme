@@ -1,0 +1,18 @@
+﻿@model ProductDetailsModel.AddToCartModel
+
+<div class="add-to-cart">
+    <button type="button" id="add-to-cart-button-@Model.ProductId" class="button add-to-cart-button" data-productid="@Model.ProductId" onclick="AjaxCart.addproducttocart_details('@Url.RouteUrl("AddProductCombinationToCart-Details", new {productId = Model.ProductId})', '#product-details-form', this);return false;">
+        <span>@T("ShoppingCart.AddToCart")</span>
+    </button>
+    <script asp-location="Footer">
+        //when a customer clicks 'Enter' button we submit the "add to cart" button (if visible)
+        $(document).ready(function () {
+            $("#@Html.IdFor(model => model.EnteredQuantity)").on('keydown', function (e) {
+                if (event.keyCode == 13) {
+                    $("#add-to-cart-button-@Model.ProductId").trigger('click');
+                    return false;
+                }
+            });
+        });
+    </script>
+</div>

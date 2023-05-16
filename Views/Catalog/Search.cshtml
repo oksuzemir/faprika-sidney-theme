@@ -1,0 +1,194 @@
+﻿@model Faprika.Web.Models.Catalog.SearchModel
+@{
+    //title
+    Html.AddTitleParts(T("PageTitle.Search").Text);
+    Html.AddCssFileParts(ResourceLocation.Head, "~/Themes/Sidney/Content/css/pages/search.min.css" , "~/Themes/Sidney/Content/css/pages/search.css");
+    Html.AppendScriptParts(ResourceLocation.Footer, "~/lib/sticky-sidebar/sticky-sidebar.min.js", "~/lib/sticky-sidebar/sticky-sidebar.js");
+}
+<div class="page search-page">
+    @if (Model.Products.Count > 0)
+    {
+        <div class="autohide-menu">
+            <div class="category-filter">
+                <span>
+                    @T("Filtering.SpecificationFilter.Title")
+                    @if (Model.PagingFilteringContext.SpecificationFilter.AlreadyFilteredItems.Count > 0)
+                    {
+                        <label class="count">@(string.Format(T("Filtering.SpecificationFilter.Count").Text, Model.PagingFilteringContext.SpecificationFilter.AlreadyFilteredItems.Count))</label>
+                    }
+                </span>
+            </div>
+            <div class="category-sort">
+                @await Html.PartialAsync("_CatalogSort", Model.PagingFilteringContext)
+            </div>
+        </div>
+
+        <div class="page-container">
+            <div class="sidebar sidebar-fixed">
+                <div class="sidebar__inner">
+                    <div class="sidebar-header">
+                        <span>@T("Filtering.SpecificationFilter.Title")</span>
+                        <span class="sidebar-close"></span>
+                    </div>
+                    <div class="sidebar-content">
+                        @if (Model.PagingFilteringContext.SpecificationFilter.Enabled)
+                        {
+                            @await Html.PartialAsync("_FilterFilteredSpecsBox", Model.PagingFilteringContext.SpecificationFilter)
+                        }
+                        @await Component.InvokeAsync("CategoryNavigation")
+                        @if (Model.PagingFilteringContext.SpecificationFilter.Enabled)
+                        {
+                            @await Html.PartialAsync("_FilterNotFilteredSpecsBox", Model.PagingFilteringContext.SpecificationFilter)
+                        }
+                        @if (Model.PagingFilteringContext.PriceRangeFilter.Enabled)
+                        {
+                            @await Html.PartialAsync("_FilterPriceBox", Model.PagingFilteringContext.PriceRangeFilter)
+                        }
+                    </div>
+                    @if (Model.PagingFilteringContext.SpecificationFilter.Enabled)
+                    {
+                        <div class="sidebar-footer">
+                            <button type="button" onclick="CatalogFilter.applyFilter();return false;">Filtrele</button>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="product-grid">
+                <div class="catalog-header">
+                    <div class="category-info">
+                        <h1 class="title">@Model.q</h1>
+                        @*search breadcrumb*@
+                        <div class="breadcrumb">
+                            <ul>
+                                <li>
+                                    <a href="@Url.RouteUrl("HomePage")" title="@T("Breadcrumb.Top")">@T("Breadcrumb.Top")</a>
+                                    <span class="delimiter">></span>
+                                </li>
+                                <li>
+                                    <span class="current-item">@T("PageTitle.Search")</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="category-options">
+                        @if (Model.Products.Count > 0)
+                        {
+                            @await Html.PartialAsync("_CatalogHideOutOfStock", Model.PagingFilteringContext)
+                            <div class="options-bottom">
+                                @await Html.PartialAsync("_CatalogSort", Model.PagingFilteringContext)
+                                @await Html.PartialAsync("_CatalogViewMode", Model.PagingFilteringContext)
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="item-grid @(Model.PagingFilteringContext.v == "f" ? "grid-4" : "grid-3")">
+                    @foreach (var product in Model.Products)
+                    {
+                        <div class="product-item">
+                            @await Html.PartialAsync("_ProductBox", product)
+                        </div>
+                    }
+                </div>
+                @{
+                    var pager = Html.Pager(Model.PagingFilteringContext).QueryParam("pagenumber");
+                }
+                @if (!pager.IsEmpty())
+                {
+                    <div class="pager">
+                        @pager
+                    </div>
+                }
+            </div>
+        </div>
+    }
+    @if (!string.IsNullOrEmpty(Model.Warning))
+    {
+        <div class="no-result-container">
+            <div class="no-result-content">
+                <h1>@T("Search.NoResults.Title")</h1>
+                <h3><b>" @Model.q "</b> @Model.Warning</h3>
+                <div class="search-suggestions">
+                    <span>@T("Search.NoResults.Suggestion1")</span>
+                    <span>@T("Search.NoResults.Suggestion2")</span>
+                    <span>@T("Search.NoResults.Suggestion3")</span>
+                </div>
+                <a href="@Url.RouteUrl("HomePage")">
+                    @T("Common.StartShopping")
+                </a>
+            </div>
+        </div>
+    }
+    @if (Model.NoResults)
+    {
+        <div class="no-result-container">
+            <div class="no-result-content">
+                <h1>@T("Search.NoResults.Title")</h1>
+                <h3><b>" @Model.q "</b> @T("Search.NoResults.Text")</h3>
+                <div class="search-suggestions">
+                    <span>@T("Search.NoResults.Suggestion1")</span>
+                    <span>@T("Search.NoResults.Suggestion2")</span>
+                    <span>@T("Search.NoResults.Suggestion3")</span>
+                </div>
+                <a href="@Url.RouteUrl("HomePage")">
+                    @T("Common.StartShopping")
+                </a>
+            </div>
+        </div>
+    }
+</div>
+
+<script asp-location="Footer">
+    //Category Fixed Sidebar
+    $(document).ready(function () {
+        if (ResponsiveToolkit.is('>md')) {
+            var FixedSidebar = new StickySidebar('.sidebar-fixed', {
+                topSpacing: 20,
+                bottomSpacing: 30,
+                containerSelector: '.page-container',
+                innerWrapperSelector: '.sidebar__inner'
+            });
+        }
+    });
+
+    //Mobile Filter Open/Close Funtion
+    (function ($) {
+        var trigger = $('.category-filter span');
+        var filter = $('.sidebar');
+        var close = $('.sidebar-close');
+
+        function openFilter() {
+            filter.show();
+            $('body').css('overflow', 'hidden');
+        }
+
+        function closeFilter() {
+            filter.hide();
+            $('body').css('overflow', 'scroll');
+        }
+
+        $(document).ready(function () {
+            trigger.on('click', openFilter);
+            close.on('click', closeFilter);
+        });
+    })(jQuery);
+
+    //Mobile Filter FilterBox Collapse Function
+    (function ($) {
+        var filterItem = $('.filter-box .title');
+
+        function collapseHandler() {
+            var $this = $(this);
+            var isActive = $this.parent('.filter-box').hasClass('active');
+
+            $(".filter-box").removeClass("active");
+
+            if (!isActive) {
+                $this.parent('.filter-box').addClass('active');
+            }
+        }
+
+        $(document).ready(function () {
+            filterItem.on('click', collapseHandler);
+        });
+    })(jQuery);
+</script>

@@ -1,0 +1,43 @@
+﻿@model ShoppingCartModel.DiscountBoxModel
+
+<div class="coupon-box">
+    <div class="coupon-box-title">
+        <span>@T("ShoppingCart.DiscountCouponCode")</span>
+        <span class="hint">
+            @T("ShoppingCart.DiscountCouponCode.Tooltip")
+        </span>
+    </div>
+
+    <div class="coupon-code inputs">
+        <input name="discountcouponcode" id="discountcouponcode" type="text" class="discount-coupon-code" />
+        <button type="submit" name="applydiscountcouponcode" id="applydiscountcouponcode" class="button apply-discount-coupon-code-button one-submit-button">
+            <span>@T("ShoppingCart.DiscountCouponCode.Button")</span>
+        </button>
+    </div>
+    @foreach (var message in Model.Messages)
+    {
+        <div class="message @(Model.IsApplied ? "message-success" : "message-failure")">
+            @message
+        </div>
+    }
+    @foreach (var discount in Model.AppliedDiscountsWithCodes)
+    {
+        <div class="current-code">
+            <span class="applied-discount-code">@discount.CouponCode</span>
+            <button type="submit" name="removediscount-@discount.Id" class="remove-discount-button one-submit-button">
+               
+            </button>
+        </div>
+    }
+    <script type="text/javascript" asp-location="Footer">
+        $(document).ready(function () {
+            $('#discountcouponcode').on('keydown', function (e) {
+                if (event.keyCode == 13) {
+                    $('#applydiscountcouponcode').click();
+                    return false;
+                }
+            });
+        });
+    </script>
+</div>
+

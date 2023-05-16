@@ -1,0 +1,1506 @@
+﻿@import "../helpers/all";
+@import "../variables/variables-dev";
+
+.checkout-page {
+    margin: 10px 0 70px 0;
+
+    form {
+        @include flexbox;
+        @include align-items(flex-start);
+        @include flex-direction(column);
+
+        .page-body {
+            @include flex(1);
+            @include flexbox;
+            @include flex-direction(column);
+            margin-bottom: 10px;
+            width: 100%;
+
+            @at-root .ie & {
+                flex: 1 1 auto;
+            }
+
+            .address-top {
+                @include flexbox();
+                @include justify-content(space-between);
+                @include align-items(center);
+                margin-bottom: 10px;
+
+                .address-search {
+                    @include flex(1);
+                    margin-left: 10px;
+                    position: relative;
+
+                    input {
+                        height: 35px;
+                        border: none;
+                        padding: 0 15px;
+                        color: $gray-light;
+                        width: calc(100% - 40px);
+                        border-left: 1px solid $color-border;
+                        border-top: 1px solid $color-border;
+                        border-bottom: 1px solid $color-border;
+                        border-top-left-radius: $border-base;
+                        border-bottom-left-radius: $border-base;
+                        background-color: #ffffff;
+                        font-size: 13px;
+
+
+                        &::placeholder {
+                            color: $gray-light;
+                            opacity: 1;
+                        }
+
+                        &:-ms-input-placeholder {
+                            color: $gray-light;
+                        }
+
+                        &::-ms-input-placeholder {
+                            color: $gray-light;
+                        }
+                    }
+
+                    button {
+                        height: 35px;
+                        width: 40px;
+                        padding: 0 10px;
+                        border: none;
+                        border-left: 1px solid $color-border;
+                        border-top: 1px solid $color-border;
+                        border-right: 1px solid $color-border;
+                        border-bottom: 1px solid $color-border;
+                        border-top-right-radius: $border-base;
+                        border-bottom-right-radius: $border-base;
+                        position: absolute;
+                        background-color: #ffffff;
+                        right: 0;
+
+                        &:before {
+                            content: "\f002";
+                            font-family: "Faprika";
+                            color: $color-primary;
+                            font-size: 18px;
+                        }
+
+                        &:hover {
+                            background: $color-primary;
+                            border-top-right-radius: $border-base;
+                            border-bottom-right-radius: $border-base;
+
+                            &:before {
+                                color: #fff;
+                            }
+                        }
+                    }
+                }
+
+                .buttons {
+                    margin: 0 !important;
+
+                    button {
+                        height: 33px !important;
+                        line-height: 33px !important;
+                    }
+                }
+            }
+        }
+
+        .page-right-sidebar {
+            @include border($color-border, $border-base);
+            background: #fff;
+            width: 100%;
+
+            .sidebar-header {
+                font-size: 14px;
+                color: $gray-darker;
+                font-weight: 600;
+                line-height: 49px;
+                border-bottom: 1px solid $color-border;
+                padding: 0 15px;
+            }
+
+            .cart-wrap {
+                .cart-item-header {
+                    display: none;
+                }
+
+                .cart-item {
+                    @include flexbox;
+                    padding: 10px;
+                    border-bottom: 1px solid $color-border;
+
+
+                    .product-image {
+                        margin-right: 15px;
+
+                        img {
+                            max-width: 50px;
+                        }
+                    }
+
+                    .product-details {
+                        font-size: 12px;
+                        line-height: 18px;
+                        width: 100%;
+
+                        .product-name {
+                            color: $gray-darker;
+                            padding-bottom: 5px;
+                            font-weight: 600;
+                            display: block;
+                        }
+
+                        .product-unit-price {
+                            display: none;
+                        }
+
+                        .variant-box {
+                            @include flexbox;
+                            @include justify-content(space-between);
+
+                            .product-quantity {
+                                padding: 0;
+                            }
+
+                            .product-total-price {
+                                color: $color-primary;
+                                font-weight: 600;
+                            }
+                        }
+                    }
+                }
+            }
+
+            .order-totals {
+                padding: 15px 15px 0;
+
+                .total-info {
+                    table {
+                        width: 100%;
+
+                        tr {
+                            @include flexbox;
+                            @include justify-content(space-between);
+
+                            td {
+                                font-size: 13px;
+                                color: $gray-darker;
+                                line-height: 24px;
+
+                                @at-root .ie & {
+                                    &.cart-total-right {
+                                        @include flexbox;
+                                    }
+                                }
+                            }
+
+                            &.order-total {
+                                border-top: 1px solid $color-border;
+                                margin-top: 10px;
+
+                                td {
+                                    text-transform: uppercase;
+                                    font-weight: 600;
+                                    line-height: 40px;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            .button {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                z-index: 999;
+                background: #fff;
+                padding: 10px;
+                border-top: 1px solid $color-border;
+
+                button {
+                    @include button($color-primary, $btn-height-md);
+                    width: 100%;
+                }
+            }
+        }
+    }
+
+    &.address-page {
+        form {
+            .page-body {
+
+                .address {
+                    @include flexbox;
+                    @include flex-wrap(wrap);
+                    margin: -10px;
+
+                    .address-item {
+                        width: 100%;
+                        padding: 10px;
+
+                        .address-content {
+                            @include border($color-border, $border-base);
+                            background: #fff;
+
+                            .address-header {
+                                position: relative;
+                                border-bottom: 1px solid $color-border;
+                                padding: 0 15px;
+
+                                h1 {
+                                    font-size: 13px;
+                                    color: $gray-darker;
+                                    font-weight: 600;
+                                    line-height: 49px;
+                                }
+
+                                .address-item-edit {
+                                    position: absolute;
+                                    top: 50%;
+                                    right: 15px;
+                                    transform: translateY(-50%);
+                                    cursor: pointer;
+
+                                    &:before {
+                                        content: "\f044";
+                                        font-family: "Faprika";
+                                        color: $color-success;
+                                    }
+                                }
+                            }
+
+                            .address-box {
+                                padding: 15px;
+                                margin: 0;
+
+                                li {
+                                    line-height: 24px;
+                                }
+                            }
+
+                            .select-options {
+                                @include flexbox;
+                                border-top: 1px solid $color-border;
+
+
+                                .inputs {
+                                    @include flexbox;
+                                    @include justify-content(center);
+                                    @include flex(1);
+                                    height: 40px;
+
+                                    @at-root .ie & {
+                                        flex: 1 1 auto;
+                                    }
+
+                                    label {
+                                        &:before {
+                                            width: 18px;
+                                            height: 18px;
+                                        }
+                                    }
+
+
+                                    &:first-child {
+                                        border-right: 1px solid $color-border;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                .buttons {
+                    margin: 0 0 10px 0;
+
+                    button {
+                        @include button($color-success, $btn-height-md);
+                        width: 100%;
+                    }
+                }
+
+                .new-address-modal {
+                    display: none;
+                }
+
+                .no-address {
+                    @include border($color-border, $border-base);
+                    background: #fff;
+                    width: 100%;
+                    padding: 8vh 0;
+                    @include centered;
+                    margin: 0;
+
+                    span {
+                        font-size: 13px;
+                        color: $gray-dark;
+                        line-height: 24px;
+                        @include flexbox;
+                        @include align-items(center);
+                        @include flex-direction(column);
+                        text-align: center;
+
+                        &:before {
+                            content: "\f2bb";
+                            font-family: "Faprika";
+                            font-size: 70px;
+                            color: $body-bg;
+                            margin-bottom: 10px;
+                            line-height: 70px;
+                        }
+                    }
+                }
+            }
+        }
+
+
+        @include mq(sm) {
+            form {
+                .page-body {
+
+                    .address-top {
+                        margin-bottom: 20px;
+
+                        .address-search {
+                            margin-left: 20px;
+                        }
+                    }
+
+                    .address {
+                        .address-item {
+                            width: 50%;
+                        }
+                    }
+
+                    .buttons {
+                        margin: 0 0 10px 0;
+                    }
+                }
+            }
+        }
+
+        @include mq(md) {
+            form {
+                .page-body {
+                    display: block;
+
+                    .address {
+                        margin: -15px;
+
+                        .address-item {
+                            padding: 15px;
+                        }
+                    }
+
+                    .buttons {
+                        margin: 10px 0 10px 0;
+
+                        button {
+                            max-width: 170px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    &.address-page-add {
+        form {
+            .page-body {
+                @include border($color-border, $border-base);
+                background: #fff;
+
+                .page-title {
+                    padding: 0 10px;
+                    border-bottom: 1px solid $color-border;
+                    font-size: 15px;
+                    color: $gray-darker;
+                    font-weight: 600;
+                    line-height: 49px;
+                }
+
+                .inputs {
+                    @include flex-wrap(wrap);
+
+                    > label {
+                        width: 100%;
+                        margin-bottom: 10px;
+                    }
+
+                    input {
+                        @include flex(initial);
+                        width: 100%;
+                    }
+
+                    select {
+                        margin: 0;
+                        max-width: 100%;
+                    }
+
+                    .shipping-country-info {
+                        margin: 1px 0 0 -60px;
+
+                        @include tooltip(200px, "\f059");
+
+                        @include mq(sm, max) {
+                            span {
+                                margin-left: -150px;
+
+                                &:after {
+                                    left: 75%;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                button {
+                    @include button($color-primary, $btn-height-md);
+                    width: 100%;
+                    margin-top: 10px;
+                }
+
+                .inputs {
+                    padding: 10px 15px;
+                }
+
+                .buttons {
+                    padding: 0 15px 15px;
+                }
+            }
+        }
+
+        .page-right-sidebar {
+            .button {
+                @include flexbox;
+                @include justify-content(space-between);
+
+                @include mq(md) {
+                    @include flex-direction(column);
+                }
+
+                button {
+                    &:first-child {
+                        margin-right: 5px;
+
+                        @include mq(md) {
+                            margin: 0 0 10px 0;
+                        }
+                    }
+
+                    &:last-child {
+                        margin-left: 5px;
+
+                        @include mq(md) {
+                            margin: 0;
+                        }
+                    }
+
+                    &.back-step-button {
+                        @include button($color-danger, $btn-height-md);
+                    }
+                }
+            }
+        }
+    }
+
+    &.shipping-method-page {
+        form {
+            .page-body {
+
+                .shipping-method {
+                    @include border($color-border, $border-base);
+                    background: #fff;
+
+                    .method-header {
+                        border-bottom: 1px solid $color-border;
+                        padding: 0 15px;
+                        line-height: 49px;
+                        font-size: 15px;
+                        color: $gray-darker;
+                        font-weight: 600;
+                    }
+
+                    .method {
+                        @include flexbox;
+                        @include align-items(center);
+                        @include justify-content(space-between);
+                        height: 60px;
+                        margin: 0 15px;
+
+                        .method-info {
+                            @include flexbox;
+
+                            @at-root .ie & {
+                                .inputs.options {
+                                    input[type=radio]:checked + label:after {
+                                        top: 4px;
+                                    }
+                                }
+                            }
+                        }
+
+                        .method-price {
+                            span {
+                                font-size: 13px;
+                                color: $gray-darker;
+                                font-weight: 600;
+
+                                &.free-shipping {
+                                    color: $color-danger;
+                                }
+                            }
+                        }
+
+                        &:not(:last-child) {
+                            border-bottom: 1px solid $color-border;
+                        }
+                    }
+
+                    .message-error {
+                        @include centered;
+                        @include flex-direction(column);
+                        background: #fff;
+                        margin: 10px 0;
+                        padding: 8vh 0;
+
+                        li {
+                            font-weight: 600;
+                        }
+                    }
+                }
+            }
+        }
+
+        @include mq(md) {
+            form {
+            }
+        }
+    }
+
+    &.payment-info-page {
+        form {
+            .page-body {
+
+                .checkout-selections {
+                    @include flexbox;
+                    @include flex-wrap(wrap);
+                    margin: 0 -5px;
+
+                    .selection {
+                        margin-bottom: 10px;
+                        @include flex(0 33.333333%);
+                        max-width: 33.333333%;
+                        padding: 0 5px;
+
+                        @at-root .ie & {
+                            flex: 1 1 auto;
+                        }
+
+                        &-card {
+                            @include border($color-border, $border-base);
+                            background: #fff;
+                            height: 100%;
+                            position: relative;
+
+                            .selection-head {
+                                border-bottom: 1px solid $color-border;
+                                padding: 10px;
+
+                                .title {
+                                    font-size: 14px;
+                                    color: $gray-darker;
+                                    font-weight: 600;
+                                    padding-left: 30px;
+                                    line-height: 20px;
+
+                                    &:before {
+                                        content: "\f00c";
+                                        font-family: "Faprika";
+                                        position: absolute;
+                                        color: $color-primary;
+                                        font-size: 20px;
+                                        font-weight: 400;
+                                        left: 10px;
+                                    }
+                                }
+
+                                .edit-selection {
+                                    line-height: 0;
+
+                                    &:before {
+                                        content: "\f044";
+                                        font-family: "Faprika";
+                                        position: absolute;
+                                        color: $color-success;
+                                        font-size: 14px;
+                                        font-weight: 400;
+                                        right: 10px;
+                                        top: 20px;
+                                    }
+                                }
+                            }
+
+                            .details {
+                                line-height: 18px;
+                                padding: 10px;
+                                display: block;
+
+                                span {
+                                    display: inline-block;
+                                }
+
+                                &.truck {
+                                    line-height: 36px;
+                                }
+
+
+                                img {
+                                    max-height: 36px;
+                                    display: inline-block;
+                                    float: right;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                .reward-points {
+                    @include border($color-border, $border-base);
+                    background: #fff;
+                    margin-bottom: 10px;
+
+                    &-header {
+                        font-size: 15px;
+                        color: $gray-darker;
+                        font-weight: 600;
+                        line-height: 49px;
+                        border-bottom: 1px solid $color-border;
+                        padding: 0 15px;
+                    }
+
+                    &-content {
+
+                        a {
+                            display: block;
+                            position: relative;
+                            padding: 15px 15px 15px 40px;
+                            line-height: 20px;
+
+                            &:before {
+                                content: "";
+                                position: absolute;
+                                width: 20px;
+                                height: 20px;
+                                @include border($color-border, $border-base);
+                                left: 10px;
+                                top: 50%;
+                                transform: translateY(-50%);
+                                @include centered;
+                            }
+
+                            &.active {
+                                &:before {
+                                    content: "\f00c";
+                                    font-family: "Faprika";
+                                    position: absolute;
+                                    @include border($color-border, $border-base);
+                                    color: $color-primary;
+                                    font-size: 13px;
+                                    font-weight: 600;
+                                }
+                            }
+                        }
+
+                        .reward-points-inputs {
+                            position: relative;
+                            margin: 0 10px 10px;
+                            max-width: 400px;
+
+                            input {
+                                height: 35px;
+                                border: none;
+                                padding: 0 15px;
+                                color: $gray-light;
+                                width: calc(100% - 40px);
+                                border-left: 1px solid $color-border;
+                                border-top: 1px solid $color-border;
+                                border-bottom: 1px solid $color-border;
+                                border-top-left-radius: $border-base;
+                                border-bottom-left-radius: $border-base;
+                                background-color: #ffffff;
+                                font-size: 13px;
+
+
+                                &::placeholder {
+                                    color: $gray-light;
+                                    opacity: 1;
+                                }
+
+                                &:-ms-input-placeholder {
+                                    color: $gray-light;
+                                }
+
+                                &::-ms-input-placeholder {
+                                    color: $gray-light;
+                                }
+                            }
+
+                            button {
+                                height: 35px;
+                                width: 40px;
+                                padding: 0 10px;
+                                border: none;
+                                border-left: 1px solid $color-border;
+                                border-top: 1px solid $color-border;
+                                border-right: 1px solid $color-border;
+                                border-bottom: 1px solid $color-border;
+                                border-top-right-radius: $border-base;
+                                border-bottom-right-radius: $border-base;
+                                position: absolute;
+                                background-color: #ffffff;
+                                right: 0;
+                                font-size: 0;
+
+                                &:before {
+                                    content: "\f00c";
+                                    font-family: "Faprika";
+                                    color: $color-primary;
+                                    font-size: 18px;
+                                }
+
+                                &:hover {
+                                    background: $color-primary;
+                                    border-top-right-radius: $border-base;
+                                    border-bottom-right-radius: $border-base;
+
+                                    &:before {
+                                        color: #fff;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                .payment-tabs {
+
+
+                    &-header {
+                        @include flexbox;
+
+                        a {
+                            font-size: 13px;
+                            color: $gray-darker;
+                            font-weight: 600;
+                            line-height: 48px;
+                            display: block;
+                            border: 1px solid $color-border;
+                            border-bottom: 0;
+                            background: #fff;
+                            margin-right: -1px;
+                            text-align: center;
+                            width: 100%;
+
+                            &.active {
+                                color: #fff;
+                                background: $color-primary;
+                            }
+
+                            @include mq(sm) {
+                                padding: 0 50px;
+                                width: auto;
+                            }
+                        }
+                    }
+
+                    &-content {
+                        padding: 15px;
+                        border: 1px solid $color-border;
+                        border-radius: 0 0 3px 3px;
+                        background: #fff;
+
+                        .stored-card {
+
+                            .sc-select {
+                                @include flex-direction(column);
+                                @include align-items(start);
+                                white-space: nowrap;
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+
+                                label {
+                                    font-size: 12px;
+                                    color: $gray-dark;
+                                    font-weight: 600;
+                                    white-space: nowrap;
+                                    overflow: hidden;
+                                    text-overflow: ellipsis;
+                                }
+
+                                select {
+                                    max-width: 100%;
+                                }
+
+                                &:not(.options) {
+                                    label {
+                                        margin-bottom: 10px;
+                                    }
+                                }
+                            }
+
+                            .sc-delete {
+
+                                button {
+                                    @include button($color-danger, $btn-height-sm);
+                                    width: 100%
+                                }
+                            }
+                        }
+
+                        .credit-card-wrap {
+                            @include flexbox;
+                            @include flex-direction(column);
+
+                            .credit-cart-details {
+                                @include flex(1);
+
+                                @at-root .ie & {
+                                    flex: 1 1 auto;
+                                }
+
+                                .inputs {
+                                    @include flex-direction(column);
+                                    @include align-items(flex-start);
+                                    white-space: nowrap;
+                                    overflow: hidden;
+                                    text-overflow: ellipsis;
+
+                                    .input-validate {
+                                        max-width: 100%;
+                                    }
+
+                                    label {
+                                        font-size: 12px;
+                                        color: $gray-darker;
+                                        font-weight: 600;
+                                        white-space: nowrap;
+                                        overflow: hidden;
+                                        text-overflow: ellipsis;
+                                        width: 100%;
+                                    }
+
+                                    input {
+                                        width: 100% !important;
+                                    }
+
+                                    select {
+                                        max-width: 100%;
+                                    }
+
+                                    &:not(.options) {
+                                        label {
+                                            margin-bottom: 10px;
+                                        }
+                                    }
+                                }
+
+                                .validation-summary-errors {
+                                    color: red;
+                                    padding-bottom: 5px;
+                                }
+                            }
+
+                            .installment-box {
+                                @include flex(1);
+                                margin-top: 10px;
+
+                                @at-root .ie & {
+                                    flex: 1 1 auto;
+                                    overflow: hidden;
+                                }
+
+                                .payment-installments {
+
+                                    @at-root .ie & {
+                                        @include flexbox;
+                                        @include flex-direction(column);
+                                    }
+
+                                    span {
+                                        font-size: 12px;
+                                        font-weight: 600;
+                                        color: $gray-darker;
+                                        line-height: 16px;
+                                        display: block;
+                                        margin-bottom: 10px;
+                                    }
+
+                                    .installment-info {
+                                        @include border($color-border, $border-base);
+                                        border: 1px dashed #e2e6eb;
+                                        width: 100%;
+                                        min-height: 135px;
+                                        background-color: #ffffff;
+                                        @include centered;
+                                        text-align: center;
+                                        margin-bottom: 10px;
+                                    }
+
+                                    table {
+                                        border-collapse: collapse;
+                                        width: 100%;
+
+                                        thead {
+                                            th {
+                                                height: 27px;
+                                                padding: 0;
+                                                font-size: 13px;
+                                                font-weight: 600;
+                                                color: $gray-darker;
+                                            }
+                                        }
+
+                                        tbody {
+                                            font-size: 12px;
+
+                                            td {
+                                                border: 1px solid $color-border;
+                                                padding: 0 10px;
+
+
+                                                strong {
+                                                    color: $gray-darker;
+                                                    font-weight: 600;
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    & > .inputs.options {
+                                        float: right;
+                                        margin: 10px 0 0 0;
+                                        color: $color-success;
+                                        font-weight: 600;
+                                    }
+                                }
+
+                                .payment-securty-info {
+                                    margin-top: 15px;
+
+                                    span {
+                                        font-size: 12px;
+                                        font-weight: 600;
+                                        color: $gray-darker;
+                                        line-height: 16px;
+                                        margin-bottom: 10px;
+                                        display: block;
+                                    }
+
+                                    p {
+                                        font-size: 12px;
+                                        line-height: 18px;
+                                        color: $gray-dark;
+                                    }
+                                }
+                            }
+                        }
+
+                        .info {
+                            &#payment-info-block {
+                                .cashondelivery-description {
+                                    span {
+                                        font-size: 12px;
+                                        font-weight: 600;
+                                        color: $gray-darker;
+                                        line-height: 16px;
+                                        margin-bottom: 10px;
+                                        display: block;
+                                    }
+
+                                    p {
+                                        font-size: 12px;
+                                        line-height: 18px;
+                                        color: $gray-dark;
+                                        padding-bottom: 15px;
+                                        margin-bottom: 15px;
+                                        border-bottom: 1px solid $color-border;
+                                    }
+                                }
+
+                                .cashondelivery-restricted {
+                                    background-color: lighten($color-info, 40%);
+                                    border-left: 3px solid $color-info;
+                                    color: $color-info;
+                                    color: $color-info;
+                                    padding: 15px;
+                                    margin: 0 0 10px 0;
+                                }
+
+                                .inputs {
+                                    &.options {
+                                        .cashondelivery-method {
+                                            span {
+                                                font-size: 12px;
+                                                font-weight: 600;
+                                                color: $gray-darker;
+                                                line-height: 16px;
+                                                margin-bottom: 10px;
+                                                display: block;
+                                            }
+                                        }
+
+                                        p {
+                                            margin-bottom: 10px;
+                                            line-height: 10px;
+
+                                            label {
+                                                display: inline-block;
+
+                                                &:after {
+                                                    left: 4px;
+                                                    top: 5px;
+                                                }
+                                            }
+
+                                            .cashondelivery-additionalfee {
+                                                font-weight: 600;
+                                            }
+
+                                            &:last-child {
+                                                margin-bottom: 0;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        @include mq(xs, max) {
+            form {
+                .page-body {
+                    .payment-tabs {
+                        &-content {
+                            .stored-card {
+                                @include flex-wrap(wrap);
+                                position: relative;
+
+                                .sc-name {
+                                    @include flex(1);
+
+                                    @at-root .ie & {
+                                        flex: 1 1 auto;
+                                    }
+                                }
+
+                                .sc-select {
+                                    margin-right: 0;
+                                    flex: 0 50%;
+                                    max-width: 100%;
+                                    position: relative;
+
+                                    select {
+                                        width: 100%;
+                                    }
+                                }
+
+                                .sc-delete {
+                                    width: 100%;
+
+                                    button {
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        @include mq(sm) {
+            form {
+                .page-body {
+                    .reward-points {
+                        &-content {
+                            a {
+                            }
+                        }
+                    }
+
+                    .payment-tabs {
+                        .credit-card-wrap {
+                            @include flex-direction(row);
+
+                            .credit-cart-details {
+                                margin-right: 30px;
+                                max-width: 50%;
+                            }
+
+                            .installment-box {
+                                margin: 0;
+
+                                .payment-installments {
+
+                                    .installment-info {
+                                        height: 100%;
+                                        min-height: 170px;
+
+                                        span {
+                                            margin-bottom: 0;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        @include mq(md, max) {
+            form {
+                .page-body {
+                    .payment-methods {
+                        .checkout-selections {
+                            @include flex-direction(column);
+
+                            .selection {
+                                max-width: 100%;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    &.order-completed-page {
+        .page-container {
+
+            .order-completed {
+                @include centered;
+                @include flex-direction(column);
+                @include border($color-border, $border-base);
+                background: #fff;
+                margin: 10px 0;
+                padding: 8vh 0;
+
+                h1 {
+                    font-size: 15px;
+                    font-weight: 700;
+                    color: $color-success;
+                    position: relative;
+                    line-height: 15px;
+                    @include flexbox;
+                    @include flex-direction(column);
+                    @include align-items(center);
+                    margin-bottom: 15px;
+
+                    &:before {
+                        content: "\f058";
+                        font-family: "Faprika";
+                        color: $color-success;
+                        font-size: 70px;
+                        line-height: 70px;
+                        font-weight: 300;
+                        margin-bottom: 30px;
+                        left: 0;
+                    }
+                }
+
+                strong {
+                    font-size: 15px;
+                    font-weight: 600;
+                    color: $gray-darker;
+
+                    @at-root .ie & {
+                        max-width: 100%;
+                    }
+                }
+
+                span {
+                    font-size: 15px;
+                    line-height: 24px;
+                    margin: 15px 0;
+                    padding: 0 10px;
+                    text-align: center;
+
+                    @at-root .ie & {
+                        max-width: 100%;
+                    }
+                }
+
+
+                .buttons {
+                    padding: 0 15px;
+                    margin-top: 15px;
+
+                    button {
+                        min-width: 100%;
+
+                        &.order-completed-continue {
+                            @include button($color-primary, $btn-height-md);
+                            margin-bottom: 10px;
+                        }
+
+                        &.order-completed-details {
+                            @include button($color-success, $btn-height-md);
+                        }
+                    }
+                }
+            }
+        }
+
+        @include mq(xs) {
+            .page-container {
+
+                .order-completed {
+                    span {
+                        font-size: 14px;
+                    }
+
+                    .buttons {
+                        button {
+                            min-width: 200px;
+
+                            &.order-completed-continue {
+                                margin-right: 25px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        @include mq(sm) {
+            .page-container {
+                .order-completed {
+                    span {
+                        font-size: 14px;
+                        width: 60%;
+                    }
+                }
+            }
+        }
+    }
+
+    &.payment-error-page {
+        .page-container {
+            .payment-error {
+                @include centered;
+                @include flex-direction(column);
+                @include border($color-border, $border-base);
+                background: #fff;
+                margin: 10px 0;
+                padding: 8vh 0;
+
+                h1 {
+                    font-size: 15px;
+                    font-weight: 700;
+                    color: $color-danger;
+                    position: relative;
+                    line-height: 15px;
+                    @include flexbox;
+                    @include flex-direction(column);
+                    @include align-items(center);
+                    margin-bottom: 15px;
+
+                    &:before {
+                        content: "\f057";
+                        font-family: "Faprika";
+                        color: $color-danger;
+                        font-size: 70px;
+                        line-height: 70px;
+                        font-weight: 300;
+                        margin-bottom: 30px;
+                        left: 0;
+                    }
+                }
+
+                strong {
+                    font-size: 15px;
+                    font-weight: 600;
+                    color: $gray-darker;
+
+                    @at-root .ie & {
+                        max-width: 100%;
+                    }
+                }
+
+                span {
+                    font-size: 15px;
+                    line-height: 24px;
+                    margin: 15px 0;
+                    padding: 0 10px;
+                    text-align: center;
+
+                    @at-root .ie & {
+                        max-width: 100%;
+                    }
+                }
+
+                .buttons {
+                    padding: 0 15px;
+                    margin-top: 15px;
+
+                    button {
+                        min-width: 100%;
+
+                        &.payment-error-continue {
+                            @include button($color-primary, $btn-height-md);
+                            margin-bottom: 10px;
+                        }
+
+                        &.payment-error-reorder {
+                            @include button($color-danger, $btn-height-md);
+                        }
+                    }
+                }
+            }
+        }
+
+        @include mq(xs) {
+            .page-container {
+
+                .payment-error {
+                    span {
+                        font-size: 14px;
+                    }
+
+                    .buttons {
+                        button {
+                            min-width: 200px;
+
+                            &.order-completed-continue {
+                                margin-right: 25px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        @include mq(sm) {
+            .page-container {
+                .order-completed {
+                    span {
+                        font-size: 14px;
+                        width: 60%;
+                    }
+
+                    .buttons {
+                        button {
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @include mq(sm) {
+
+        &.address-page-add {
+            form {
+                .page-body {
+                    .page-title {
+                        padding: 0 15px;
+                    }
+
+                    .inputs {
+                        padding: 10px 15px;
+
+                        > label {
+                            margin: 0;
+                            width: 20%;
+                            @include flexbox;
+                            @include justify-content(space-between);
+
+                            &:after {
+                                content: ":";
+                                margin-right: 20px;
+                            }
+                        }
+
+                        input, select {
+                            max-width: 300px;
+                            width: 100%;
+                        }
+                    }
+
+                    .input-group {
+                        @include flex-direction(column);
+                        margin: 0;
+                    }
+
+                    .buttons {
+                        button {
+                            max-width: 200px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @include mq(md) {
+        margin: 20px 0;
+
+        form {
+            @include flex-direction(row);
+            margin: 0;
+
+            .page-right-sidebar {
+                @include flex(0 300px);
+                margin-left: 30px;
+                padding-bottom: 15px;
+
+                @at-root .ie & {
+                    @include flex(0 0 300px);
+                }
+
+                .button {
+                    position: relative;
+                    padding: 0 15px;
+                    border: 0;
+                }
+            }
+        }
+    }
+}
+
+.new-address {
+    .inputs {
+        @include flex-wrap(wrap);
+
+        label {
+            width: 100%;
+            font-size: 12px;
+            color: $gray-dark;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        select {
+            max-width: 100%;
+            margin: 0;
+        }
+
+        .shipping-country-info {
+            font-size: 11px;
+            margin-top: 10px;
+        }
+    }
+
+    .buttons {
+        button {
+            @include button($color-primary, $btn-height-md);
+            width: 100%;
+        }
+    }
+}

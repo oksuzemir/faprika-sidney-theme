@@ -1,0 +1,118 @@
+﻿@model CheckoutAddressModel
+@{
+    Layout = "_Root.Blank";
+
+    //title
+    Html.AddTitleParts(T("PageTitle.Checkout").Text);
+    //register CSS and JS
+    Html.AddCssFileParts(ResourceLocation.Head, "~/Themes/Sidney/Content/css/pages/checkout.min.css", "~/Themes/Sidney/Content/css/pages/checkout.css");
+}
+
+@if (!Model.ExistingAddresses.Any() && !Model.SearchTerm.HasValue())
+{
+    <script asp-location="Footer">
+        $(document).ready(function () {
+            $(".new-address-add-button").trigger("click");
+        });
+    </script>
+}
+
+<div class="page checkout-page address-page">
+    @*<div class="progress-container">
+        @await Component.InvokeAsync("CheckoutProgress", new { step = CheckoutProgressStep.Address })
+        </div>*@
+    <div class="page-container">
+        <form asp-route="CheckoutAddress" method="post" id="checkoutaddress-form">
+            <div class="page-body">
+
+                <div class="address-top">
+                    <div class="buttons">
+                        <div class="buttons">
+                            <button type="button" class="new-address-add-button" onclick="setLocation('@Url.RouteUrl("CheckoutAddressAdd")'); return false;">@T("Checkout.Address.Add")</button>
+                        </div>
+                    </div>
+                    <div class="address-search">
+                        <input asp-for="SearchTerm" placeholder="@T("Common.Search")" />
+                        <button type="submit" name="search" class="button-search one-submit-button"></button>
+                    </div>
+                </div>
+
+                @if (Model.ExistingAddresses.Any())
+                {
+                    <div class="address">
+                        @foreach (var item in Model.ExistingAddresses)
+                        {
+                            <div class="address-item">
+                                <div class="address-content">
+                                    <div class="address-header">
+                                        <h1>@item.Name</h1>
+                                        <span class="address-item-edit" onclick="setLocation('@Url.RouteUrl("CheckoutAddressEdit", new {addressId = item.Id})'); return false;"></span>
+                                    </div>
+                                    <ul class="address-box">
+                                        <li class="name">
+                                            @item.FirstName @item.LastName
+                                        </li>
+                                        <li class="email">
+                                            @item.Email
+                                        </li>
+                                        <li class="phone">
+                                            @item.Phone
+                                        </li>
+                                        <li class="address-detail">
+                                            @item.AddressDetail
+                                        </li>
+                                        <li class="city-state-country">
+                                            @item.DistrictName, @item.StateProvinceName - @item.CountryName
+                                        </li>
+                                    </ul>
+                                    <div class="select-options">
+                                        <div class="inputs options">
+                                            <span class="billing-option">
+                                                <input type="radio" asp-for="BillingAddressId" value="@item.Id" id="billing-address-@item.Id" />
+                                                <label class="custom-control-label" for="billing-address-@item.Id">@T("Checkout.BillingAddress")</label>
+                                            </span>
+                                        </div>
+                                        <div class="inputs options">
+                                            <span class="shipping-option">
+                                                <input type="radio" asp-for="ShippingAddressId" value="@item.Id" id="shipping-address-@item.Id" />
+                                                <label class="custom-control-label" for="shipping-address-@item.Id">@T("Checkout.ShippingAddress")</label>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                    var pager = Html.Pager(Model.PagerModel);
+                    if (!string.IsNullOrEmpty(pager.ToHtmlString()))
+                    {
+                        <div class="pager">
+                            @pager
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="no-address">
+                        <span>@T("Checkout.Addresses.NoAddresses")</span>
+                    </div>
+                }
+            </div>
+            <div class="page-right-sidebar">
+                <div class="sidebar-header">
+                    @T("Order.Totals.Title")
+                </div>
+                @*@await Component.InvokeAsync("OrderSummary")*@
+                <div class="order-totals">
+                    @await Component.InvokeAsync("OrderTotals", new { isEditable = false, preparePaymentMethodAdditionalFee = false })
+                </div>
+                <div class="button">
+                    <button type="submit" name="nextstep" class="new-address-next-step-button one-submit-button">
+                        <span>@T("Checkout.Address.NextButton")</span>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,84 @@
+﻿@model IList<ProductOverviewModel>
+@if (Model.Count > 0)
+{
+    <div class="cross-sells">
+        <div class="cross-sells-title">
+            <span>@T("ShoppingCart.CrossSells")</span>
+        </div>
+        @if (Model.Count <= 3)
+        {
+            @* Grid Products*@
+            <div class="cross-sells-products">
+                <div class="cross-sells-wrapper">
+                    @foreach (var item in Model)
+                    {
+                        <div class="cross-sells-product-item">
+                            @await Html.PartialAsync("_ProductBox", item)
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+        else
+        {
+            @*Slide Products*@
+            <div class="cross-sells-product-wrap">
+                <div class="swiper-container">
+                    <div class="swiper-wrapper">
+                        @foreach (var item in Model)
+                        {
+                            <div class="swiper-slide">
+                                @await Html.PartialAsync("_ProductBox", item)
+                            </div>
+                        }
+                    </div>
+                    <!-- Add Arrows -->
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                </div>
+            </div>
+
+
+            <script asp-location="Footer">
+                $(function () {
+                    var swiper = new Swiper('.cross-sells-product-wrap .swiper-container', {
+                        // Disable preloading of all images
+                        preloadImages: false,
+                        // Enable lazy loading
+                        lazy: {
+                            elementClass: 'product-image',
+                        },
+                        pagination: {
+                            el: '.swiper-pagination',
+                            clickable: true,
+                        },
+                        navigation: {
+                            nextEl: '.swiper-button-next',
+                            prevEl: '.swiper-button-prev',
+                        },
+                        //autoplay: {
+                        //    delay: 5000,
+                        //},
+                        autoplay: false,
+                        breakpointsInverse: true,
+                        breakpoints: {
+                            0: {
+                                slidesPerView: 2,
+                                spaceBetween: 10
+                            },
+                            768: {
+                                slidesPerView: 3,
+                                spaceBetween: 25
+                            },
+                            1200: {
+                                slidesPerView: 4,
+                                spaceBetween: 20
+                            },
+                        }
+                    });
+                })
+            </script>
+        }
+    </div>
+}
+

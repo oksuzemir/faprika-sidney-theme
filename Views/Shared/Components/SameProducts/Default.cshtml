@@ -1,0 +1,35 @@
+﻿@model IList<ProductOverviewModel>
+@if (Model.Count > 0)
+{
+    <div class="same-products">
+        <div class="same-products-title">
+            <span>
+                @T("Products.SameProducts")
+            </span>
+        </div>
+        <div class="same-products-item">
+
+            @foreach (var item in Model)
+            {
+                <a href="@Url.RouteUrl("Product", new { SeName = item.SeName })" title="@item.Name" class="same-item @if (item.Id == ViewBag.Id) {<text>active</text>}" data-fullsize="@item.DefaultPictureModel.FullSizeImageUrl">
+                    <img src="@item.DefaultPictureModel.ImageUrl" alt="@item.Name" title="@item.Name" />
+                </a>
+            }
+
+        </div>
+
+    </div>
+
+    <script asp-location="Footer">
+        $(document).ready(function () {
+            var currenctSrc = "";
+            $(".same-products").on('mouseenter', '.same-item', function () {
+                currenctSrc = $('.product-slider .gallery-top .swiper-slide-active img').attr('src');
+                $('.product-slider .gallery-top .swiper-slide-active img').attr('src', $(this).data('fullsize'));
+            })
+                .on('mouseleave', '.same-item', function () {
+                    $('.product-slider .gallery-top .swiper-slide-active img').attr('src', currenctSrc);
+                });
+        });
+    </script>
+}

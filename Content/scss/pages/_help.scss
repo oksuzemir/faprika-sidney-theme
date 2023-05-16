@@ -1,0 +1,231 @@
+﻿@import "../helpers/all";
+@import "../variables/variables-dev";
+
+.help-page {
+    margin: 60px 0 10px 0;
+
+    .page-container {
+        @include flexbox;
+        @include align-items(flex-start);
+        @include flex-direction(column);
+
+        .side-navigation {
+            @include border($color-border, $border-base);
+            background: #fff;
+            width: 100%;
+            margin-bottom: 10px;
+
+            .nav-title {
+                font-size: 20px;
+                @include flexbox();
+                @include align-items(center);
+                @include justify-content(space-between);
+                padding: 0 15px;
+                line-height: 48px;
+                cursor: pointer;
+                position: relative;
+
+                @at-root .ie & {
+                    display: block;
+                }
+
+                strong {
+                    position: relative;
+                    display: block;
+                    text-transform: capitalize;
+                    font-size: 15px;
+                    font-weight: 600;
+                    color: $gray-darker;
+                }
+
+                &:before {
+                    content: "\f107";
+                    font-family: "Faprika";
+                    position: absolute;
+                    right: 15px;
+                    font-size: 15px;
+                }
+            }
+
+            &.open {
+                .nav-title {
+                    &:before {
+                        -webkit-transform: rotate(180deg);
+                        -ms-transform: rotate(180deg);
+                        transform: rotate(180deg);
+                    }
+                }
+            }
+
+            .nav-wrap {
+                overflow: hidden;
+
+                .nav-list {
+                    padding: 0 15px;
+
+                    li {
+                        a {
+                            font-size: 13px;
+                            display: block;
+                            line-height: 40px;
+                            position: relative;
+
+
+                            &:after {
+                                content: "\f105";
+                                font-family: "Faprika";
+                                font-size: 15px;
+                                font-weight: 400;
+                                position: absolute;
+                                right: 0;
+                            }
+                        }
+
+                        &:not(:last-child) {
+                            border-bottom: 1px solid $color-border;
+                        }
+
+                        &:first-child {
+                            border-top: 1px solid $color-primary;
+                        }
+                    }
+                }
+            }
+        }
+
+        .page-body {
+            @include flex(1);
+            @include border($color-border, $border-base);
+            background: #fff;
+
+            @at-root .ie & {
+                flex: 1 1 auto;
+            }
+
+            .help-header {
+                @include flexbox;
+                @include flex-direction(column);
+                padding: 15px;
+                border-bottom: 1px solid $color-border;
+
+
+                h1 {
+                    font-size: 14px;
+                    font-weight: 700;
+                    color: $gray-darker;
+                    margin-bottom: 15px;
+                }
+
+                .breadcrumb {
+                    @include breadcrumb;
+                }
+            }
+
+            .help-tabs {
+                label {
+                    display: block;
+                    padding: 0 15px;
+                    line-height: 40px;
+                    font-size: 13px;
+                    color: $gray-darker;
+                    cursor: pointer;
+                    position: relative;
+
+                    &:before {
+                        content: "\f107";
+                        font-family: "Faprika";
+                        position: absolute;
+                        right: 15px;
+                        font-size: 15px;
+                    }
+                }
+
+                .answer {
+                    display: none;
+                    margin: 0 15px;
+                    padding: 20px 0;
+                    font-size: 13px;
+                    line-height: 24px;
+                    color: $gray-dark;
+                    font-weight: 400;
+                    border-top: 1px solid $color-border;
+                }
+
+                &.active {
+                    font-weight: 600;
+                    background: #fbfbfb;
+
+                    label {
+                        + .answer {
+                            display: block;
+                        }
+
+                        &:before {
+                            transform: rotate(-180deg);
+                        }
+                    }
+                }
+
+                &:hover {
+                    background: #fbfbfb;
+                }
+
+                &:not(:last-child) {
+                    border-bottom: 1px solid $color-border;
+                }
+            }
+        }
+    }
+
+
+    @include mq(md) {
+        margin: 20px 0;
+
+        .page-container {
+            @include flex-direction(row);
+
+            .side-navigation {
+                @include flex(0);
+                @include flex-basis(220px);
+                margin-right: 30px;
+
+                .nav-title {
+                    padding: 0 20px;
+
+                    &:before {
+                        display: none;
+                    }
+                }
+
+                .nav-wrap {
+                    .nav-list {
+                        padding: 0 20px;
+                    }
+                }
+            }
+
+            .page-body {
+                .help-header {
+                    @include flex-direction(row);
+                    @include justify-content(space-between);
+                    line-height: 48px;
+                    padding: 0 20px;
+
+                    h1 {
+                        margin: 0;
+                    }
+                }
+
+                .help-tabs {
+                    label {
+                        padding: 0 20px;
+                    }
+
+                    .answer {
+                        margin: 0 20px;
+                    }
+                }
+            }
+        }
+    }
+}

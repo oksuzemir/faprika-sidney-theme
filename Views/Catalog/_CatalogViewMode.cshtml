@@ -1,0 +1,23 @@
+﻿@model CatalogPagingFilteringModel
+@*view mode*@
+@if (Model.AvailableViewModes.Count > 1)
+{
+    <div class="viewmode">
+        @{
+            var threeColumn = Model.AvailableViewModes[0];
+            var fourColumn = Model.AvailableViewModes[1];
+        }
+        <div class="selector @if(threeColumn.Selected){<text>selected</text>}" onclick="location.href='@threeColumn.Value'">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+
+        <div class="selector @if (fourColumn.Selected){<text>selected</text>}" onclick="location.href='@fourColumn.Value'">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+}

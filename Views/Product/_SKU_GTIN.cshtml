@@ -1,0 +1,24 @@
+﻿@model ProductDetailsModel
+@*SKU*@
+@if (Model.ShowSku)
+{
+    <div class="sku" @(string.IsNullOrWhiteSpace(Model.Sku) ? Html.Raw("style=\"display:none\"") : null)>
+        <span class="label">@T("Products.Sku")</span>
+        <span class="value" itemprop="sku" id="sku-@Model.Id">@Model.Sku</span>
+    </div>
+}
+@*GTIN*@
+@if (Model.ShowGtin)
+{
+    <div class="gtin" @(string.IsNullOrWhiteSpace(Model.Gtin) ? Html.Raw("style=\"display:none\"") : null)>
+        <span class="label">@T("Products.GTIN")</span>
+        <span class="value" itemprop="gtin13" id="gtin-@Model.Id">@Model.Gtin</span>
+    </div>
+}
+@*Vendor*@
+@if (Model.ShowVendor)
+{
+<div class="product-vendor">
+    <span class="label">Tedarikçi:</span>
+    <span class="value"><a href="@Url.RouteUrl("Vendor", new { SeName = Model.VendorModel.SeName })">@Model.VendorModel.Name</a></span>
+</div>}

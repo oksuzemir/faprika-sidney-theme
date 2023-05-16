@@ -1,0 +1,17 @@
+﻿@inject IEventPublisher eventPublisher
+@{
+    Layout = "_Root.Head";
+
+    //event
+    eventPublisher.Publish(new PageRenderingEvent(this.Html, false));
+}
+
+@await Html.PartialAsync("Header")
+
+@RenderBody()
+
+@await Html.PartialAsync("_Copyright")
+
+<script asp-location="Footer">
+    AjaxCart.init('.header-links .qty-cart', '.header-links .qty-wishlist', '.flyout-cart');
+</script>

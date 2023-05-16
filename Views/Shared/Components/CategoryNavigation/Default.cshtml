@@ -1,0 +1,18 @@
+﻿@model CategoryNavigationModel
+@if (Model.Categories.Count > 0)
+{
+    <div class="filter-box categoryNav">
+        <div class="title">@T("Categories")</div>
+        <ul>
+            @foreach (var category in Model.Categories)
+            {
+                var categoryLineModel = new CategoryNavigationModel.CategoryLineModel
+                {
+                    CurrentCategoryId = Model.CurrentCategoryId,
+                    Category = category
+                };
+                @await Html.PartialAsync("_CategoryLine.Navigation", categoryLineModel)
+            }
+        </ul>
+    </div>
+}

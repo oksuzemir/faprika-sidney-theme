@@ -1,0 +1,93 @@
+﻿@model AffiliateRewardHistoryListModel
+@{
+    //title
+    Html.AddTitleParts(T("Account.AffiliateRewards").Text);
+    Html.AddCssFileParts(ResourceLocation.Head, "~/Themes/Sidney/Content/css/pages/account.min.css");
+}
+
+<section class="page account-page affiliate-reward-history-page">
+    <div class="page-container">
+        <div class="page-left-sidebar">
+            @await Component.InvokeAsync("CustomerNavigation", new { selectedTabId = CustomerNavigationEnum.AffiliateRewards })
+        </div>
+        <div class="page-body">
+            <div class="button-group">
+                <button type="button" class="button-orders" onclick="setLocation('@Url.RouteUrl("AffiliateRewardOrders")')">@T("Common.Back")</button>
+            </div>
+
+            <div class="message current-balance">
+                @T("AffiliateRewards.CurrentBalance", Model.AffiliateRewardBalance)
+            </div>
+            
+            <div class="affiliate-reward-history">
+
+                @if (Model.AffiliateRewardHistories.Count > 0)
+                {
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <colgroup>
+                                <col width="20%" />
+                                <col width="10%" />
+                                <col width="10%" />
+                                <col />
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th class="date">
+                                        @T("AffiliateRewards.Fields.Date")
+                                    </th>
+                                    <th class="points">
+                                        @T("AffiliateRewards.Fields.Amount")
+                                    </th>
+                                    <th class="points-balance">
+                                        @T("AffiliateRewards.Fields.AmountBalance")
+                                    </th>
+                                    <th class="reward-message">
+                                        @T("AffiliateRewards.Fields.Message")
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (var i = 0; i < Model.AffiliateRewardHistories.Count; i++)
+                                {
+                                    var item = Model.AffiliateRewardHistories[i];
+                                    <tr class="@(item.Amount > decimal.Zero ? "increase" : "decrease")">
+                                        <td class="date">
+                                            <label>@T("AffiliateRewards.Fields.Date")</label>
+                                            <span>@item.CreatedOn</span>
+                                        </td>
+                                        <td class="points">
+                                            <label>@T("AffiliateRewards.Fields.Amount")</label>
+                                            <span>@item.Amount</span>
+                                        </td>
+                                        <td class="points-balance">
+                                            <label>@T("AffiliateRewards.Fields.AmountBalance")</label>
+                                            <span>@item.AmountBalance </span>
+                                        </td>
+                                        <td class="reward-message">
+                                            <label>@T("AffiliateRewards.Fields.Message")</label>
+                                            <span>@item.Message</span>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    var pager = Html.Pager(Model.PagerModel);
+                    if (!string.IsNullOrEmpty(pager.ToHtmlString()))
+                    {
+                        <div class="pager">
+                            @pager
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="no-data">
+                        <span class="no-reward">@T("AffiliateRewards.NoHistory")</span>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>

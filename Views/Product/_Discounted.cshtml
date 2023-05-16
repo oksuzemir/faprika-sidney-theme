@@ -1,0 +1,8 @@
+﻿@model ProductDetailsModel.ProductPriceModel
+@if (Model.DisplayDiscountedMessage)
+{
+    <div class="discount-label">
+        <span class="discount-percentage">@Model.Discount</span>
+        <span> @T("Products.Discounted")</span>
+    </div>
+}

@@ -1,0 +1,6 @@
+﻿@model ProductDetailsModel.AddToCartModel
+<div class="wishlist">
+    <button class="add-to-wishlist-button" type="button" id="add-to-wishlist-button-@Model.ProductId" data-productid="@Model.ProductId" onclick="AjaxCart.addproducttowishlist('@Url.RouteUrl("AddProductToWishlist", new {productId = Model.ProductId})', this);return false;">
+        @*@T("Products.Wishlist.AddToWishlist").Text*@
+    </button>
+</div>

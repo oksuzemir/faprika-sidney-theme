@@ -1,0 +1,72 @@
+﻿@model IList<ProductOverviewModel>
+@if (Model.Count > 0)
+{
+    <div class="slide-in-related-products-container">
+        <div class="products-title">
+            <span>@T("Products.RelatedProducts")</span>
+        </div>
+        <div class="swiper-container">
+            <div class="swiper-wrapper">
+                @foreach (var item in Model)
+                {
+                    <div class="swiper-slide">
+                        @await Html.PartialAsync("_ProductBox", item)
+                    </div>
+                }
+            </div>
+            <!-- Add Arrows -->
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+        </div>
+    </div>
+
+    <script asp-location="Footer">
+        $(function () {
+            var swiper = new Swiper('.slide-in-related-products-container .swiper-container', {
+                // Disable preloading of all images
+                preloadImages: false,
+                // Enable lazy loading
+                lazy: {
+                    elementClass: 'product-image',
+                },
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+                autoplay: {
+                    delay: 5000,
+                },
+                breakpointsInverse: true,
+                breakpoints: {
+                    0: {
+                        slidesPerView: 2,
+                        spaceBetween: 10
+                    },
+                    768: {
+                        slidesPerView: 3,
+                        spaceBetween: 25
+                    },
+                    992: {
+                        slidesPerView: 4,
+                        spaceBetween: 20
+                    },
+                }
+            });
+        })
+        $(document).ready(function () {
+            if (ResponsiveToolkit.is('<=md')) {
+                var maxHeight = 0;
+                $(".product-info").each(function () {
+                    if ($(this).height() > maxHeight) { maxHeight = $(this).height(); }
+                });
+                var infoHeight = maxHeight + 15;
+                $(".product-info").css('min-height', infoHeight);
+            }
+        });
+    </script>
+}
+

@@ -1,0 +1,164 @@
+﻿@model ShoppingCartModel
+@using System.Text
+@using Faprika.Core.Domain.Catalog
+@if (Model.CheckoutAttributes.Count > 0)
+{
+    var attributeChangeScriptsBuilder = new StringBuilder();
+    <div class="checkout-attributes">
+        @foreach (var attribute in Model.CheckoutAttributes)
+        {
+            <div class="checkout-attributes-item">
+                @{
+                    var controlId = $"checkout_attribute_{attribute.Id}";
+                    var textPrompt = !string.IsNullOrEmpty(attribute.TextPrompt) ? attribute.TextPrompt : attribute.Name;
+                    <label id="@($"checkout_attribute_label_{attribute.Id}")" class="attribute-title">@textPrompt</label>
+                    <div class="attribute-input">
+                        @switch (attribute.AttributeControlType)
+                        {
+                            case AttributeControlType.DropdownList:
+                                {
+                                    <select name="@(controlId)" class="gift-dropdown" id="@(controlId)">
+                                        <option value="0">---</option>
+                                        @foreach (var attributeValue in attribute.Values)
+                                        {
+                                            var attributeName = string.IsNullOrEmpty(attributeValue.PriceAdjustment) ?
+                                                attributeValue.Name :
+                                                T("ShoppingCart.CheckoutAttributes.PriceAdjustment", attributeValue.Name, attributeValue.PriceAdjustment).Text;
+                                            <option selected="@attributeValue.IsPreSelected" value="@attributeValue.Id">@attributeName</option>
+                                        }
+                                    </select>
+                                    attributeChangeScriptsBuilder.AppendFormat("$('#{0}').on('change',function(){{checkoutAttributeChange();}});\n", controlId);
+                                }
+                                break;
+                            case AttributeControlType.RadioList:
+                                {
+                                    <ul class="option-list">
+                                        @foreach (var attributeValue in attribute.Values)
+                                        {
+                                            var attributeName = string.IsNullOrEmpty(attributeValue.PriceAdjustment) ?
+                                                attributeValue.Name :
+                                                T("ShoppingCart.CheckoutAttributes.PriceAdjustment", attributeValue.Name, attributeValue.PriceAdjustment).Text;
+                                            <li>
+                                                <input id="@(controlId)_@(attributeValue.Id)" type="radio" name="@(controlId)" value="@attributeValue.Id" checked="@attributeValue.IsPreSelected" />
+                                                <label for="@(controlId)_@(attributeValue.Id)">@attributeName</label>
+                                            </li>
+                                            attributeChangeScriptsBuilder.AppendFormat("$('#{0}_{1}').on('click',function(){{checkoutAttributeChange();}});\n", controlId, attributeValue.Id);
+                                        }
+                                    </ul>
+                                }
+                                break;
+                            case AttributeControlType.Checkboxes:
+                                {
+                                    <ul class="option-list">
+                                        @foreach (var attributeValue in attribute.Values)
+                                        {
+                                            var attributeName = string.IsNullOrEmpty(attributeValue.PriceAdjustment) ?
+                                                attributeValue.Name :
+                                                T("ShoppingCart.CheckoutAttributes.PriceAdjustment", attributeValue.Name, attributeValue.PriceAdjustment).Text;
+                                            <li>
+                                                <input id="@(controlId)_@(attributeValue.Id)" type="checkbox" name="@(controlId)" value="@attributeValue.Id" checked="@attributeValue.IsPreSelected" />
+                                                <label for="@(controlId)_@(attributeValue.Id)">@attributeName</label>
+                                            </li>
+                                            attributeChangeScriptsBuilder.AppendFormat("$('#{0}_{1}').on('click',function(){{checkoutAttributeChange();}});\n", controlId, attributeValue.Id);
+                                        }
+                                    </ul>
+                                }
+                                break;
+                            case AttributeControlType.TextBox:
+                                {
+                                    <input name="@(controlId)" type="text" id="@(controlId)" value="@attribute.DefaultValue" />
+                                }
+                                break;
+                            case AttributeControlType.MultilineTextbox:
+                                {
+                                    <textarea id="@(controlId)" name="@(controlId)">@attribute.DefaultValue</textarea>
+                                }
+                                break;
+                            case AttributeControlType.ColorSquares:
+                                {
+                                    <ul class="option-list attribute-squares color-squares" id="color-squares-@(attribute.Id)">
+                                        @foreach (var attributeValue in attribute.Values)
+                                        {
+                                            var attributeName = string.IsNullOrEmpty(attributeValue.PriceAdjustment) ?
+                                                attributeValue.Name :
+                                                T("ShoppingCart.CheckoutAttributes.PriceAdjustment", attributeValue.Name, attributeValue.PriceAdjustment).Text;
+                                            <li @(attributeValue.IsPreSelected ? @Html.Raw(" class=\"selected-value\"") : null)>
+                                                <label for="@(controlId)_@(attributeValue.Id)">
+                                                    <span class="attribute-square-container" title="@attributeName">
+                                                        <span class="attribute-square" style="background-color:@(attributeValue.ColorSquaresRgb);">&nbsp;</span>
+                                                    </span>
+                                                    <input id="@(controlId)_@(attributeValue.Id)" type="radio" name="@(controlId)" value="@attributeValue.Id" checked="@attributeValue.IsPreSelected" />
+                                                    @*uncomment below to display attribute value name*@
+                                                    @*<span class="name">@attributeName</span>*@
+                                                </label>
+                                            </li>
+                                            attributeChangeScriptsBuilder.AppendFormat("$('#{0}_{1}').on('click',function(){{checkoutAttributeChange();}});\n", controlId, attributeValue.Id);
+                                        }
+                                    </ul>
+                                    <script asp-location="Footer">
+                                        $(document).ready(function () {
+                                            $('.checkout-attributes #color-squares-@(attribute.Id)').delegate('input', 'click', function (event) {
+                                                $('.checkout-attributes #color-squares-@(attribute.Id)').find('li').removeClass('selected-value');
+                                                $(this).closest('li').addClass('selected-value');
+                                            });
+                                        });
+                                    </script>
+                                }
+                                break;
+                            case AttributeControlType.ImageSquares:
+                                {
+                                    //not support attribute type
+                                }
+                                break;
+                        }
+                    </div>
+                }
+            </div>
+        }
+    </div>
+    <script asp-location="Footer">
+        $(document).ready(function() {
+            checkoutAttributeChange();
+            @Html.Raw(attributeChangeScriptsBuilder.ToString())
+        });
+
+        function checkoutAttributeChange() {
+            $.ajax({
+                cache: false,
+                url: '@Html.Raw(Url.RouteUrl("CheckoutAttributeChange", new { isEditable = Model.IsEditable }))',
+                data: $('#shopping-cart-form').serialize(),
+                type: 'post',
+                success: function(data) {
+                    if (data.ordetotalssectionhtml) {
+                        $('.total-info').replaceWith(data.ordetotalssectionhtml);
+                    }
+                    if (data.selectedcheckoutattributesssectionhtml) {
+                        $('.selected-checkout-attributes').replaceWith(data.selectedcheckoutattributesssectionhtml);
+                    }
+                    if (data.enabledattributeids) {
+                        for (var i = 0; i < data.enabledattributeids.length; i++) {
+                            $('#checkout_attribute_label_' + data.enabledattributeids[i]).show();
+                            $('#checkout_attribute_input_' + data.enabledattributeids[i]).show();
+                        }
+                    }
+                    if (data.disabledattributeids) {
+                        for (var i = 0; i < data.disabledattributeids.length; i++) {
+                            $('#checkout_attribute_label_' + data.disabledattributeids[i]).hide();
+                            $('#checkout_attribute_input_' + data.disabledattributeids[i]).hide();
+                        }
+                    }
+                    $.event.trigger({ type: "checkout_attributes_changed", changedData: data });
+                }
+            });
+        }
+    </script>
+
+    foreach (var warning in Model.Warnings)
+    {
+        <script asp-location="Footer">
+            $(document).ready(function () {
+                toastr["error"]("", "@warning");
+            });
+        </script>
+    }
+}

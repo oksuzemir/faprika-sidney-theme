@@ -1,0 +1,40 @@
+﻿@model SearchAutoCompleteModel
+
+@if (Model.Categories.Any())
+{
+    <ul>
+        @foreach (var search in Model.Categories)
+        {
+            <li>
+                <a href="@Url.RouteUrl("Category", new { SeName = search.SeName })">@Html.Raw(search.Name)</a>
+                <span class="search-label">@T("SearchAutoComplete.Category")</span>
+            </li>
+        }
+    </ul>
+
+}
+
+@if (Model.Manufacturers.Any())
+{
+    <ul>
+        @foreach (var search in Model.Manufacturers)
+        {
+            <li>
+                <a href="@Url.RouteUrl("Manufacturer", new { SeName = search.SeName })">@Html.Raw(search.Name)</a>
+                <span>@T("SearchAutoComplete.Manufacturer")</span>
+            </li>
+        }
+    </ul>
+}
+
+@if (Model.Products.Any())
+{
+    <ul>
+        @foreach (var search in Model.Products)
+        {
+            <li>
+                <a href="@Url.RouteUrl("Product", new { SeName = search.SeName })">@Html.Raw(search.Name)</a>
+            </li>
+        }
+    </ul>
+}

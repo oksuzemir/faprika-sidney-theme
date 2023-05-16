@@ -1,0 +1,86 @@
+﻿@import "../helpers/all";
+@import "../variables/variables-dev";
+
+
+.under-construction-page {
+    .page-container {
+        margin-top: 10px;
+
+        .under-construction-content {
+            @include centered;
+            @include flex-direction(column);
+            @include border($color-border, $border-base);
+            background: #fff;
+            margin: 10px 0;
+            padding: 8vh 0;
+
+            h1 {
+                font-size: 22px;
+                font-weight: 700;
+                color: $gray-darker;
+                position: relative;
+                line-height: 42px;
+                @include flexbox;
+                @include flex-direction(column);
+                @include align-items(center);
+
+                &:before {
+                    content: "\f085";
+                    font-family: "Faprika";
+                    color: $color-primary;
+                    font-size: 70px;
+                    line-height: 70px;
+                    font-weight: 700;
+                    margin-bottom: 15px;
+                    left: 0;
+                }
+            }
+
+            span {
+                font-size: 13px;
+                line-height: 24px;
+                margin: 15px 0;
+                padding: 0 10px;
+                text-align: center;
+            }
+        }
+    }
+
+    @include mq(xs) {
+        .page-container {
+
+            .under-construction-content {
+                h1 {
+                    font-size: 35px;
+                }
+
+                span {
+                    font-size: 14px;
+                }
+            }
+        }
+    }
+
+    @include mq(sm) {
+        .page-container {
+            .under-construction-content {
+
+                span {
+                    font-size: 14px;
+                    width: 60%;
+                    margin: 30px 0;
+                }
+            }
+        }
+    }
+
+    @include mq(md) {
+        .page-container {
+            margin-top: 0;
+
+            .under-construction-content {
+                margin: 20px 0;
+            }
+        }
+    }
+}

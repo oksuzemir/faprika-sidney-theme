@@ -1,0 +1,35 @@
+﻿@model CancelAccountModel
+@{
+    //title
+    Html.AddTitleParts(T("PageTitle.CancelAccount").Text);
+    Html.AddCssFileParts(ResourceLocation.Head, "~/Themes/Sidney/Content/css/pages/account.min.css");
+}
+<section class="page account-page cancel-account-page">
+    <div class="page-container">
+        <div class="page-left-sidebar">
+            @await Component.InvokeAsync("CustomerNavigation", new { selectedTabId = CustomerNavigationEnum.CancelAccount })
+        </div>
+        <div class="page-body">
+            <p class="warning">@T("Account.CancelAccount.WarningMessage")</p>
+
+            <form asp-route="CancelAccount" method="post">
+                <div class="page-title">
+                    @T("PageTitle.CancelAccount")
+                </div>
+
+                <div asp-validation-summary="All" ></div>
+
+                <div class="inputs options">
+                    <input type="checkbox" asp-for="Confirm" />
+                    <label asp-for="Confirm"></label>
+                </div>
+
+                <div class="buttons">
+                    <button type="submit" class="button">
+                        @T("Account.CancelAccount.Button")
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
